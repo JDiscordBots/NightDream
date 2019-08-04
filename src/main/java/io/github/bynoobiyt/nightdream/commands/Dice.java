@@ -1,7 +1,5 @@
 package io.github.bynoobiyt.nightdream.commands;
 
-import io.github.bynoobiyt.nightdream.commands.BotCommand;
-import io.github.bynoobiyt.nightdream.commands.Command;
 import io.github.bynoobiyt.nightdream.util.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -13,13 +11,14 @@ import java.util.concurrent.TimeUnit;
 @BotCommand("dice")
 public class Dice implements Command {
 
+	private Random r=new Random();
+	
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
         if (args[0] == null) {
             event.getChannel().sendMessage("<:IconProvide:553870022125027329> Not enough arguments!").queue();
             return;
         }
-        Random r = new Random();
         EmbedBuilder eb = new EmbedBuilder().setColor(0x212121).setTitle("Rolling the dice...")
                 .setDescription(String.format("From 1 to %s", args[0]));
 
