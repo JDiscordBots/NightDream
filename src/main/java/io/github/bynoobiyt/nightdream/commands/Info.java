@@ -16,7 +16,7 @@ public class Info implements Command {
                     "This instance is owned by dan1st#7327 and Gehasstes#0001.\r\n" +
                     "JDA v4.BETA.0_32\r\n" +
                     "Logo Font: Avenir Next LT Pro / (c) Linotype\r\n" +
-                    "(c) dan1st and Gehasstes %s, Release %s.", event.getJDA().getGuilds().size(), event.getJDA().getUsers().size(), Year.now().getValue(), NightDream.version).queue();
+                    "(c) dan1st and Gehasstes %s, Release %s.", event.getJDA().getGuilds().size(), event.getJDA().getUsers().size(), Year.now().getValue(), NightDream.VERSION).queue();
         }
     }
 

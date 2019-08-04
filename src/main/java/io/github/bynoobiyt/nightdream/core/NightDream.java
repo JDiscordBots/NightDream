@@ -26,7 +26,7 @@ import net.dv8tion.jda.internal.JDAImpl;
 public class NightDream {
 
 	private static final String ANNOTATED_WITH=" is annotated with @";
-	public static String version = "0.0.4";
+	public static final String VERSION = "0.0.4";
 	
 	public static void main(String[] args) {
 		Properties props = new Properties();
@@ -41,8 +41,9 @@ public class NightDream {
 			System.out.println("No Property File found");
 			try(FileWriter writer = new FileWriter(file)){
 				props.setProperty("token", "");
-				props.setProperty("prefix", "nd-");
+				props.setProperty("prefix", BotData.getDefaultPrefix());
 				props.setProperty("game","with you");
+				props.setProperty("admin", BotData.getAdminID());
 				props.store(writer,"Nightdream Properties");
 				System.out.println("created Properties file with default Properties - please include the Bot token");
 				System.exit(1);
@@ -52,7 +53,8 @@ public class NightDream {
 			}
 		}
 		
-		BotData.setDefaultPrefix(props.getProperty("prefix","nd-"));
+		BotData.setDefaultPrefix(props.getProperty("prefix",BotData.getDefaultPrefix()));
+		BotData.setAdminID(props.getProperty("admin",BotData.getAdminID()));
 		
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
 		.setToken(props.getProperty("token"))
@@ -114,7 +116,7 @@ public class NightDream {
 	 * invokes Method Objects of all Classes from that are annotated with a specified {@link Annotation}
 	 * @param ref The {@link Reflections} Object that scanned the Classes
 	 * @param annotClass The Class Object of the Annotation
-	 * @param function
+	 * @param function the code to be executed with every annotated Class
 	 */
 	private static void addAction(Reflections ref, Class<? extends Annotation> annotClass, BiConsumer<Annotation, Object> function) {
 		for (Class<?> cl : ref.getTypesAnnotatedWith(annotClass,true)) {

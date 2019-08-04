@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Guild;
 public class BotData {
 	private static String defaultPrefix;
 	private static final Map<Guild,String> prefixes = new HashMap<>();
+	private static String adminID="321227144791326730";
 	
 	static {
 		setDefaultPrefix(null);
@@ -41,4 +42,14 @@ public class BotData {
 		}
 		
 	}
+
+	public static String getAdminID() {
+		return BotData.adminID;
+	}
+
+	public static void setAdminID(String adminID) {
+		BotData.adminID = adminID;
+	}
+	
+	
 }
