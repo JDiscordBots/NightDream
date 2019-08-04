@@ -26,7 +26,7 @@ public class Help implements Command{
 
 	@Override
 	public String help() {
-		return "¯\\_(ツ)_/¯";
+		return "¯\_(ツ)_/¯";
 	}
 
 }
