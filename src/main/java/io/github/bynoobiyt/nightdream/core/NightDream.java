@@ -32,7 +32,7 @@ public class NightDream {
 		Properties props = new Properties();
 		File file = new File("NightDream.properties");
 		if (file.exists()) {
-			try(FileReader reader=new FileReader(file)){
+			try(FileReader reader = new FileReader(file)){
 				props.load(reader);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -116,7 +116,7 @@ public class NightDream {
 	 * @param annotClass The Class Object of the Annotation
 	 * @param function
 	 */
-	private static void addAction(Reflections ref,Class<? extends Annotation> annotClass, BiConsumer<Annotation, Object> function) {
+	private static void addAction(Reflections ref, Class<? extends Annotation> annotClass, BiConsumer<Annotation, Object> function) {
 		for (Class<?> cl : ref.getTypesAnnotatedWith(annotClass,true)) {
             try {
 				Object annotatedAsObject = cl.getDeclaredConstructor().newInstance();

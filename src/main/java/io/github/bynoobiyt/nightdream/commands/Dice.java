@@ -1,7 +1,5 @@
 package io.github.bynoobiyt.nightdream.commands;
 
-import io.github.bynoobiyt.nightdream.commands.BotCommand;
-import io.github.bynoobiyt.nightdream.commands.Command;
 import io.github.bynoobiyt.nightdream.util.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -15,11 +13,18 @@ public class Dice implements Command {
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        if (args[0] == null) {
+        if (args.length == 0) {
             event.getChannel().sendMessage("<:IconProvide:553870022125027329> Not enough arguments!").queue();
             return;
         }
         Random r = new Random();
+        double d = 0;
+        try {
+            d = Math.floor(Math.random() * Double.parseDouble(args[0]) + 1);
+        } catch (NumberFormatException e) {
+            Utils.errmsg(event.getTextChannel(), "<:IconProvide:553870022125027329> Not enough arguments!");
+            return;
+        }
         EmbedBuilder eb = new EmbedBuilder().setColor(0x212121).setTitle("Rolling the dice...")
                 .setDescription(String.format("From 1 to %s", args[0]));
 
@@ -27,7 +32,7 @@ public class Dice implements Command {
 
         eb.clear();
 
-        eb.setColor(0x212121).setTitle("Done!").setDescription("It landed on a " + Math.floor(Math.random() * Double.parseDouble(args[0]) + 1));
+        eb.setColor(0x212121).setTitle("Done!").setDescription("It landed on a " + d);
 
         msg.editMessage(eb.build()).completeAfter(Long.parseLong(String.valueOf(r.nextInt(6))), TimeUnit.SECONDS);
     }

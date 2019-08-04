@@ -4,6 +4,7 @@ import io.github.bynoobiyt.nightdream.util.Utils;
 import jdk.jshell.execution.Util;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Random;
@@ -15,15 +16,14 @@ public class Rate implements Command {
     public void action(String[] args, MessageReceivedEvent event) {
         Random r = new Random();
         int i = r.nextInt(100) + 1;
-        Member mentioned = null;
+        User mentioned = null;
         try {
-            mentioned = event.getMessage().getMentionedMembers().get(0);
+            mentioned = event.getMessage().getMentionedMembers().get(0).getUser();
         } catch (Exception ignored) {
-            // mentioned = event.getMember();
         }
 
         EmbedBuilder eb = new EmbedBuilder().setColor(0x212121)
-                .setTitle(String.format("Rating %s", /* mentioned.getUser().getName() */ mentioned != null ? mentioned.getUser().getName() : event.getAuthor().getName()))
+                .setTitle(String.format("Rating %s", mentioned != null ? mentioned.getName() : event.getAuthor().getName()))
                 .setDescription(String.format("%s/100", i));
         Utils.msg(event.getTextChannel(), eb.build(), false);
     }
