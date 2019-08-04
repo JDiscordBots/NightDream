@@ -29,10 +29,10 @@ public class CommandHandler {
 	 * @param cmd the Command as {@link CommandContainer}
 	 */
 	public static void handleCommand(final CommandParser.CommandContainer cmd) {
-		if(commands.containsKey(cmd.invoke.toLowerCase())) {
-			boolean save=commands.get(cmd.invoke.toLowerCase()).allowExecute(cmd.args, cmd.event);
+		if (commands.containsKey(cmd.invoke.toLowerCase())) {
+			boolean save = commands.get(cmd.invoke.toLowerCase()).allowExecute(cmd.args, cmd.event);
 			
-			if(save) {
+			if (save) {
 				try {
 					commands.get(cmd.invoke.toLowerCase()).action(cmd.args, cmd.event);
 				} catch (Exception e) {
@@ -41,8 +41,7 @@ public class CommandHandler {
 				}
 			}
 			commands.get(cmd.invoke.toLowerCase()).executed(save, cmd.event);
-		}
-		else{
+		} else {
 			Utils.msg(cmd.event.getTextChannel(), "Unknown Command");
 		}
 	}

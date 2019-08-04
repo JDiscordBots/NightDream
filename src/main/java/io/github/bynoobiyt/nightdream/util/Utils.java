@@ -71,8 +71,7 @@ public class Utils {
 	 */
 	public static Message msg(TextChannel channel, MessageEmbed message,boolean timeout) {
 		try {
-			Message msg=channel.sendMessage(
-					message).complete();
+			Message msg = channel.sendMessage(message).complete();
 			if (timeout) {
 				new Timer().schedule(new TimerTask() {
 					@Override

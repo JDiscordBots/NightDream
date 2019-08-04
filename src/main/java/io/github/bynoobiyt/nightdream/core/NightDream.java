@@ -28,36 +28,35 @@ public class NightDream {
 	private static final String ANNOTATED_WITH=" is annotated with @";
 	
 	public static void main(String[] args) {
-		Properties props=new Properties();
-		File file=new File("NightDream.properties");
-		if(file.exists()) {
+		Properties props = new Properties();
+		File file = new File("NightDream.properties");
+		if (file.exists()) {
 			try(FileReader reader=new FileReader(file)){
 				props.load(reader);
 			} catch (IOException e) {
 				e.printStackTrace();
-				
 			}
-		}else {
+		} else {
 			System.out.println("No Property File found");
-			try(FileWriter writer=new FileWriter(file)){
+			try(FileWriter writer = new FileWriter(file)){
 				props.setProperty("token", "");
 				props.setProperty("prefix", "nd-");
 				props.setProperty("game","with you");
 				props.store(writer,"Nightdream Properties");
 				System.out.println("created Properties file with default Properties - please include the Bot token");
 				System.exit(1);
+
 			} catch (IOException e) {
 				e.printStackTrace();
-				
 			}
 		}
 		
 		BotData.setDefaultPrefix(props.getProperty("prefix","nd-"));
 		
-		final JDABuilder builder=new JDABuilder(AccountType.BOT);
-		builder.setToken(props.getProperty("token"));	
-		builder.setAutoReconnect(true);//should the Bot reconnect?
-		builder.setStatus(OnlineStatus.ONLINE);//the online Status
+		final JDABuilder builder = new JDABuilder(AccountType.BOT)
+		.setToken(props.getProperty("token"))
+		.setAutoReconnect(true) //should the Bot reconnect?
+		.setStatus(OnlineStatus.ONLINE)//the online Status
 		/*possible statuses:
 			OnlineStatus.DO_NOT_DISTURB
 			OnlineStatus.IDLE
@@ -66,20 +65,21 @@ public class NightDream {
 			OnlineStatus.OFFLINE
 			OnlineStatus.UNKNOWN
 		*/
-		builder.setActivity(Activity.playing(props.getProperty("game","with you")));//the name of the game the Bot is "playing"
+		.setActivity(Activity.playing(props.getProperty("game","with you"))) //the name of the game the Bot is "playing"
 		/*
 			Game.playing(String)//playing...
 			Game.listening(String)//listening...
 			Game.streaming(String, String)//streaming...(with url)
 			Game.watching(String)//watching...
 		*/
-		builder.setRequestTimeoutRetry(true);
+		.setRequestTimeoutRetry(true);
 		//initialize listeners
-		Reflections ref=new Reflections("io.github.bynoobiyt.nightdream");
+		Reflections ref = new Reflections("io.github.bynoobiyt.nightdream");
 		addCommandsAndListeners(ref, builder);
 		try {
-			JDA jda=builder.build();
+			JDA jda = builder.build();
 			jda.awaitReady();
+
 			((JDAImpl) jda).getGuildSetupController().clearCache();
 		} catch (final LoginException e) {
 			System.err.println("The entered token is not valid!");
@@ -98,38 +98,36 @@ public class NightDream {
 	 */
 	private static void addCommandsAndListeners(Reflections ref,JDABuilder jdaBuilder) {
 		addAction(ref, BotCommand.class,(cmdAsAnnotation,annotatedAsObject)->{
-    		BotCommand cmdAsBotCommand=(BotCommand)cmdAsAnnotation;
-    		Command cmd=(Command)annotatedAsObject;
+    		BotCommand cmdAsBotCommand = (BotCommand)cmdAsAnnotation;
+    		Command cmd = (Command)annotatedAsObject;
     		for (String alias : cmdAsBotCommand.value()) {
 				CommandHandler.addCommand(alias.toLowerCase(), cmd);
 			}
     	});
     	addAction(ref, BotListener.class,(cmdAsAnnotation,annotatedAsObject)->{
-    		ListenerAdapter listener=(ListenerAdapter) annotatedAsObject;
+    		ListenerAdapter listener = (ListenerAdapter) annotatedAsObject;
 			jdaBuilder.addEventListeners(listener);
     	});
 	}
 	/**
 	 * invokes Method Objects of all Classes from that are annotated with a specified {@link Annotation}
 	 * @param ref The {@link Reflections} Object that scanned the Classes
-	 * @param jdaBuilder The Builder of the JDA
 	 * @param annotClass The Class Object of the Annotation
 	 * @param function
 	 */
 	private static void addAction(Reflections ref,Class<? extends Annotation> annotClass, BiConsumer<Annotation, Object> function) {
 		for (Class<?> cl : ref.getTypesAnnotatedWith(annotClass,true)) {
             try {
-				Object annotatedAsObject=cl.getDeclaredConstructor().newInstance();
+				Object annotatedAsObject = cl.getDeclaredConstructor().newInstance();
 				Annotation cmdAsAnnotation = cl.getAnnotation(annotClass);
 				function.accept(cmdAsAnnotation, annotatedAsObject);
 			} catch (InstantiationException e) {
-				System.err.println(cl.getName()+ANNOTATED_WITH+annotClass.getName()+" but cannot be instanciated");
+				System.err.println(cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but cannot be instantiated");
 			} catch (IllegalAccessException e) {
-				System.err.println(cl.getName()+ANNOTATED_WITH+annotClass.getName()+" but the no-args constructor is not visible");
+				System.err.println(cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but the no-args constructor is not visible");
 			} catch (Exception e) {
-				System.err.println(cl.getName()+ANNOTATED_WITH+annotClass.getName()+" but there was an unknown Error: "+e.getClass().getName()+": "+e.getCause());
+				System.err.println(cl.getName() + ANNOTATED_WITH+annotClass.getName() + " but there was an unknown Error: " + e.getClass().getName()+": "+e.getCause());
 			}
         }
     }
-	
 }

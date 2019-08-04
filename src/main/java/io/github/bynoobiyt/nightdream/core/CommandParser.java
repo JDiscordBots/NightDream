@@ -31,22 +31,22 @@ public class CommandParser {
 	 * @return the parsed Command
 	 */
 	public static CommandContainer parser(final MessageReceivedEvent event, final String prefix) {
-		final String raw=event.getMessage().getContentRaw();
-		final String beheaded=raw.replaceFirst(Pattern.quote(prefix), "");
-		final String[] splitBeheaded=beheaded.split(" ");
-		final String invoke=splitBeheaded[0];
-		final ArrayList<String> split=new ArrayList<>();
-		boolean inQuoute=false;
+		final String raw = event.getMessage().getContentRaw();
+		final String beheaded = raw.replaceFirst(Pattern.quote(prefix), "");
+		final String[] splitBeheaded = beheaded.split(" ");
+		final String invoke = splitBeheaded[0];
+		final ArrayList<String> split = new ArrayList<>();
+		boolean inQuoute = false;
 		for (String s : splitBeheaded) {
 			if (inQuoute) {
 				split.add(split.remove(split.size()-1).concat(" ").concat(s.substring(0,s.length()-1)));
 				if (s.endsWith("\"")) {
-					inQuoute=false;
+					inQuoute = false;
 				}
-			}else {
+			} else {
 				if (s.startsWith("\"")&&!s.endsWith("\"")) {
-					inQuoute=true;
-					s=s.substring(1);
+					inQuoute = true;
+					s = s.substring(1);
 				}
 				split.add(s);
 			}
