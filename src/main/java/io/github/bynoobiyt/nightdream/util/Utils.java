@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Utils {
 
@@ -90,4 +91,31 @@ public class Utils {
 			return null;
 		}
 	}
+	
+	/**
+	 * tests if the Author of a Message is the Developer of this Bot<br>
+	 * if not an errormessage will be sent.
+	 * @param event the {@link MessageReceivedEvent} of the Message
+	 * @return <code>true</code> if the Author is the Developer, else <code>false</code>
+	 */
+	public static boolean checkOwner(MessageReceivedEvent event) {
+		return checkOwner(event, true);
+	}
+	/**
+	 * tests if the Author of a Message is the Developer of this Bot<br>
+	 * if forbidden and doErrMsg is true an errormessage will be sent.
+	 * @param event the {@link MessageReceivedEvent} of the Message
+	 * @param doErrMsg should an Error-Message be sent?
+	 * @return <code>true</code> if the Author is the Developer, else <code>false</code>
+	 */
+	public static boolean checkOwner(MessageReceivedEvent event,boolean doErrMsg) {
+		if(event.getAuthor().getId().equals(BotData.getAdminID())) {
+			return true;
+		}
+		if (doErrMsg) {
+			errmsg(event.getTextChannel(),"You need to be Bot-Admin to do that!");
+		}
+		return false;
+	}
+	
 }
