@@ -12,7 +12,7 @@ import io.github.bynoobiyt.nightdream.util.Utils;
  * @author Daniel Schmid
  */
 public class CommandHandler {
-	private static final Map<String, Command> commands=new HashMap<>();
+	private static final Map<String, Command> commands = new HashMap<>();
 	
 	private CommandHandler() {
 		//no instantiation
@@ -21,7 +21,7 @@ public class CommandHandler {
 	public static Map<String, Command> getCommands() {
 		return Collections.unmodifiableMap(commands);
 	}
-	public static void addCommand(String name,Command cmd) {
+	static void addCommand(String name,Command cmd) {
 		commands.put(name, cmd);
 	}
 	/**
@@ -37,7 +37,7 @@ public class CommandHandler {
 					commands.get(cmd.invoke.toLowerCase()).action(cmd.args, cmd.event);
 				} catch (Exception e) {
 					e.printStackTrace();
-					save=false;
+					save = false;
 				}
 			}
 			commands.get(cmd.invoke.toLowerCase()).executed(save, cmd.event);

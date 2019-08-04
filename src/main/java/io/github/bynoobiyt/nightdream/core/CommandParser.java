@@ -51,7 +51,7 @@ public class CommandParser {
 				split.add(s);
 			}
 		}
-		final String[] args=new String[split.size()-1];
+		final String[] args = new String[split.size()-1];
 		split.subList(1, split.size()).toArray(args);
 		return new CommandContainer(invoke, args, event);
 	}

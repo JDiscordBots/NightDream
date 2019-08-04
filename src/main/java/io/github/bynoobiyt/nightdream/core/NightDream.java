@@ -26,6 +26,7 @@ import net.dv8tion.jda.internal.JDAImpl;
 public class NightDream {
 
 	private static final String ANNOTATED_WITH=" is annotated with @";
+	public static String version = "0.0.4";
 	
 	public static void main(String[] args) {
 		Properties props = new Properties();
@@ -67,7 +68,7 @@ public class NightDream {
 			OnlineStatus.OFFLINE
 			OnlineStatus.UNKNOWN
 		*/
-		.setActivity(Activity.playing(props.getProperty("game","with you"))) //the name of the game the Bot is "playing"
+		.setActivity(Activity.playing("nd-help | " + props.getProperty("game","with you"))) //the name of the game the Bot is "playing"
 		/*
 			Game.playing(String)//playing...
 			Game.listening(String)//listening...
