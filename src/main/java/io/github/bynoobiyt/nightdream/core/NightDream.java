@@ -30,7 +30,7 @@ public class NightDream {
 	
 	public static void main(String[] args) {
 		Properties props = new Properties();
-		File file = new File("NightDream.properties");
+		File file = new File(BotData.DATA_DIR,"NightDream.properties");
 		if (file.exists()) {
 			try(FileReader reader = new FileReader(file)){
 				props.load(reader);

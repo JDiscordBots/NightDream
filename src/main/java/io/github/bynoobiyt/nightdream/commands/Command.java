@@ -29,7 +29,7 @@ public interface Command {
 	 * @param event The {@link MessageReceivedEvent} of the incoming {@link Message}
 	 */
 	public default void executed(boolean success, MessageReceivedEvent event) {
-		
+		Telemetry.addTelemetry(getClass());
 	}
 	/**
 	 * help for the Command<br>
