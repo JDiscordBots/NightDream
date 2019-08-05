@@ -35,16 +35,17 @@ public class Eval implements Command{
         se.put("jda", event.getJDA());
         se.put("guild", event.getGuild());
         se.put("channel", event.getChannel());
-       
-        StringBuilder scriptBuilder=new StringBuilder();
+        se.put("message", event.getMessage());
+
+        StringBuilder scriptBuilder = new StringBuilder();
         for (String string : args) {
 			scriptBuilder.append(string).append(" ");
 		}
-        Object result=null;
+        Object result = null;
 		try {
-			result=se.eval(scriptBuilder.toString());
+			result = se.eval(scriptBuilder.toString());
 		} catch (ScriptException e) {
-			Utils.msg(event.getTextChannel(), ""+"\n"+e.getMessage(),Color.RED,false);
+			Utils.msg(event.getTextChannel(), "" + " \n " + e.getMessage(), Color.RED,false);
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
 		}
         if (result != null) {

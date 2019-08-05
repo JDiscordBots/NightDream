@@ -27,15 +27,18 @@ public class BotData {
 		}
 		BotData.defaultPrefix = prefix;
 	}
-	public static final String getPrefix(Guild g) {
+	public static String getPrefix(Guild g) {
 		String prefix = prefixes.get(g);
 		if (prefix == null) {
 			prefix = defaultPrefix;
 		}
 		return prefix;
 	}
-	public static void setPrefix(Guild g,String prefix) {
-		if (prefix==null || prefix.equals("")) {
+	public static void resetPrefix(Guild g) {
+		setPrefix(g, getDefaultPrefix());
+	}
+	public static void setPrefix(Guild g, String prefix) {
+		if (prefix == null || prefix.equals("")) {
 			prefixes.remove(g);
 		} else {
 			prefixes.put(g, prefix);
