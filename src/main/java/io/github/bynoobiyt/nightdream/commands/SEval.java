@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.entities.MessageReaction;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @BotCommand("seval")
-public class SEval implements Command{
+public class SEval implements Command {
 
 	private ScriptEngine se;
 	private static final String LATEST_EXCEPTION_KEY_NAME="err";
@@ -38,8 +38,9 @@ public class SEval implements Command{
         se.put("jda", event.getJDA());
         se.put("guild", event.getGuild());
         se.put("channel", event.getChannel());
+        se.put("message", event.getMessage());
        
-        StringBuilder scriptBuilder=new StringBuilder();
+        StringBuilder scriptBuilder = new StringBuilder();
         for (String string : args) {
 			scriptBuilder.append(string).append(" ");
 		}
@@ -47,15 +48,15 @@ public class SEval implements Command{
 			se.eval(scriptBuilder.toString());
 		} catch (ScriptException e) {
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
-			final Message msg=event.getTextChannel().sendMessage("No...").complete();
+			final Message msg = event.getTextChannel().sendMessage("No...").complete();
 			msg.addReaction("❌").complete();
 			new Timer().schedule(new TimerTask() {
 				
 				@Override
 				public void run() {
-					Message message=event.getTextChannel().retrieveMessageById(msg.getId()).complete();
+					Message message = event.getTextChannel().retrieveMessageById(msg.getId()).complete();
 					for (MessageReaction reaction : message.getReactions()) {
-						if(reaction.getReactionEmote().getEmoji().equals("❌")&&reaction.retrieveUsers().complete().contains(event.getAuthor())) {
+						if(reaction.getReactionEmote().getEmoji().equals("❌") && reaction.retrieveUsers().complete().contains(event.getAuthor())) {
 							message.delete().complete();
 							return;
 						}

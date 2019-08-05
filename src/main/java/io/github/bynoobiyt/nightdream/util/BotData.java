@@ -39,7 +39,9 @@ public class BotData {
 	public static void setPrefix(Guild g,String prefix) {
 		setProperty("prefix", prefix, g);
 	}
-
+	public static void resetPrefix(Guild g) {
+		setPrefix(g, getDefaultPrefix());
+	}
 	public static String[] getAdminIDs() {
 		return BotData.adminIDs;
 	}
