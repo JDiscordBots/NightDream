@@ -41,7 +41,7 @@ public class NightDream {
 			System.out.println("No Property File found");
 			try(FileWriter writer = new FileWriter(file)){
 				props.setProperty("token", "");
-				props.setProperty("prefix", BotData.getDefaultPrefix());
+				//props.setProperty("prefix", BotData.getDefaultPrefix()); TODO test
 				props.setProperty("game","with you");
 				props.setProperty("admin", String.join(" ",BotData.getAdminIDs()));
 				props.store(writer,"Nightdream Properties");
@@ -53,7 +53,7 @@ public class NightDream {
 			}
 		}
 		
-		BotData.setDefaultPrefix(props.getProperty("prefix",BotData.getDefaultPrefix()));
+		//BotData.setDefaultPrefix(props.getProperty("prefix",BotData.getDefaultPrefix()));
 		BotData.setAdminIDs(props.getProperty("admin",String.join(" ",BotData.getAdminIDs())).split(" "));
 		
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)

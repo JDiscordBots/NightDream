@@ -23,14 +23,13 @@ public class CommandListener extends ListenerAdapter {
 		if (!event.isFromGuild()){
 			return;
 		}
-		if (event.getMessage().getContentDisplay().startsWith("nd-prefix") && !event.getAuthor().isBot()) {
-			CommandHandler.handleCommand(CommandParser.parser(event,"nd-"));
-			return;
+		else if(event.getMessage().getContentRaw().equals(event.getGuild().getMember(event.getJDA().getSelfUser()).getAsMention())&& !event.getAuthor().isBot()) {
+			event.getTextChannel().sendMessage("My prefix here: `"+BotData.getPrefix(event.getGuild())+"`").complete();
 		}
-		if ((event.getMessage().getMentionedUsers().size() == 1) && (event.getMessage().getContentDisplay().startsWith("@")) && event.getMessage().getMentionedUsers().contains(event.getJDA().getSelfUser()) && !event.getMessage().getAuthor().isBot()) {
+		else if (event.getMessage().getContentRaw().startsWith(event.getGuild().getMember(event.getJDA().getSelfUser()).getAsMention()+" ") && !event.getMessage().getAuthor().isBot()) {
 			CommandHandler.handleCommand(CommandParser.parser(event,event.getMessage().getContentRaw().split(" ")[0]+" "));
 		}
-		if (event.getMessage().getContentDisplay().startsWith(BotData.getPrefix(event.getGuild())) && (!event.getMessage().getAuthor().isBot())) {
+		else if (event.getMessage().getContentDisplay().startsWith(BotData.getPrefix(event.getGuild())) && (!event.getMessage().getAuthor().isBot())) {
 			CommandHandler.handleCommand(CommandParser.parser(event));
 		}
 		

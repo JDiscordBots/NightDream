@@ -1,6 +1,7 @@
 package io.github.bynoobiyt.nightdream.util;
 
 import java.awt.Color;
+import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -120,5 +121,4 @@ public class Utils {
 		}
 		return false;
 	}
-	
 }
