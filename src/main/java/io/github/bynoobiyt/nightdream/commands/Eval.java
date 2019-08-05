@@ -11,7 +11,7 @@ import io.github.bynoobiyt.nightdream.util.Utils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @BotCommand("eval")
-public class Eval implements Command{
+public class Eval implements Command {
 
 	private ScriptEngine se;
 	private static final String LATEST_EXCEPTION_KEY_NAME="err";
