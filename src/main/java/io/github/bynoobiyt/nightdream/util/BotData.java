@@ -1,7 +1,6 @@
 package io.github.bynoobiyt.nightdream.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -18,26 +17,28 @@ public class BotData {
 	private static Properties defaultProps;
 	private static final Map<Guild,Properties> guildProps = new HashMap<>();
 	
+	private static final String PREFIX_PROP_NAME="prefix";
+	
 	private BotData() {
 		//prevent Instantiation
 	}
 	
 	public static String getDefaultPrefix() {
-		return getDefaultProperties().getProperty("prefix","nd-");
+		return getDefaultProperties().getProperty(PREFIX_PROP_NAME,"nd-");
 	}
 	public static void setDefaultPrefix(String prefix) {
 		if (prefix == null || prefix.equals("")) {
 			prefix = "nd-";
 		}
 		Properties props=getDefaultProperties();
-		props.setProperty("prefix", prefix);
+		props.setProperty(PREFIX_PROP_NAME, prefix);
 		saveGuildDefaultProperties(props);
 	}
 	public static final String getPrefix(Guild g) {
-		return getProperty("prefix", g);
+		return getProperty(PREFIX_PROP_NAME, g);
 	}
 	public static void setPrefix(Guild g,String prefix) {
-		setProperty("prefix", prefix, g);
+		setProperty(PREFIX_PROP_NAME, prefix, g);
 	}
 	public static void resetPrefix(Guild g) {
 		setPrefix(g, getDefaultPrefix());
@@ -92,13 +93,12 @@ public class BotData {
 		if(file.exists()) {
 			try(Reader reader=new FileReader(file)){
 				props.load(reader);
-				//setDefaultPrefix(props.getProperty(defaultPrefix,getDefaultPrefix()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}else {
 			try(Writer writer=new FileWriter(file)){
-				props.setProperty("prefix", getDefaultPrefix());
+				props.setProperty(PREFIX_PROP_NAME, getDefaultPrefix());
 				props.store(writer,"Default Properties of Nightdream");
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -10,14 +10,16 @@ import java.util.Random;
 @BotCommand("rate")
 public class Rate implements Command {
 
+	Random r = new Random();
+	
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        Random r = new Random();
         int i = r.nextInt(100) + 1;
         User mentioned = null;
         try {
             mentioned = event.getMessage().getMentionedMembers().get(0).getUser();
         } catch (Exception ignored) {
+        	//ignore
         }
 
         EmbedBuilder eb = new EmbedBuilder().setColor(0x212121)
