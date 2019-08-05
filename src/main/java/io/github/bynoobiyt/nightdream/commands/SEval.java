@@ -49,14 +49,14 @@ public class SEval implements Command {
 		} catch (ScriptException e) {
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
 			final Message msg = event.getTextChannel().sendMessage("No...").complete();
-			msg.addReaction("❌").complete();
+			msg.addReaction("\u274C").complete();
 			new Timer().schedule(new TimerTask() {
 				
 				@Override
 				public void run() {
 					Message message = event.getTextChannel().retrieveMessageById(msg.getId()).complete();
 					for (MessageReaction reaction : message.getReactions()) {
-						if(reaction.getReactionEmote().getEmoji().equals("❌") && reaction.retrieveUsers().complete().contains(event.getAuthor())) {
+						if(reaction.getReactionEmote().getEmoji().equals("\u274C") && reaction.retrieveUsers().complete().contains(event.getAuthor())) {
 							message.delete().complete();
 							return;
 						}

@@ -9,8 +9,9 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
-    id'com.github.johnrengelman.shadow' version '4.0.4'
 }
+
+version = '0.0.4'
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
