@@ -56,11 +56,11 @@ public class BotData {
 	public static void setAdminIDs(String[] adminIDs) {
 		BotData.adminIDs = adminIDs;
 	}
-	private static String getProperty(String key,Guild g) {
+	private static String getProperty(String key, Guild g) {
 		return getGuildSpecificProperties(g).getProperty(key);
 	}
-	private static void setProperty(String key,String value,Guild g) {
-		Properties props=getGuildSpecificProperties(g);
+	private static void setProperty(String key, String value, Guild g) {
+		Properties props = getGuildSpecificProperties(g);
 		props.setProperty(key, value);
 		saveGuildSpecificProperties(props, g);
 	}
