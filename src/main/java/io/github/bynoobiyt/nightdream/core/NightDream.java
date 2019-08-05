@@ -43,7 +43,7 @@ public class NightDream {
 				props.setProperty("token", "");
 				props.setProperty("prefix", BotData.getDefaultPrefix());
 				props.setProperty("game","with you");
-				props.setProperty("admin", BotData.getAdminID());
+				props.setProperty("admin", String.join(" ",BotData.getAdminIDs()));
 				props.store(writer,"Nightdream Properties");
 				System.out.println("created Properties file with default Properties - please include the Bot token");
 				System.exit(1);
@@ -54,7 +54,7 @@ public class NightDream {
 		}
 		
 		BotData.setDefaultPrefix(props.getProperty("prefix",BotData.getDefaultPrefix()));
-		BotData.setAdminID(props.getProperty("admin",BotData.getAdminID()));
+		BotData.setAdminIDs(props.getProperty("admin",String.join(" ",BotData.getAdminIDs())).split(" "));
 		
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
 		.setToken(props.getProperty("token"))
