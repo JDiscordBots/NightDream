@@ -16,8 +16,14 @@ public class BotData {
 	private static String[] adminIDs= {"358291050957111296","321227144791326730","299556333097844736"};
 	private static Properties defaultProps;
 	private static final Map<Guild,Properties> guildProps = new HashMap<>();
-	
 	private static final String PREFIX_PROP_NAME="prefix";
+	public static final File DATA_DIR=new File("NightDream");
+	
+	static {
+		if(!DATA_DIR.exists()) {
+			DATA_DIR.mkdirs();
+		}
+	}
 	
 	private BotData() {
 		//prevent Instantiation
@@ -66,7 +72,7 @@ public class BotData {
 	}
 	private static Properties loadGuildSpecificProperties(Guild g) {
 		Properties props=new Properties(getDefaultProperties());
-		try(Reader reader=new FileReader(new File("Guild"+g.getId()+".properties"))){
+		try(Reader reader=new FileReader(new File(DATA_DIR,"Guild"+g.getId()+".properties"))){
 			props.load(reader);
 		} catch (IOException e) {
 			// ignore
@@ -74,21 +80,21 @@ public class BotData {
 		return props;
 	}
 	private static void saveGuildSpecificProperties(Properties props,Guild g) {
-		try(Writer writer=new FileWriter(new File("Guild"+g.getId()+".properties"))){
+		try(Writer writer=new FileWriter(new File(DATA_DIR,"Guild"+g.getId()+".properties"))){
 			props.store(writer,"Guild specific Properties for Guild "+g.getName());
 		} catch (IOException e) {
 			// ignore
 		}
 	}
 	private static void saveGuildDefaultProperties(Properties props) {
-		try(Writer writer=new FileWriter(new File("Guild.properties"))){
+		try(Writer writer=new FileWriter(new File(DATA_DIR,"Guild.properties"))){
 			props.store(writer,"Default Properties of Nightdream");
 		} catch (IOException e) {
 			// ignore
 		}
 	}
 	private static Properties loadGuildDefaultProperties() {
-		File file=new File("Guild.properties");
+		File file=new File(DATA_DIR,"Guild.properties");
 		Properties props=new Properties();
 		if(file.exists()) {
 			try(Reader reader=new FileReader(file)){
