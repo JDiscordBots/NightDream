@@ -11,8 +11,8 @@ plugins {
 }
 
 version = '0.0.4'
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 8
+targetCompatibility = 8
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
