@@ -16,8 +16,8 @@ public class BotData {
 	private static String[] adminIDs= {"358291050957111296","321227144791326730","299556333097844736"};
 	private static Properties defaultProps;
 	private static final Map<Guild,Properties> guildProps = new HashMap<>();
-	private static final String PREFIX_PROP_NAME="prefix";
-	public static final File DATA_DIR=new File("NightDream");
+	private static final String PREFIX_PROP_NAME = "prefix";
+	public static final File DATA_DIR = new File("NightDream");
 	
 	static {
 		if(!DATA_DIR.exists()) {
