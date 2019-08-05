@@ -109,8 +109,11 @@ public class Utils {
 	 * @return <code>true</code> if the Author is the Developer, else <code>false</code>
 	 */
 	public static boolean checkOwner(MessageReceivedEvent event,boolean doErrMsg) {
-		if(event.getAuthor().getId().equals(BotData.getAdminID())) {
-			return true;
+		String authorID=event.getAuthor().getId();
+		for (String adminID : BotData.getAdminIDs()) {
+			if(adminID.equals(authorID)) {
+				return true;
+			}
 		}
 		if (doErrMsg) {
 			errmsg(event.getTextChannel(),"You need to be Bot-Admin to do that!");
