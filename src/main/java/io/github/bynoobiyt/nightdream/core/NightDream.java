@@ -66,7 +66,7 @@ public class NightDream {
 			OnlineStatus.OFFLINE
 			OnlineStatus.UNKNOWN
 		*/
-		.setActivity(Activity.playing("nd-help | " + props.getProperty("game","with you"))) //the name of the game the Bot is "playing"
+		.setActivity(Activity.playing(BotData.getDefaultPrefix() + " | " + props.getProperty("game","with you"))) //the name of the game the Bot is "playing"
 		/*
 			Game.playing(String)//playing...
 			Game.listening(String)//listening...
