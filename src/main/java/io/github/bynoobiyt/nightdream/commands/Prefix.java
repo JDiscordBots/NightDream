@@ -10,7 +10,7 @@ public class Prefix implements Command {
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
         if (args.length == 0) {
-            event.getChannel().sendMessageFormat("%s, Something went very wrong! <:IconX:553868311960748044>", event.getMember().getAsMention()).queue();
+            event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a prefix to begin with.").queue();
             return;
         }
         if (args[0].equals("reset")) {
