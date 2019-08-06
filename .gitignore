@@ -1,5 +1,7 @@
 *.properties
 
+start.bat
+
 gradle
 
 # Created by https://www.gitignore.io/api/java,linux,macos,gradle,windows,eclipse,intellij+all

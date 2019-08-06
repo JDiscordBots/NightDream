@@ -43,7 +43,7 @@ public class Telemetry implements Command {
 	public void action(String[] args, MessageReceivedEvent event) {
 		StringBuilder sb=new StringBuilder();
 		for(Command cmd:CommandHandler.getCommands().values()) {
-			sb.append(BotData.getPrefix(event.getGuild())).append(cmd.getClass().getSimpleName());
+			sb.append(BotData.getPrefix(event.getGuild())).append(cmd.getClass().getSimpleName().toLowerCase());
 			if(TELEMETRY_DATA.containsKey(cmd.getClass().getSimpleName())) {
 				sb.append(" used ").append(TELEMETRY_DATA.getProperty(cmd.getClass().getSimpleName())).append(" times in total\n");
 			}else {
