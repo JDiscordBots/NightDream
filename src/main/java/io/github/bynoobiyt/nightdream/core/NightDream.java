@@ -55,19 +55,19 @@ public class NightDream {
 		BotData.setAdminIDs(props.getProperty("admin",String.join(" ",BotData.getAdminIDs())).split(" "));
 		
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
-		.setToken(props.getProperty("token"))
-		.setAutoReconnect(true) //should the Bot reconnect?
-		.setStatus(OnlineStatus.ONLINE)//the online Status
-		/*possible statuses:
-			OnlineStatus.DO_NOT_DISTURB
-			OnlineStatus.IDLE
-			OnlineStatus.INVISIBLE
-			OnlineStatus.ONLINE
-			OnlineStatus.OFFLINE
-			OnlineStatus.UNKNOWN
-		*/
-		.setActivity(Activity.playing(BotData.getDefaultPrefix() + " | " + props.getProperty("game","with you"))) //the name of the game the Bot is "playing"
-		/*
+			.setToken(props.getProperty("token"))
+			.setAutoReconnect(true) //should the Bot reconnect?
+			.setStatus(OnlineStatus.ONLINE)//the online Status
+			/*possible statuses:
+				OnlineStatus.DO_NOT_DISTURB
+				OnlineStatus.IDLE
+				OnlineStatus.INVISIBLE
+				OnlineStatus.ONLINE
+				OnlineStatus.OFFLINE
+				OnlineStatus.UNKNOWN
+			*/
+			.setActivity(Activity.playing(BotData.getDefaultPrefix() + "help | " + props.getProperty("game","with you"))) //the name of the game the Bot is "playing"
+			/*
 			Game.playing(String)//playing...
 			Game.listening(String)//listening...
 			Game.streaming(String, String)//streaming...(with url)
