@@ -10,7 +10,7 @@ import java.util.Random;
 @BotCommand("rate")
 public class Rate implements Command {
 
-	Random r = new Random();
+	private Random r = new Random();
 	
     @Override
     public void action(String[] args, MessageReceivedEvent event) {

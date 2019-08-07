@@ -1,6 +1,7 @@
 package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
+import io.github.bynoobiyt.nightdream.util.Utils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -24,7 +25,7 @@ public class Prefix implements Command {
 
     @Override
     public boolean allowExecute(String[] args, MessageReceivedEvent event) {
-        return event.getMember().hasPermission(Permission.ADMINISTRATOR) || event.getMember().hasPermission(Permission.MANAGE_SERVER) || event.getMember().hasPermission(Permission.MESSAGE_MANAGE);
+        return event.getMember().hasPermission(Permission.ADMINISTRATOR) || event.getMember().hasPermission(Permission.MANAGE_SERVER) || event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || Utils.checkOwner(event);
     }
 
     @Override

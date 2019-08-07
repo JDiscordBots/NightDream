@@ -18,7 +18,7 @@ public class Ping implements Command {
 		builder.setColor(Color.GRAY);
 		Message msg = Utils.msg(event.getTextChannel(), builder.build(),false);
 		builder.setColor(Color.GREEN);
-		builder.setDescription("<:IconThis:553869005820002324> Latency: "+(msg.getTimeCreated().getNano() -event.getMessage().getTimeCreated().getNano())/1000+"ms. API Latency is "+event.getJDA().getGatewayPing()+"ms");
+		builder.setDescription("<:IconThis:553869005820002324> Latency: " + (msg.getTimeCreated().getNano() - event.getMessage().getTimeCreated().getNano()) / 1000 + "ms. API Latency is " + event.getJDA().getGatewayPing() + "ms");
 		msg.editMessage(builder.build()).complete();
 	}
 
