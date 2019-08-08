@@ -8,4 +8,4 @@ jobs:
       - gradle wrapper
       script:
         - ./saveJAR.sh
-      if: branch = master
+      if: (branch = master) AND (type = push)
