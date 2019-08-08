@@ -4,6 +4,8 @@ jobs:
     - stage: "Upload to Wiki"
       jdk:
       - openjdk8
+      before-install:
+      - gradle wrapper
       script:
         - chmod +x ./saveJAR.sh
         - ./saveJAR.sh
