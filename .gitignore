@@ -276,3 +276,4 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/java,linux,macos,gradle,windows,eclipse,intellij+all
+startNightdream.bat
