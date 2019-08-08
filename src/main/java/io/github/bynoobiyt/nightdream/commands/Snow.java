@@ -1,5 +1,6 @@
 package io.github.bynoobiyt.nightdream.commands;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -25,7 +26,7 @@ public class Snow implements Command {
 		}else {
 			EmbedBuilder eb=new EmbedBuilder();
 			eb.setTitle(args[0]);
-			eb.setColor(0x212121);
+			eb.setColor(Color.white);
 			String binStr=fillWithZerosBefore(64,Long.toBinaryString(Long.valueOf(args[0])));
 			eb.addField("Binary",binStr , false);
 			eb.addField("Date", new Date(Long.valueOf(binStr.substring(0,42),2)+EPOCH).toString(), false);

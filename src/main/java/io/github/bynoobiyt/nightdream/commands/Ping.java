@@ -15,7 +15,7 @@ public class Ping implements Command {
 		
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(":alarm_clock:");
-		builder.setColor(Color.GRAY);
+		builder.setColor(Color.white);
 		Message msg = Utils.msg(event.getTextChannel(), builder.build(),false);
 		builder.setColor(Color.GREEN);
 		builder.setDescription("<:IconThis:553869005820002324> Latency: " + (msg.getTimeCreated().getNano() - event.getMessage().getTimeCreated().getNano()) / 1000000 + "ms. API Latency is " + event.getJDA().getGatewayPing() + "ms");

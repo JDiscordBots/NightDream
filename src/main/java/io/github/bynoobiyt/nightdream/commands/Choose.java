@@ -4,6 +4,7 @@ import io.github.bynoobiyt.nightdream.util.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -24,7 +25,7 @@ public class Choose implements Command {
 
         String chosen = args[r.nextInt(list.size())];
 
-        EmbedBuilder eb = new EmbedBuilder().setColor(0x212121).setTitle("I've chosen!")
+        EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("I've chosen!")
                 .setDescription(chosen);
 
         Utils.msg(event.getTextChannel(), eb.build(), false);

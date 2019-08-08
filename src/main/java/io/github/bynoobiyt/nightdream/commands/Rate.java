@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.awt.*;
 import java.util.Random;
 
 @BotCommand("rate")
@@ -22,7 +23,7 @@ public class Rate implements Command {
         	//ignore
         }
 
-        EmbedBuilder eb = new EmbedBuilder().setColor(0x212121)
+        EmbedBuilder eb = new EmbedBuilder().setColor(Color.white)
                 .setTitle(String.format("Rating %s", mentioned != null ? mentioned.getName() : event.getAuthor().getName()))
                 .setDescription(String.format("%s/100", i));
         Utils.msg(event.getTextChannel(), eb.build(), false);
