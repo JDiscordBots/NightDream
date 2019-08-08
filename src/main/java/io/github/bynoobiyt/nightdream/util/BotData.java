@@ -102,7 +102,7 @@ public class BotData {
 		if(globalProps==null) {
 			Map<String,String> defaults=new HashMap<>();
 			defaults.put("token", "");
-			defaults.put("game","Nightdreaming");
+			defaults.put("game","Nightdreaming...");
 			defaults.put("admin", String.join(" ","358291050957111296","321227144791326730","299556333097844736"));
 			globalProps=loadProperties("NightDream.properties", defaults, "Nightdream Properties");
 		}

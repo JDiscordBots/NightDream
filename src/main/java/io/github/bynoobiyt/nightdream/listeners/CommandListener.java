@@ -27,7 +27,12 @@ public class CommandListener extends ListenerAdapter {
 			event.getTextChannel().sendMessage("My prefix here: `"+BotData.getPrefix(event.getGuild())+"`").complete();
 		}
 		else if (event.getMessage().getContentRaw().startsWith(event.getGuild().getMember(event.getJDA().getSelfUser()).getAsMention()+" ") && !event.getMessage().getAuthor().isBot()) {
-			CommandHandler.handleCommand(CommandParser.parser(event,event.getMessage().getContentRaw().split(" ")[0]+" "));
+			if(event.getMessage().getContentRaw().toLowerCase().endsWith("> i messed up")) {
+				BotData.setPrefix(event.getGuild(), BotData.getDefaultPrefix());
+				event.getTextChannel().sendMessage("It's fine :smiley:\nI reset the prefix on this guild.").complete();
+			}else {
+				CommandHandler.handleCommand(CommandParser.parser(event,event.getMessage().getContentRaw().split(" ")[0]+" "));
+			}
 		}
 		else if (event.getMessage().getContentDisplay().startsWith(BotData.getPrefix(event.getGuild())) && (!event.getMessage().getAuthor().isBot())) {
 			CommandHandler.handleCommand(CommandParser.parser(event));
