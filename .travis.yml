@@ -1,0 +1,11 @@
+language: java
+jobs:
+  include:
+    - stage: "Upload to Wiki"
+      jdk:
+      - openjdk8
+      before_install:
+      - gradle wrapper
+      script:
+        - ./saveJAR.sh
+      if: (branch = master) AND (type = push)
