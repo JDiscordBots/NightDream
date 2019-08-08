@@ -10,10 +10,7 @@ public class Activity implements Command {
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        if (args.length == 0) {
-            event.getChannel().sendMessageFormat("%s, Something went very wrong! <:IconX:553868311960748044>", event.getMember().getAsMention()).queue();
-            return;
-        }
+
         StringBuilder builder = new StringBuilder();
         for (String arg : args) {
             builder.append(arg).append(" ");
