@@ -19,11 +19,11 @@ public class Activity implements Command {
             builder.append(arg).append(" ");
         }
         BotData.setGlobalProperty("game", builder.toString());
-        builder.insert(0, BotData.getDefaultPrefix() + " | " );
-        String gameName=builder.toString();
+        builder.insert(0, BotData.getDefaultPrefix() + "help | " );
+        String gameName = builder.toString();
         event.getJDA().getPresence().setActivity(playing(gameName));
         
-        event.getChannel().sendMessage(gameName).queue();
+        event.getChannel().sendMessage("Done: " + gameName).queue();
     }
 
     @Override
