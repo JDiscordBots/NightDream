@@ -5,7 +5,6 @@ import io.github.bynoobiyt.nightdream.util.Utils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import static net.dv8tion.jda.api.entities.Activity.playing;
 
-// TODO: 06.08.2019 Write new game into NightDream.properties
 @BotCommand("activity")
 public class Activity implements Command {
 
@@ -19,9 +18,12 @@ public class Activity implements Command {
         for (String arg : args) {
             builder.append(arg).append(" ");
         }
-        event.getJDA().getPresence().setActivity(playing(BotData.getDefaultPrefix() + " | " + builder.toString()));
-
-        event.getChannel().sendMessage("Done: " + BotData.getDefaultPrefix() + " | " + builder.toString()).queue();
+        BotData.setGlobalProperty("game", builder.toString());
+        builder.insert(0, BotData.getDefaultPrefix() + " | " );
+        String gameName=builder.toString();
+        event.getJDA().getPresence().setActivity(playing(gameName));
+        
+        event.getChannel().sendMessage(gameName).queue();
     }
 
     @Override

@@ -1,11 +1,6 @@
 package io.github.bynoobiyt.nightdream.core;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.Properties;
 import java.util.function.BiConsumer;
 
 import javax.security.auth.login.LoginException;
@@ -29,33 +24,8 @@ public class NightDream {
 	public static final String VERSION = "0.0.4";
 	
 	public static void main(String[] args) {
-		Properties props = new Properties();
-		File file = new File(BotData.DATA_DIR,"NightDream.properties");
-		if (file.exists()) {
-			try(FileReader reader = new FileReader(file)){
-				props.load(reader);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("No Property File found");
-			try(FileWriter writer = new FileWriter(file)){
-				props.setProperty("token", "");
-				props.setProperty("game","with you");
-				props.setProperty("admin", String.join(" ",BotData.getAdminIDs()));
-				props.store(writer,"Nightdream Properties");
-				System.out.println("created Properties file with default Properties - please include the Bot token");
-				System.exit(1);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		BotData.setAdminIDs(props.getProperty("admin",String.join(" ",BotData.getAdminIDs())).split(" "));
-		
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
-			.setToken(props.getProperty("token"))
+			.setToken(BotData.getGlobalProperty("token"))
 			.setAutoReconnect(true) //should the Bot reconnect?
 			.setStatus(OnlineStatus.ONLINE)//the online Status
 			/*possible statuses:
@@ -66,7 +36,7 @@ public class NightDream {
 				OnlineStatus.OFFLINE
 				OnlineStatus.UNKNOWN
 			*/
-			.setActivity(Activity.playing(BotData.getDefaultPrefix() + "help | " + props.getProperty("game","with you"))) //the name of the game the Bot is "playing"
+			.setActivity(Activity.playing(BotData.getDefaultPrefix() + "help | " + BotData.getGlobalProperty("game"))) //the name of the game the Bot is "playing"
 			/*
 			Game.playing(String)//playing...
 			Game.listening(String)//listening...

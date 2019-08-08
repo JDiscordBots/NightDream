@@ -1,9 +1,7 @@
 package io.github.bynoobiyt.nightdream.commands;
 
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import io.github.bynoobiyt.nightdream.util.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -40,7 +38,7 @@ public class Snow implements Command {
 	public String help() {
 		return null;
 	}
-	private String generate() {
+	private static String generate() {
 		long diff=System.currentTimeMillis()-EPOCH;
 		String timeBinStr=Long.toBinaryString(diff);
 		String timeStampStr=fillWithZerosBefore(42,timeBinStr);
@@ -48,7 +46,7 @@ public class Snow implements Command {
 		String binStr=timeStampStr+workerAndProcessIDs+fillWithZerosBefore(12,Integer.toBinaryString((increment++)%4096));
 		return Long.valueOf(binStr, 2).toString();
 	}
-	private String fillWithZerosBefore(int len,String original) {
+	private static String fillWithZerosBefore(int len,String original) {
 		char[] data=new char[len];
 		int strlen=original.length();
 		Arrays.fill(data,0,data.length-strlen, '0');

@@ -1,7 +1,5 @@
 package io.github.bynoobiyt.nightdream.commands;
 
-import java.awt.Color;
-
 import io.github.bynoobiyt.nightdream.core.CommandHandler;
 import io.github.bynoobiyt.nightdream.util.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;

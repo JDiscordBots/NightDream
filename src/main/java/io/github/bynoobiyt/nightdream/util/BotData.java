@@ -13,9 +13,9 @@ import java.util.Properties;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class BotData {
-	private static String[] adminIDs= {"358291050957111296","321227144791326730","299556333097844736"};
 	private static Properties defaultProps;
 	private static final Map<Guild,Properties> guildProps = new HashMap<>();
+	private static Properties globalProps;
 	private static final String PREFIX_PROP_NAME = "prefix";
 	public static final File DATA_DIR = new File("NightDream");
 	
@@ -50,11 +50,10 @@ public class BotData {
 		setPrefix(g, getDefaultPrefix());
 	}
 	public static String[] getAdminIDs() {
-		return BotData.adminIDs;
+		return getGlobalProperty("admin").split(" ");
 	}
-
 	public static void setAdminIDs(String[] adminIDs) {
-		BotData.adminIDs = adminIDs;
+		setGlobalProperty("admin", String.join(" ",adminIDs));
 	}
 	private static String getProperty(String key, Guild g) {
 		return getGuildSpecificProperties(g).getProperty(key);
@@ -71,31 +70,48 @@ public class BotData {
 		return guildProps.get(g);
 	}
 	private static Properties loadGuildSpecificProperties(Guild g) {
-		Properties props=new Properties(getDefaultProperties());
-		try(Reader reader=new FileReader(new File(DATA_DIR,"Guild"+g.getId()+".properties"))){
-			props.load(reader);
-		} catch (IOException e) {
-			// ignore
-		}
-		return props;
+		return loadPropertiesWithoutGenerating("Guild"+g.getId()+".properties", getDefaultProperties());
 	}
+
 	private static void saveGuildSpecificProperties(Properties props,Guild g) {
-		try(Writer writer=new FileWriter(new File(DATA_DIR,"Guild"+g.getId()+".properties"))){
-			props.store(writer,"Guild specific Properties for Guild "+g.getName());
-		} catch (IOException e) {
-			// ignore
-		}
+		saveProperties("Guild"+g.getId()+".properties", props, "Guild specific Properties for Guild "+g.getName());
 	}
 	private static void saveGuildDefaultProperties(Properties props) {
-		try(Writer writer=new FileWriter(new File(DATA_DIR,"Guild.properties"))){
-			props.store(writer,"Default Properties of Nightdream");
-		} catch (IOException e) {
-			// ignore
-		}
+		saveProperties("Guild.properties", props, "Default Properties of Nightdream");
 	}
 	private static Properties loadGuildDefaultProperties() {
-		File file=new File(DATA_DIR,"Guild.properties");
+		Map<String,String> defaults=new HashMap<>();
+		defaults.put(PREFIX_PROP_NAME, "nd-");
+		return loadProperties("Guild.properties", defaults, "Default Properties of Nightdream");
+	}
+	private static Properties getDefaultProperties() {
+		if (defaultProps==null) {
+			defaultProps=loadGuildDefaultProperties();
+		}
+		return defaultProps;
+	}
+	public static String getGlobalProperty(String key) {
+		return getGlobalProperties().getProperty(key);
+	}
+	public static void setGlobalProperty(String key,String value) {
+		Properties props=getGlobalProperties();
+		props.setProperty(key, value);
+		saveProperties("NightDream.properties", props, "Nightdream Properties");
+	}
+	private static Properties getGlobalProperties() {
+		if(globalProps==null) {
+			Map<String,String> defaults=new HashMap<>();
+			defaults.put("token", "");
+			defaults.put("game","Nightdreaming");
+			defaults.put("admin", String.join(" ","358291050957111296","321227144791326730","299556333097844736"));
+			globalProps=loadProperties("NightDream.properties", defaults, "Nightdream Properties");
+		}
+		return globalProps;
+	}
+	private static Properties loadProperties(String filename,Map<String,String> defaults,String comment) {
 		Properties props=new Properties();
+		props.putAll(defaults);
+		File file=new File(DATA_DIR,filename);
 		if(file.exists()) {
 			try(Reader reader=new FileReader(file)){
 				props.load(reader);
@@ -104,18 +120,30 @@ public class BotData {
 			}
 		}else {
 			try(Writer writer=new FileWriter(file)){
-				props.setProperty(PREFIX_PROP_NAME, getDefaultPrefix());
-				props.store(writer,"Default Properties of Nightdream");
+				props.store(writer,comment);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return props;
 	}
-	private static Properties getDefaultProperties() {
-		if (defaultProps==null) {
-			defaultProps=loadGuildDefaultProperties();
+	private static Properties loadPropertiesWithoutGenerating(String filename, Properties defaultProperties) {
+		Properties props=new Properties(defaultProperties);
+		File file=new File(DATA_DIR,filename);
+		if(file.exists()) {
+			try(Reader reader=new FileReader(file)){
+				props.load(reader);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		return defaultProps;
+		return props;
+	}
+	private static void saveProperties(String filename,Properties props, String comment) {
+		try(Writer writer=new FileWriter(new File(DATA_DIR,filename))){
+			props.store(writer,comment);
+		} catch (IOException e) {
+			// ignore
+		}
 	}
 }
