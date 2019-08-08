@@ -7,6 +7,5 @@ jobs:
       before_install:
       - gradle wrapper
       script:
-        - chmod +x ./saveJAR.sh
         - ./saveJAR.sh
-      #if: branch = master
+      if: branch = master
