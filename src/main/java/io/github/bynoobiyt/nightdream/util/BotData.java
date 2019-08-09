@@ -90,7 +90,7 @@ public class BotData {
 	private static Properties loadGuildDefaultProperties() {
 		Map<String,String> defaults=new HashMap<>();
 		defaults.put(PREFIX_PROP_NAME, "nd-");
-		defaults.put("MsgLogChannelId", "");
+		defaults.put("MsgLogChannel", "");
 		return loadProperties("Guild.properties", defaults, "Default Properties of Nightdream");
 	}
 	private static Properties getDefaultProperties() {
@@ -114,7 +114,6 @@ public class BotData {
 			defaults.put("game","Nightdreaming...");
 			defaults.put("admin", String.join(" ","358291050957111296","321227144791326730","299556333097844736"));
 			defaults.put("BugReportChannel", "");
-			defaults.put("MsgLogChannel", "");
 			defaults.put("FixedBugsChannel", "");
 			defaults.put("BugID", "0");
 
