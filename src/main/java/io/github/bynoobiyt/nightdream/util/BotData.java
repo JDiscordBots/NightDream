@@ -118,7 +118,7 @@ public class BotData {
 		}
 		return globalProps;
 	}
-	private static Properties loadProperties(String filename,Map<String,String> defaults,String comment) {
+	public static Properties loadProperties(String filename,Map<String,String> defaults,String comment) {
 		Properties props=new Properties();
 		props.putAll(defaults);
 		File file=new File(DATA_DIR,filename);
@@ -137,7 +137,7 @@ public class BotData {
 		}
 		return props;
 	}
-	private static Properties loadPropertiesWithoutGenerating(String filename, Properties defaultProperties) {
+	public static Properties loadPropertiesWithoutGenerating(String filename, Properties defaultProperties) {
 		Properties props=new Properties(defaultProperties);
 		File file=new File(DATA_DIR,filename);
 		if(file.exists()) {
@@ -149,7 +149,7 @@ public class BotData {
 		}
 		return props;
 	}
-	private static void saveProperties(String filename,Properties props, String comment) {
+	public static void saveProperties(String filename,Properties props, String comment) {
 		try(Writer writer=new FileWriter(new File(DATA_DIR,filename))){
 			props.store(writer,comment);
 		} catch (IOException e) {
