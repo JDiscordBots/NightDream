@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 public class BotData {
 	private static Properties defaultProps;
