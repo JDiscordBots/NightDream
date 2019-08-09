@@ -22,6 +22,7 @@ public class NightDream {
 
 	private static final String ANNOTATED_WITH=" is annotated with @";
 	public static final String VERSION = "0.0.4";
+	private static JDA jda;
 	
 	public static void main(String[] args) {
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
@@ -42,13 +43,13 @@ public class NightDream {
 			Game.listening(String)//listening...
 			Game.streaming(String, String)//streaming...(with url)
 			Game.watching(String)//watching...
-		*/
-		.setRequestTimeoutRetry(true);
+			*/
+			.setRequestTimeoutRetry(true);
 		//initialize listeners
 		Reflections ref = new Reflections("io.github.bynoobiyt.nightdream");
 		addCommandsAndListeners(ref, builder);
 		try {
-			JDA jda = builder.build();
+			jda = builder.build();
 			jda.awaitReady();
 
 			((JDAImpl) jda).getGuildSetupController().clearCache();
@@ -101,4 +102,8 @@ public class NightDream {
 			}
         }
     }
+
+	public static JDA getJDA() {
+		return jda;
+	}
 }

@@ -11,7 +11,7 @@ public class Avatar implements Command {
 
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
-		User user = null;
+		User user;
 		try {
 			user = event.getMessage().getMentionedMembers().get(0).getUser();
 		} catch (Exception e) {

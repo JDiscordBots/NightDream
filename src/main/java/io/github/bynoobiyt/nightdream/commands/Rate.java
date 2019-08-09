@@ -16,15 +16,15 @@ public class Rate implements Command {
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
         int i = r.nextInt(100) + 1;
-        User mentioned = null;
+        User mentioned;
         try {
             mentioned = event.getMessage().getMentionedMembers().get(0).getUser();
         } catch (Exception ignored) {
-        	//ignore
+            mentioned = event.getAuthor();
         }
 
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white)
-                .setTitle(String.format("Rating %s", mentioned != null ? mentioned.getName() : event.getAuthor().getName()))
+                .setTitle(String.format("Rating %s", mentioned.getName()))
                 .setDescription(String.format("%s/100", i));
         Utils.msg(event.getTextChannel(), eb.build(), false);
     }

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 public class BotData {
 	private static Properties defaultProps;
@@ -45,6 +46,15 @@ public class BotData {
 	}
 	public static void setPrefix(Guild g,String prefix) {
 		setProperty(PREFIX_PROP_NAME, prefix, g);
+	}
+	public static void setMsgLogChannel(String channelId, Guild guild) {
+		setProperty("MsgLogChannelId", channelId, guild);
+	}
+	public static String getMsgLogChannel(Guild guild) {
+		return getProperty("MsgLogChannelId", guild);
+	}
+	public static void resetMsgLogChannel(Guild guild) {
+		setMsgLogChannel(getMsgLogChannel(guild), null);
 	}
 	public static void resetPrefix(Guild g) {
 		setPrefix(g, getDefaultPrefix());

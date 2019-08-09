@@ -21,7 +21,7 @@ public class CommandListener extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(final MessageReceivedEvent event) {
 		if (!event.isFromGuild()){
-			//return
+			// return
 		}
 		else if(event.getMessage().getContentRaw().equals(event.getGuild().getMember(event.getJDA().getSelfUser()).getAsMention())&& !event.getAuthor().isBot()) {
 			event.getTextChannel().sendMessage("My prefix here: `"+BotData.getPrefix(event.getGuild())+"`").complete();
