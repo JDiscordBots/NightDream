@@ -12,13 +12,17 @@ public class MsgLog implements Command {
 
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
-		if (args.length == 0 || event.getMessage().getMentionedChannels().isEmpty()) {
+		if (args.length == 0) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a mentioned channel").queue();
 			return;
 		}
 		if (args[0].equals("none")) {
 			BotData.resetMsgLogChannel(event.getGuild());
 			event.getChannel().sendMessage("Removed").queue();
+			return;
+		}
+		if (event.getMessage().getMentionedChannels().isEmpty()) {
+			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a mentioned channel").queue();
 			return;
 		}
 		TextChannel channel = null;
