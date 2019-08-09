@@ -47,13 +47,13 @@ public class BotData {
 		setProperty(PREFIX_PROP_NAME, prefix, g);
 	}
 	public static void setMsgLogChannel(String channelId, Guild guild) {
-		setProperty("MsgLogChannelId", channelId, guild);
+		setProperty("MsgLogChannel", channelId, guild);
 	}
 	public static String getMsgLogChannel(Guild guild) {
-		return getProperty("MsgLogChannelId", guild);
+		return getProperty("MsgLogChannel", guild);
 	}
 	public static void resetMsgLogChannel(Guild guild) {
-		setMsgLogChannel(getMsgLogChannel(guild), null);
+		setProperty("MsgLogChannel", "", guild);
 	}
 	public static void resetPrefix(Guild g) {
 		setPrefix(g, getDefaultPrefix());
@@ -81,7 +81,6 @@ public class BotData {
 	private static Properties loadGuildSpecificProperties(Guild g) {
 		return loadPropertiesWithoutGenerating("Guild"+g.getId()+".properties", getDefaultProperties());
 	}
-
 	private static void saveGuildSpecificProperties(Properties props,Guild g) {
 		saveProperties("Guild"+g.getId()+".properties", props, "Guild specific Properties for Guild "+g.getName());
 	}
@@ -114,6 +113,11 @@ public class BotData {
 			defaults.put("token", "");
 			defaults.put("game","Nightdreaming...");
 			defaults.put("admin", String.join(" ","358291050957111296","321227144791326730","299556333097844736"));
+			defaults.put("BugReportChannel", "");
+			defaults.put("MsgLogChannel", "");
+			defaults.put("FixedBugsChannel", "");
+			defaults.put("BugID", "0");
+
 			globalProps=loadProperties("NightDream.properties", defaults, "Nightdream Properties");
 		}
 		return globalProps;
@@ -155,5 +159,23 @@ public class BotData {
 		} catch (IOException e) {
 			// ignore
 		}
+	}
+	public static void setBugReportChannel(String channelID) {
+		setGlobalProperty("BugReportChannel", channelID);
+	}
+	public static String getBugReportChannel() {
+		return getGlobalProperty("BugReportChannel");
+	}
+	public static void setBugID(int bugID) {
+		setGlobalProperty("BugID", String.valueOf(bugID));
+	}
+	public static int getBugID() {
+		return Integer.parseInt(getGlobalProperty("BugID"));
+	}
+	public static void setFixedBugsChannel(String channelID) {
+		setGlobalProperty("FixedBugsChannel", channelID);
+	}
+	public static String getFixedBugsChannel() {
+		return getGlobalProperty("FixedBugsChannel");
 	}
 }
