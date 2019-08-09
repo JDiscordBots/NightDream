@@ -1,5 +1,6 @@
 package io.github.bynoobiyt.nightdream.commands;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
@@ -37,8 +38,11 @@ public class NPM implements Command{
 			.addField(new Field("Scope", "`"+scope+"`", true));
 			
 			Utils.msg(event.getTextChannel(), builder.build(),false);
-		} catch (IOException e) {
+		}catch(FileNotFoundException e) {
+			Utils.errmsg(event.getTextChannel(), "Not found");
+		}catch (IOException e) {
 			Utils.errmsg(event.getTextChannel(), "An error occured.");
+			e.printStackTrace();
 		}
 	}
 	private String getJSONString(String json,String query) {

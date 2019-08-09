@@ -25,7 +25,7 @@ public class Utils {
 	 * @param text The text of the Message as {@link String}
 	 */
 	public static void errmsg(TextChannel channel, String text) {
-		msg(channel, text, Color.RED, true);
+		msg(channel, text, Color.RED, false);
 	}
 	/**
 	 * send a Message
