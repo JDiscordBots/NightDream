@@ -116,7 +116,7 @@ public class Utils {
 			}
 		}
 		if (doErrMsg) {
-			errmsg(event.getTextChannel(),"You need to be Bot-Admin to do that!");
+			event.getTextChannel().sendMessage("<:IconInfo:553868326581829643> This is an admin command.").complete();
 		}
 		return false;
 	}
