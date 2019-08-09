@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 public class BotData {
 	private static Properties defaultProps;
@@ -91,6 +90,7 @@ public class BotData {
 	private static Properties loadGuildDefaultProperties() {
 		Map<String,String> defaults=new HashMap<>();
 		defaults.put(PREFIX_PROP_NAME, "nd-");
+		defaults.put("MsgLogChannelId", "");
 		return loadProperties("Guild.properties", defaults, "Default Properties of Nightdream");
 	}
 	private static Properties getDefaultProperties() {

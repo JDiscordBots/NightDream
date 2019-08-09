@@ -12,7 +12,7 @@ public class MsgLog implements Command {
 
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
-		if (args.length == 0 || event.getMessage().getMentionedChannels().size() == 0) {
+		if (args.length == 0 || event.getMessage().getMentionedChannels().isEmpty()) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a mentioned channel").queue();
 			return;
 		}

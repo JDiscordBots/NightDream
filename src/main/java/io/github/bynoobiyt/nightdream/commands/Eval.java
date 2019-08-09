@@ -1,7 +1,9 @@
 package io.github.bynoobiyt.nightdream.commands;
 
 
-import java.awt.Color;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -41,16 +43,30 @@ public class Eval implements Command {
         for (String string : args) {
 			scriptBuilder.append(string).append(" ");
 		}
-        Object result = null;
 		try {
+			Object result = null;
 			result = se.eval(scriptBuilder.toString());
+			if (result != null) {
+	        	event.getTextChannel().sendMessage("```js\n"+result.toString()+"\n```").complete();
+			}else {
+				event.getTextChannel().sendMessage("`undefined` or `null`").complete();
+			}
 		} catch (ScriptException e) {
-			Utils.msg(event.getTextChannel(), "" + " \n " + e.getMessage(), Color.RED,false);
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
+			try(StringWriter sw=new StringWriter();
+					PrintWriter pw=new PrintWriter(sw)){
+				e.printStackTrace(pw);
+				String exStr=sw.getBuffer().toString();
+				int len=exStr.length();
+				if(len>1000) {
+					len=1000;
+				}
+				event.getTextChannel().sendMessage("`ERROR` ```java\n"+exStr.substring(0,len)+"\n```").complete();
+			} catch (IOException e1) {
+				//ignore 
+			}
 		}
-        if (result != null) {
-			Utils.msg(event.getTextChannel(), result.toString());
-		}
+        
 	}
 
 	@Override

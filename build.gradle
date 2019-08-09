@@ -24,6 +24,8 @@ dependencies {
     implementation 'com.google.guava:guava:23.0'
 
     compile 'org.reflections:reflections:0.9.11'
+    
+    //should be the same as in io.github.bynoobiyt.nightdream.commands.Info
     compile 'net.dv8tion:JDA:4.BETA.0_32'
     
     //logging
