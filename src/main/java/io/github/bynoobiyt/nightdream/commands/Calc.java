@@ -25,25 +25,25 @@ public class Calc implements Command {
 	public void action(String[] args, MessageReceivedEvent event) {
 		channel = event.getTextChannel();
 		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/] num2`", BotData.getDefaultPrefix());
-			if (args.length == 0) {
-				event.getChannel().sendMessage(wrongFormat).queue();
-				return;
-			}
-			String[] ops = {"+", "-", "*", "/"};
+		if (args.length == 0) {
+			event.getChannel().sendMessage(wrongFormat).queue();
+			return;
+		}
+		String[] ops = {"+", "-", "*", "/"};
 
-			List<String> operations = new ArrayList<>(Arrays.asList(ops));
+		List<String> operations = new ArrayList<>(Arrays.asList(ops));
 
-			if (!operations.contains(args[1]) || args[2] == null) {
-				event.getChannel().sendMessage(wrongFormat).queue();
-				return;
-			}
-			try {
-				Integer.parseInt(args[0]);
-				Integer.parseInt(args[2]);
-		        } catch (Exception e) {
-		    	        event.getChannel().sendMessage(wrongFormat).queue();
-                                return;
-		        }
+		if (!operations.contains(args[1]) || args[2] == null) {
+			event.getChannel().sendMessage(wrongFormat).queue();
+			return;
+		}
+		try {
+			Integer.parseInt(args[0]);
+			Integer.parseInt(args[2]);
+	        } catch (Exception e) {
+		        event.getChannel().sendMessage(wrongFormat).queue();
+                        return;
+		}
 		String operator = args[1];
 
 		num1 = Float.parseFloat(args[0]);
