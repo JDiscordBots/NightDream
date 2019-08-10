@@ -3,8 +3,6 @@ package io.github.bynoobiyt.nightdream.commands;
 import io.github.bynoobiyt.nightdream.core.NightDream;
 import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.IFakeable;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
@@ -39,7 +37,7 @@ public class BugReport implements Command {
 			return false;
 		}
 		try {
-			TextChannel channel = NightDream.getJDA().getTextChannelById(BotData.getBugReportChannel());
+			NightDream.getJDA().getTextChannelById(BotData.getBugReportChannel());
 		} catch (Exception e) {
 			System.out.println("Bug report command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
 			return false;

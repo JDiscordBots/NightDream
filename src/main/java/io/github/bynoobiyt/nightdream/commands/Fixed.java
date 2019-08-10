@@ -4,7 +4,6 @@ import io.github.bynoobiyt.nightdream.core.NightDream;
 import io.github.bynoobiyt.nightdream.util.BotData;
 import io.github.bynoobiyt.nightdream.util.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
@@ -53,7 +52,7 @@ public class Fixed implements Command {
 			return false;
 		}
 		try {
-			TextChannel channel = NightDream.getJDA().getTextChannelById(BotData.getFixedBugsChannel());
+			NightDream.getJDA().getTextChannelById(BotData.getFixedBugsChannel());
 		} catch (Exception e) {
 			System.out.println("Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
 			return false;
