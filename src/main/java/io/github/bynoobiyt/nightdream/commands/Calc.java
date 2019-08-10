@@ -40,9 +40,10 @@ public class Calc implements Command {
 			try {
 				Integer.parseInt(args[0]);
 				Integer.parseInt(args[2]);
-		} catch (Exception e) {
-			event.getChannel().sendMessage(wrongFormat).queue();
-		}
+		        } catch (Exception e) {
+		    	        event.getChannel().sendMessage(wrongFormat).queue();
+                                return;
+		        }
 		String operator = args[1];
 
 		num1 = Float.parseFloat(args[0]);
