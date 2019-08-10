@@ -47,18 +47,18 @@ public class NPM implements Command{
 	}
 	private String getJSONString(String json,String query) {
 		String str="\""+query+"\":\"";
-		int startIndex=json.indexOf(str)+str.length();
-		if(startIndex<0) {
+		if(json.indexOf(str)<0) {
 			return "undefined";
 		}
+		int startIndex=json.indexOf(str)+str.length();
 		return json.substring(startIndex,json.indexOf('\"', startIndex));
 	}
 	private String getMultipleJSONStrings(String json,String query) {
 		String str="\""+query+"\":[\"";
-		int startIndex=json.indexOf(str)+str.length();
-		if(startIndex<0) {
+		if(json.indexOf(str)<0) {
 			return "undefined";
 		}
+		int startIndex=json.indexOf(str)+str.length();
 		return json.substring(startIndex,json.indexOf("\"]", startIndex)).replace("\"", "").replace(",", ", ");
 	}
 	@Override
