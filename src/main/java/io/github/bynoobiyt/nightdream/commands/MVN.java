@@ -29,7 +29,7 @@ public class MVN implements Command{
 			builder.setColor(0xfb3b49)
 			.setTitle("Result")
 			.addField(new Field("group id", "`"+id.split(":")[0]+"`", true))
-			.addField(new Field("artefact id", id.split(":")[1], true))
+			.addField(new Field("artifact id", id.split(":")[1], true))
 			.addField(new Field("Current Version", getJSONString(json, "latestVersion"), true))
 			.addField(new Field("Repository", getJSONString(json, "repositoryId"), true));
 			
