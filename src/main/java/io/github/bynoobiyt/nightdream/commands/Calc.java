@@ -40,6 +40,14 @@ public class Calc implements Command {
 					result = num1 / num2;
 					operation = "divided by";
 					break;
+				case "%":
+					result = num1 % num2;
+					operation = "mod";
+					break;
+				case "**":
+					result = Math.pow(num1, num2);
+					operation = "exponented by";
+					break;
 				default:
 					event.getChannel().sendMessage(wrongFormat).queue();
 					return;
