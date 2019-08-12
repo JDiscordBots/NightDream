@@ -97,7 +97,7 @@ public class Utils {
 	 * @param user the {@link User} that should be checked
 	 * @return <code>true</code> if the Author is an Admin, else <code>false</code>
 	 */
-	public static boolean isOwner(User user) {//TODO test
+	public static boolean isOwner(User user) {
 		String authorID=user.getId();
 		for (String adminID : BotData.getAdminIDs()) {
 			if(adminID.equals(authorID)) {

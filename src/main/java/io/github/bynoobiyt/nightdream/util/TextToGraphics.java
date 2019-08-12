@@ -34,9 +34,7 @@ public class TextToGraphics {
 				InputStream headingStream=new BufferedInputStream(TextToGraphics.class.getClassLoader().getResourceAsStream("fonts/RedHatDisplay-Bold.ttf"))){
 			body = Font.createFont(Font.TRUETYPE_FONT, bodyStream);
 			heading = Font.createFont(Font.TRUETYPE_FONT, headingStream);
-		} catch (FontFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException|FontFormatException e) {
 			e.printStackTrace();
 		}
 		FONT_BODY=body.deriveFont(48f);
@@ -62,7 +60,7 @@ public class TextToGraphics {
         Graphics2D g2d = img.createGraphics();
         g2d.setFont(FONT_NOSPACE);
         final FontMetrics fm = g2d.getFontMetrics();
-        int width = Stream.of(text.split("\n")).collect(Collectors.summarizingInt((str)->fm.stringWidth(str))).getMax();
+        int width = Stream.of(text.split("\n")).collect(Collectors.summarizingInt(fm::stringWidth)).getMax();
         int height = fm.getHeight()*text.split("\n").length+1;
         
         g2d.dispose();

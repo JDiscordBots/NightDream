@@ -177,4 +177,14 @@ public class BotData {
 	public static String getFixedBugsChannel() {
 		return getGlobalProperty("FixedBugsChannel");
 	}
+	public static void reloadAllProperties() {
+		globalProps=null;
+		getGlobalProperties();
+		defaultProps=loadGuildDefaultProperties();
+		guildProps.clear();
+	}
+
+	public static void reloadGuildProperties(Guild guild) {
+		guildProps.remove(guild);
+	}
 }

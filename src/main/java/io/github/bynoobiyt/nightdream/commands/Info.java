@@ -40,7 +40,7 @@ public class Info implements Command {
         	TextToGraphics.sendTextAsImage(event.getTextChannel(), "info.png", String.format(
         			"Bot Info\n" +
         			"\tIn %s guilds, serving %s users and %s bots.\n" +
-                            "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map((id) ->jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n" +
+                            "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map(id ->jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n" +
                             "\tJDA v4.0.0_39\n" +
                             "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n" +
                             "\t(c) dan1st and Gehasstes %s, Release %s.\n ", event.getJDA().getGuilds().size(), getUsers(), getBots(), Year.now().getValue(), NightDream.VERSION
