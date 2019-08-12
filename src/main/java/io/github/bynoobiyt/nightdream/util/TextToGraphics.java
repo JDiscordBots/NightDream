@@ -2,13 +2,16 @@ package io.github.bynoobiyt.nightdream.util;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,12 +23,25 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class TextToGraphics {
 	
 	private static final Font FONT_BODY;
-	private static final Font FONT_NOSPACE = new Font("Arial", Font.BOLD, 48);
+	private static final Font FONT_NOSPACE;
 	private static final Color BG_COLOR=Color.WHITE;
 	private static final Color FG_COLOR=new Color(0x212121);
 	
 	static {
-		FONT_BODY = new Font("Arial", Font.PLAIN, 48);
+		Font body = new Font("Arial", Font.PLAIN, 48);
+		Font heading = new Font("Arial", Font.BOLD, 48);
+		try (InputStream bodyStream=new BufferedInputStream(TextToGraphics.class.getClassLoader().getResourceAsStream("fonts/RedHatDisplay-Black.ttf"));
+				InputStream headingStream=new BufferedInputStream(TextToGraphics.class.getClassLoader().getResourceAsStream("fonts/RedHatDisplay-Bold.ttf"))){
+			body = Font.createFont(Font.TRUETYPE_FONT, bodyStream);
+			heading = Font.createFont(Font.TRUETYPE_FONT, headingStream);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		FONT_BODY=body.deriveFont(48f);
+		FONT_NOSPACE=heading.deriveFont(52f).deriveFont(Font.BOLD);
+		
 	}
 	
 	private TextToGraphics() {
@@ -44,9 +60,6 @@ public class TextToGraphics {
     	text=text.replace("\t", "    ");
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
-        
-        
-        
         g2d.setFont(FONT_NOSPACE);
         final FontMetrics fm = g2d.getFontMetrics();
         int width = Stream.of(text.split("\n")).collect(Collectors.summarizingInt((str)->fm.stringWidth(str))).getMax();
@@ -81,7 +94,8 @@ public class TextToGraphics {
         	}else {
         		g.setFont(FONT_NOSPACE);
         	}
-            g.drawString(line, x+g.getFontMetrics().charWidth(' '), y += g.getFontMetrics().getHeight());
+        	y += g.getFontMetrics().getHeight();
+            g.drawString(line, x+g.getFontMetrics().charWidth(' '), y);
         }
     }
 

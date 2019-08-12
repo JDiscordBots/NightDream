@@ -12,6 +12,8 @@ plugins {
 
 compileJava.options.encoding = "UTF-8"
 
+
+
 version = '0.0.4'
 sourceCompatibility = 8
 targetCompatibility = 8
