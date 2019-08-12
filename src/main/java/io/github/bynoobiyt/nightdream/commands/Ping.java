@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -17,7 +17,7 @@ public class Ping implements Command {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(":alarm_clock:");
 		builder.setColor(Color.white);
-		Message msg = Utils.msg(event.getTextChannel(), builder.build(),false);
+		Message msg = JDAUtils.msg(event.getTextChannel(), builder.build(),false);
 		builder.setColor(Color.GREEN);
 		System.out.println();
 		long ms= getMilliSeconds(msg.getTimeCreated()) - getMilliSeconds(event.getMessage().getTimeCreated());

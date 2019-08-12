@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.GeneralUtils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -30,36 +31,20 @@ public class NPM implements Command{
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0xfb3b49)
 			.setTitle("Result")
-			.addField(new Field("name", "`"+getJSONString(json, "name")+"`", true))
-			.addField(new Field("Description", getJSONString(json, "description"), true))
-			.addField(new Field("Current Version", getJSONString(json, "latest"), true))
-			.addField(new Field("Keywords", "`"+getMultipleJSONStrings(json, "keywords")+"`", true))
-			.addField(new Field("Author", getJSONString(json, "author\":{\"name"), true))
+			.addField(new Field("name", "`"+GeneralUtils.getJSONString(json, "name")+"`", true))
+			.addField(new Field("Description", GeneralUtils.getJSONString(json, "description"), true))
+			.addField(new Field("Current Version", GeneralUtils.getJSONString(json, "latest"), true))
+			.addField(new Field("Keywords", "`"+GeneralUtils.getMultipleJSONStrings(json, "keywords")+"`", true))
+			.addField(new Field("Author", GeneralUtils.getJSONString(json, "author\":{\"name"), true))
 			.addField(new Field("Scope", "`"+scope+"`", true));
 			
-			Utils.msg(event.getTextChannel(), builder.build(),false);
+			JDAUtils.msg(event.getTextChannel(), builder.build(),false);
 		}catch(FileNotFoundException e) {
-			Utils.errmsg(event.getTextChannel(), "Not found");
+			JDAUtils.errmsg(event.getTextChannel(), "Not found");
 		}catch (IOException e) {
-			Utils.errmsg(event.getTextChannel(), "An error occured.");
+			JDAUtils.errmsg(event.getTextChannel(), "An error occured.");
 			e.printStackTrace();
 		}
-	}
-	private String getJSONString(String json,String query) {
-		String str="\""+query+"\":\"";
-		if(json.indexOf(str)<0) {
-			return "undefined";
-		}
-		int startIndex=json.indexOf(str)+str.length();
-		return json.substring(startIndex,json.indexOf('\"', startIndex));
-	}
-	private String getMultipleJSONStrings(String json,String query) {
-		String str="\""+query+"\":[\"";
-		if(json.indexOf(str)<0) {
-			return "undefined";
-		}
-		int startIndex=json.indexOf(str)+str.length();
-		return json.substring(startIndex,json.indexOf("\"]", startIndex)).replace("\"", "").replace(",", ", ");
 	}
 	@Override
 	public String help() {

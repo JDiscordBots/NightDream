@@ -1,6 +1,6 @@
 package io.github.bynoobiyt.nightdream.commands;
 
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -26,7 +26,7 @@ public class Rate implements Command {
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white)
                 .setTitle(String.format("Rating %s", mentioned.getName()))
                 .setDescription(String.format("%s/100", i));
-        Utils.msg(event.getTextChannel(), eb.build(), false);
+        JDAUtils.msg(event.getTextChannel(), eb.build(), false);
     }
 
     @Override

@@ -2,7 +2,7 @@ package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.core.NightDream;
 import io.github.bynoobiyt.nightdream.util.BotData;
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -26,7 +26,7 @@ public class Fixed implements Command {
 		try {
 			bugID = Integer.parseInt(args[0]);
 		} catch (Exception e) {
-			Utils.errmsg(event.getTextChannel(), "Please enter a correct number for the bug id!");
+			JDAUtils.errmsg(event.getTextChannel(), "Please enter a correct number for the bug id!");
 		}
 		if (BotData.getBugID() < bugID) {
 			event.getChannel().sendMessage("This bug id is not valid!").queue();
@@ -57,6 +57,6 @@ public class Fixed implements Command {
 			System.out.println("Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
 			return false;
 		}
-		return Utils.checkOwner(event);
+		return JDAUtils.checkOwner(event);
 	}
 }

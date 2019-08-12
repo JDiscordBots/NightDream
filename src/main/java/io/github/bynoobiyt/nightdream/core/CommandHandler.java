@@ -6,7 +6,7 @@ import java.util.Map;
 
 import io.github.bynoobiyt.nightdream.commands.Command;
 import io.github.bynoobiyt.nightdream.core.CommandParser.CommandContainer;
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 /**
  * executed by a listener when Message sent which begins with the Bot prefix
  * @author Daniel Schmid
@@ -42,7 +42,7 @@ public class CommandHandler {
 			}
 			commands.get(cmd.invoke.toLowerCase()).executed(save, cmd.event);
 		} else {
-			Utils.msg(cmd.event.getTextChannel(), "Unknown Command");
+			JDAUtils.msg(cmd.event.getTextChannel(), "Unknown Command");
 		}
 	}
 }

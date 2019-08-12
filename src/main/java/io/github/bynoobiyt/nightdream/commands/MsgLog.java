@@ -1,7 +1,7 @@
 package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -42,6 +42,6 @@ public class MsgLog implements Command {
 
 	@Override
 	public boolean allowExecute(String[] args, MessageReceivedEvent event) {
-		return event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || Utils.checkOwner(event);
+		return event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || JDAUtils.checkOwner(event);
 	}
 }

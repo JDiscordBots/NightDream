@@ -11,12 +11,12 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class Utils {
+public class JDAUtils {
 
 	public static final long INFO_TIMEOUT=5000;
 	
 	
-	private Utils() {
+	private JDAUtils() {
 		//prevent instantiation
 	}
 	

@@ -9,7 +9,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 @BotCommand("eval")
@@ -29,7 +29,7 @@ public class Eval implements Command {
 	}
 	@Override
 	public boolean allowExecute(String[] args, MessageReceivedEvent event) {
-		return Utils.checkOwner(event);	
+		return JDAUtils.checkOwner(event);	
 	}
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {

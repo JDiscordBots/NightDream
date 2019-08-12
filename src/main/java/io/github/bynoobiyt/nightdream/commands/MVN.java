@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.GeneralUtils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -20,31 +21,23 @@ public class MVN implements Command{
 		String url="http://search.maven.org/solrsearch/select?q="+args[0]+"&wt=json";
 		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
 			String json=scan.nextLine();
-			String id=getJSONString(json,"id");
+			String id=GeneralUtils.getJSONString(json,"id");
 			if(id.equals("?")) {
-				Utils.errmsg(event.getTextChannel(), "Not found.");
+				JDAUtils.errmsg(event.getTextChannel(), "Not found.");
 				return;
 			}
 			EmbedBuilder builder=new EmbedBuilder();
-			builder.setColor(0xfb3b49)
+			builder.setColor(0xdc6328)
 			.setTitle("Result")
 			.addField(new Field("Group ID", "`"+id.split(":")[0]+"`", true))
 			.addField(new Field("Artifact ID", id.split(":")[1], true))
-			.addField(new Field("Current Version", getJSONString(json, "latestVersion"), true))
-			.addField(new Field("Repository", getJSONString(json, "repositoryId"), true));
+			.addField(new Field("Current Version", GeneralUtils.getJSONString(json, "latestVersion"), true))
+			.addField(new Field("Repository", GeneralUtils.getJSONString(json, "repositoryId"), true));
 			
-			Utils.msg(event.getTextChannel(), builder.build(),false);
+			JDAUtils.msg(event.getTextChannel(), builder.build(),false);
 		}catch (IOException e) {
-			Utils.errmsg(event.getTextChannel(), "An error occurred, maybe your query is invalid");
+			JDAUtils.errmsg(event.getTextChannel(), "An error occurred, maybe your query is invalid");
 		}
-	}
-	private String getJSONString(String json,String query) {
-		String str="\""+query+"\":\"";
-		if(json.indexOf(str)<0) {
-			return "?";
-		}
-		int startIndex=json.indexOf(str)+str.length();
-		return json.substring(startIndex,json.indexOf('\"', startIndex));
 	}
 	@Override
 	public String help() {

@@ -3,7 +3,7 @@ package io.github.bynoobiyt.nightdream.commands;
 import java.awt.Color;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReconnectedEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -15,23 +15,23 @@ public class Reload implements Command {
 
 	@Override
 	public boolean allowExecute(String[] args, MessageReceivedEvent event) {
-		return Utils.checkOwner(event);
+		return JDAUtils.checkOwner(event);
 	}
 	
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		final TextChannel tc=event.getTextChannel();
 		if(args.length==0) {
-			Utils.msg(event.getTextChannel(), "reloading all Properties...",Color.YELLOW,false);
+			JDAUtils.msg(event.getTextChannel(), "reloading all Properties...",Color.YELLOW,false);
 			BotData.reloadAllProperties();
-			Utils.msg(event.getTextChannel(), "reloaded!");
+			JDAUtils.msg(event.getTextChannel(), "reloaded!");
 			return;
 		}
 		switch(args[0]) {
 		case "login":
 		case "reconnect"://TODO fix console error(InterruptedException)
 			try {
-				Utils.msg(event.getTextChannel(), "reconnecting...",Color.YELLOW,false);
+				JDAUtils.msg(event.getTextChannel(), "reconnecting...",Color.YELLOW,false);
 				JDAImpl jda=((JDAImpl)event.getJDA());
 				jda.setAutoReconnect(false);
 				jda.getClient().socket.disconnect();
@@ -39,7 +39,7 @@ public class Reload implements Command {
 				jda.addEventListener(new ListenerAdapter() {
 					@Override
 					public void onReconnect(ReconnectedEvent event) {
-						Utils.msg(tc, "reconnected!");
+						JDAUtils.msg(tc, "reconnected!");
 						jda.removeEventListener(this);
 					}
 				});
@@ -51,17 +51,17 @@ public class Reload implements Command {
 			}
 			break;
 		case "props":
-			Utils.msg(event.getTextChannel(), "reloading all Properties...");
+			JDAUtils.msg(event.getTextChannel(), "reloading all Properties...");
 			BotData.reloadAllProperties();
-			Utils.msg(event.getTextChannel(), "reloaded!");
+			JDAUtils.msg(event.getTextChannel(), "reloaded!");
 			break;
 		case "guild":
-			Utils.msg(event.getTextChannel(), "reloading all Properties...");
+			JDAUtils.msg(event.getTextChannel(), "reloading all Properties...");
 			BotData.reloadGuildProperties(event.getGuild());
-			Utils.msg(event.getTextChannel(), "reloaded!");
+			JDAUtils.msg(event.getTextChannel(), "reloaded!");
 			break;
 		default:
-			Utils.errmsg(event.getTextChannel(), "Invalid argument "+args[0]);
+			JDAUtils.errmsg(event.getTextChannel(), "Invalid argument "+args[0]);
 		}
 		
 			

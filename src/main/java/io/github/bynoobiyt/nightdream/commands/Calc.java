@@ -13,7 +13,7 @@ public class Calc implements Command {
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		String operation="";
-		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/] num2`", BotData.getDefaultPrefix());
+		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/,%%,**] num2`", BotData.getDefaultPrefix());
 		if (args.length < 2) {
 			event.getChannel().sendMessage(wrongFormat).queue();
 			return;

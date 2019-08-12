@@ -1,7 +1,7 @@
 package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import static net.dv8tion.jda.api.entities.Activity.playing;
 
@@ -30,6 +30,6 @@ public class Activity implements Command {
 
     @Override
     public boolean allowExecute(String[] args, MessageReceivedEvent event) {
-        return Utils.checkOwner(event);
+        return JDAUtils.checkOwner(event);
     }
 }

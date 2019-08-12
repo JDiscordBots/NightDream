@@ -1,7 +1,7 @@
 package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.core.CommandHandler;
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -21,7 +21,7 @@ public class Help implements Command {
 				builder.addField(new Field(k, v.help(), true));
 			}
 		});
-		Utils.msg(event.getTextChannel(), builder.build(),false);
+		JDAUtils.msg(event.getTextChannel(), builder.build(),false);
 	}
 
 	@Override

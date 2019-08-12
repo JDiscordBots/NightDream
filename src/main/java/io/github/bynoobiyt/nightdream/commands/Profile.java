@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -73,7 +73,7 @@ public class Profile implements Command {
 			showProfile(event.getTextChannel(), event.getAuthor());
 			return;
 		}
-		Utils.msg(event.getTextChannel(), builder.build(),false);
+		JDAUtils.msg(event.getTextChannel(), builder.build(),false);
 	}
 	private void showProfile(TextChannel tc,User user) {
 		EmbedBuilder builder=new EmbedBuilder();
@@ -86,10 +86,10 @@ public class Profile implements Command {
 		builder.setColor(color);
 		builder.setTitle(getProp(user, "name", user.getAsTag()));
 		builder.setDescription(getProp(user, "description", "A Ghost... yet"));
-		if(Utils.isOwner(user)) {
+		if(JDAUtils.isOwner(user)) {
 			builder.addField(new Field("<:IconInfo:553868326581829643> Bot Admin!", "This is a bot admin.", false));
 		}
-		Utils.msg(tc, builder.build(),false);
+		JDAUtils.msg(tc, builder.build(),false);
 	}
 	private static String getProp(User user,String name) {
 		return getProp(user,name,"");

@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Date;
 
-import io.github.bynoobiyt.nightdream.util.Utils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -16,7 +16,7 @@ public class Snow implements Command {
 	
 	@Override
 	public boolean allowExecute(String[] args, MessageReceivedEvent event) {
-		return Utils.checkOwner(event);	
+		return JDAUtils.checkOwner(event);	
 	}
 	
 	@Override
