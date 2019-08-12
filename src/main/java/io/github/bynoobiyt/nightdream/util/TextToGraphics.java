@@ -51,7 +51,7 @@ public class TextToGraphics {
 		try(ByteArrayOutputStream baos=new ByteArrayOutputStream()){
 			createImage(imgText,baos);
 			baos.flush();
-			chan.sendFile(baos.toByteArray(), imgName).complete();
+			chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName).complete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
