@@ -13,7 +13,7 @@ public class Calc implements Command {
 	@Override
 	public void action(String[] args, MessageReceivedEvent event) {
 		String operation="";
-		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/,%%,**] num2`", BotData.getDefaultPrefix());
+		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/,%%,**,root] num2`", BotData.getDefaultPrefix());
 		if (args.length < 2) {
 			event.getChannel().sendMessage(wrongFormat).queue();
 			return;
@@ -47,6 +47,10 @@ public class Calc implements Command {
 				case "**":
 					result = Math.pow(num1, num2);
 					operation = "exponented by";
+					break;
+				case "root":
+					result = Math.pow(num2, 1/num1);
+					operation = "root of";
 					break;
 				default:
 					event.getChannel().sendMessage(wrongFormat).queue();
