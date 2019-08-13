@@ -29,7 +29,7 @@ public class NightDream {
 			.setToken(BotData.getGlobalProperty("token"))
 			.setAutoReconnect(true) //should the Bot reconnect?
 			.setStatus(OnlineStatus.ONLINE)//the online Status
-			/*possible statuses:
+			/*	possible statuses:
 				OnlineStatus.DO_NOT_DISTURB
 				OnlineStatus.IDLE
 				OnlineStatus.INVISIBLE
@@ -39,10 +39,10 @@ public class NightDream {
 			*/
 			.setActivity(Activity.playing(BotData.getDefaultPrefix() + "help | " + BotData.getGlobalProperty("game"))) //the name of the game the Bot is "playing"
 			/*
-			Game.playing(String)//playing...
-			Game.listening(String)//listening...
-			Game.streaming(String, String)//streaming...(with url)
-			Game.watching(String)//watching...
+				Game.playing(String)//playing...
+				Game.listening(String)//listening...
+				Game.streaming(String, String)//streaming...(with url)
+				Game.watching(String)//watching...
 			*/
 			.setRequestTimeoutRetry(true);
 		//initialize listeners
