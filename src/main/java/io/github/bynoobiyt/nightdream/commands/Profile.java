@@ -3,6 +3,8 @@ package io.github.bynoobiyt.nightdream.commands;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
@@ -21,7 +23,7 @@ public class Profile implements Command {
 	}
 	
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {//TODO test
+	public void action(String[] args, MessageReceivedEvent event) {
 		if(!event.getMessage().getMentionedUsers().isEmpty()) {
 			User user = event.getMessage().getMentionedUsers().get(0);
 			showProfile(event.getTextChannel(),user);
@@ -62,12 +64,41 @@ public class Profile implements Command {
 			break;
 		case "name":
 			if(args.length<2) {
-				event.getTextChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").complete();//TODO link???
+				event.getTextChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").complete();
 				return;
 			}
 			String name=String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 			setProp(event.getAuthor(), "name", name);
 			builder.setDescription("It is now "+name+".");
+			break;
+		case "link":
+			if(args.length<3) {
+				event.getTextChannel().sendMessage("<:IconProvide:553870022125027329> I need more than 1 argument.").queue();
+				return;
+			}
+			name=args[1];
+			String link=String.join(" ",Arrays.copyOfRange(args, 2, args.length));
+			if(name.contains("|")||link.contains("|")) {
+				event.getTextChannel().sendMessage("<:IconX:553868311960748044> Sorry, Links cannot contain pipes. Use `%7C` instead.").queue();
+				return;
+			}
+			if(!link.startsWith("http")) {
+				event.getTextChannel().sendMessage("<:IconX:553868311960748044> Sorry, this is not a link. Make sure to include `http/s`.").queue();
+				return;
+			}
+			
+			builder.setTitle("Link added!")
+			.setColor(0x212121)
+			.addField("`"+name+"`", link, false);
+			
+			String links=getProp(event.getAuthor(), "links");
+			link=name+"|"+link.replace("[", "%5B").replace("]", "%5D").replace("(", "%28").replace(")", "%29");
+			if(links.equals("")) {
+				links=link;
+			}else {
+				links+="||"+link;
+			}
+			setProp(event.getAuthor(), "links", links);
 			break;
 		default:
 			showProfile(event.getTextChannel(), event.getAuthor());
@@ -83,9 +114,17 @@ public class Profile implements Command {
 		}catch(NumberFormatException e) {
 			//ignore
 		}
+		
 		builder.setColor(color);
 		builder.setTitle(getProp(user, "name", user.getAsTag()));
 		builder.setDescription(getProp(user, "description", "A Ghost... yet"));
+		String links=getProp(user,"links");
+		if(!links.equals("")) {
+			builder.addField("Links",
+					Stream.of(links.split("\\|\\|"))
+					.map(link->"["+link.split("\\|")[0]+"]("+link.split("\\|")[1]+")")
+					.collect(Collectors.joining("\n")),false);
+		}
 		if(JDAUtils.isOwner(user)) {
 			builder.addField(new Field("<:IconInfo:553868326581829643> Bot Admin!", "This is a bot admin.", false));
 		}
