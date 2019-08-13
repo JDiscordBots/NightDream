@@ -51,7 +51,6 @@ public class NightDream {
 		try {
 			jda = builder.build();
 			jda.awaitReady();
-
 			((JDAImpl) jda).getGuildSetupController().clearCache();
 		} catch (final LoginException e) {
 			System.err.println("The entered token is not valid!");
