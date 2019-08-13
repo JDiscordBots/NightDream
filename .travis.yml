@@ -1,11 +1,16 @@
 language: java
+before_install:
+  - gradle wrapper
 jobs:
   include:
+    - stage: "compile with different Java versions"
+      jdk:
+      - openjdk8
+    - jdk:
+      - openjdk12
     - stage: "Upload to Wiki"
       jdk:
       - openjdk8
-      before_install:
-      - gradle wrapper
       script:
         - ./saveJAR.sh
       if: (branch = master) AND (type = push)
