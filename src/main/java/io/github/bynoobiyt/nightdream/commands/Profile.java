@@ -19,6 +19,9 @@ public class Profile implements Command {
 	private static Properties props;
 	
 	static {
+		reload();
+	}
+	public static void reload() {
 		props=BotData.loadProperties("Profiles.properties", new HashMap<>(), "Profile data");
 	}
 	

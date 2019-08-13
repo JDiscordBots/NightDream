@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import io.github.bynoobiyt.nightdream.commands.Profile;
 import net.dv8tion.jda.api.entities.Guild;
 
 public class BotData {
@@ -182,6 +183,7 @@ public class BotData {
 		getGlobalProperties();
 		defaultProps=loadGuildDefaultProperties();
 		guildProps.clear();
+		Profile.reload();
 	}
 
 	public static void reloadGuildProperties(Guild guild) {
