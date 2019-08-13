@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-// TODO: 08.08.2019 TEST
 @BotCommand("msglog")
 public class MsgLog implements Command {
 

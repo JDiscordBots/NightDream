@@ -2,6 +2,7 @@ package io.github.bynoobiyt.nightdream.commands;
 
 import java.awt.Color;
 
+import io.github.bynoobiyt.nightdream.listeners.MsgLogListener;
 import io.github.bynoobiyt.nightdream.util.BotData;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -60,11 +61,16 @@ public class Reload implements Command {
 			BotData.reloadGuildProperties(event.getGuild());
 			JDAUtils.msg(event.getTextChannel(), "reloaded!");
 			break;
+		case "msgcache":
+			for (Object obj : event.getJDA().getRegisteredListeners()) {
+				if(obj instanceof MsgLogListener) {
+					((MsgLogListener)obj).clearCache();
+				}
+			}
+			break;
 		default:
 			JDAUtils.errmsg(event.getTextChannel(), "Invalid argument "+args[0]);
 		}
-		
-			
 	}
 
 	@Override
