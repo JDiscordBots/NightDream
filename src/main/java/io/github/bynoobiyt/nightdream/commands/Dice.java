@@ -1,17 +1,16 @@
 package io.github.bynoobiyt.nightdream.commands;
 
+import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @BotCommand("dice")
 public class Dice implements Command {
-	private static Random r=new Random();
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         if (args.length == 0) {
@@ -34,7 +33,7 @@ public class Dice implements Command {
 
         eb.setColor(0x212121).setTitle("Done!").setDescription("It landed on a " + d);
 
-        msg.editMessage(eb.build()).completeAfter(Long.parseLong(String.valueOf(r.nextInt(6))), TimeUnit.SECONDS);
+        msg.editMessage(eb.build()).completeAfter(Long.parseLong(String.valueOf(GeneralUtils.getRandInt(6))), TimeUnit.SECONDS);
     }
 
     @Override

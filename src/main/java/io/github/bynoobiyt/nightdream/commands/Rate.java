@@ -1,21 +1,19 @@
 package io.github.bynoobiyt.nightdream.commands;
 
+import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
-import java.util.Random;
 
 @BotCommand("rate")
 public class Rate implements Command {
 
-	private Random r = new Random();
-	
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-        int i = r.nextInt(100) + 1;
+        int i = GeneralUtils.getRandInt(1, 100);
         User mentioned;
         try {
             mentioned = event.getMessage().getMentionedMembers().get(0).getUser();
