@@ -9,15 +9,15 @@ import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("npm")
 public class NPM implements Command{
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getTextChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").complete();
+			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").complete();
 		}
 		String url="http://registry.npmjs.org/"+args[0];
 		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
@@ -38,11 +38,11 @@ public class NPM implements Command{
 			.addField(new Field("Author", GeneralUtils.getJSONString(json, "author\":{\"name"), true))
 			.addField(new Field("Scope", "`"+scope+"`", true));
 			
-			JDAUtils.msg(event.getTextChannel(), builder.build(),false);
+			JDAUtils.msg(event.getChannel(), builder.build(),false);
 		}catch(FileNotFoundException e) {
-			JDAUtils.errmsg(event.getTextChannel(), "Not found");
+			JDAUtils.errmsg(event.getChannel(), "Not found");
 		}catch (IOException e) {
-			JDAUtils.errmsg(event.getTextChannel(), "An error occured.");
+			JDAUtils.errmsg(event.getChannel(), "An error occured.");
 			e.printStackTrace();
 		}
 	}

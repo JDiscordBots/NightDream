@@ -10,7 +10,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("eval")
 public class Eval implements Command {
@@ -28,11 +28,11 @@ public class Eval implements Command {
 		}
 	}
 	@Override
-	public boolean allowExecute(String[] args, MessageReceivedEvent event) {
+	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		return JDAUtils.checkOwner(event);	
 	}
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
         se.put("event", event);
         se.put("jda", event.getJDA());
         se.put("guild", event.getGuild());
@@ -47,9 +47,9 @@ public class Eval implements Command {
 			Object result = null;
 			result = se.eval(scriptBuilder.toString());
 			if (result != null) {
-	        	event.getTextChannel().sendMessage("```js\n"+result.toString()+"\n```").complete();
+	        	event.getChannel().sendMessage("```js\n"+result.toString()+"\n```").complete();
 			}else {
-				event.getTextChannel().sendMessage("`undefined` or `null`").complete();
+				event.getChannel().sendMessage("`undefined` or `null`").complete();
 			}
 		} catch (ScriptException e) {
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
@@ -61,7 +61,7 @@ public class Eval implements Command {
 				if(len>1000) {
 					len=1000;
 				}
-				event.getTextChannel().sendMessage("`ERROR` ```java\n"+exStr.substring(0,len)+"\n```").complete();
+				event.getChannel().sendMessage("`ERROR` ```java\n"+exStr.substring(0,len)+"\n```").complete();
 			} catch (IOException e1) {
 				//ignore 
 			}

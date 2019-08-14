@@ -11,7 +11,7 @@ import javax.script.ScriptException;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageReaction;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("seval")
 public class SEval implements Command {
@@ -29,11 +29,11 @@ public class SEval implements Command {
 		}
 	}
 	@Override
-	public boolean allowExecute(String[] args, MessageReceivedEvent event) {
+	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		return JDAUtils.checkOwner(event);	
 	}
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
         se.put("event", event);
         se.put("jda", event.getJDA());
         se.put("guild", event.getGuild());
@@ -48,13 +48,13 @@ public class SEval implements Command {
 			se.eval(scriptBuilder.toString());
 		} catch (ScriptException e) {
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
-			final Message msg = event.getTextChannel().sendMessage("No...").complete();
+			final Message msg = event.getChannel().sendMessage("No...").complete();
 			msg.addReaction("\u274C").complete();
 			new Timer().schedule(new TimerTask() {
 				
 				@Override
 				public void run() {
-					Message message = event.getTextChannel().retrieveMessageById(msg.getId()).complete();
+					Message message = event.getChannel().retrieveMessageById(msg.getId()).complete();
 					for (MessageReaction reaction : message.getReactions()) {
 						if(reaction.getReactionEmote().getEmoji().equals("\u274C") && reaction.retrieveUsers().complete().contains(event.getAuthor())) {
 							message.delete().complete();

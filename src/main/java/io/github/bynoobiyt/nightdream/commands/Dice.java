@@ -3,7 +3,7 @@ package io.github.bynoobiyt.nightdream.commands;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 import java.util.Random;
@@ -11,25 +11,24 @@ import java.util.concurrent.TimeUnit;
 
 @BotCommand("dice")
 public class Dice implements Command {
-
+	private static Random r=new Random();
     @Override
-    public void action(String[] args, MessageReceivedEvent event) {
+    public void action(String[] args, GuildMessageReceivedEvent event) {
         if (args.length == 0) {
             event.getChannel().sendMessage("<:IconProvide:553870022125027329> Not enough arguments!").queue();
             return;
         }
-        Random r = new Random();
         double d = 0;
         try {
             d = Math.floor(Math.random() * Double.parseDouble(args[0]) + 1);
         } catch (NumberFormatException e) {
-            JDAUtils.errmsg(event.getTextChannel(), "<:IconProvide:553870022125027329> Not enough arguments!");
+            JDAUtils.errmsg(event.getChannel(), "<:IconProvide:553870022125027329> Not enough arguments!");
             return;
         }
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("Rolling the dice...")
                 .setDescription(String.format("From 1 to %s", args[0]));
 
-        Message msg = JDAUtils.msg(event.getTextChannel(), eb.build(), false);
+        Message msg = JDAUtils.msg(event.getChannel(), eb.build(), false);
 
         eb.clear();
 

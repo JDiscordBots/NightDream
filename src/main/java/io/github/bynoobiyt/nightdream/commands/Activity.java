@@ -2,14 +2,15 @@ package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
 import static net.dv8tion.jda.api.entities.Activity.playing;
 
 @BotCommand("activity")
 public class Activity implements Command {
 
     @Override
-    public void action(String[] args, MessageReceivedEvent event) {
+    public void action(String[] args, GuildMessageReceivedEvent event) {
 
         StringBuilder builder = new StringBuilder();
         for (String arg : args) {
@@ -29,7 +30,7 @@ public class Activity implements Command {
     }
 
     @Override
-    public boolean allowExecute(String[] args, MessageReceivedEvent event) {
+    public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
         return JDAUtils.checkOwner(event);
     }
 }

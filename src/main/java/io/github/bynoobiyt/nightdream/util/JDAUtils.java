@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class JDAUtils {
 
@@ -109,23 +109,23 @@ public class JDAUtils {
 	/**
 	 * tests if the Author of a Message is one of the Admins of this Bot<br>
 	 * if not an error message will be sent.
-	 * @param event the {@link MessageReceivedEvent} of the Message
+	 * @param event the {@link GuildMessageReceivedEvent} of the Message
 	 * @return <code>true</code> if the Author is an Admin, else <code>false</code>
 	 */
-	public static boolean checkOwner(MessageReceivedEvent event) {
+	public static boolean checkOwner(GuildMessageReceivedEvent event) {
 		return checkOwner(event, true);
 	}
 	/**
 	 * tests if the Author of a Message is one of the Admins of this Bot<br>
 	 * if forbidden and doErrMsg is true an error message will be sent.
-	 * @param event the {@link MessageReceivedEvent} of the Message
+	 * @param event the {@link GuildMessageReceivedEvent} of the Message
 	 * @param doErrMsg should an Error-Message be sent?
 	 * @return <code>true</code> if the Author is an Admin, else <code>false</code>
 	 */
-	public static boolean checkOwner(MessageReceivedEvent event,boolean doErrMsg) {
+	public static boolean checkOwner(GuildMessageReceivedEvent event,boolean doErrMsg) {
 		boolean owner=isOwner(event.getAuthor());
 		if (!owner&&doErrMsg) {
-			event.getTextChannel().sendMessage("<:IconInfo:553868326581829643> This is an admin command.").complete();
+			event.getChannel().sendMessage("<:IconInfo:553868326581829643> This is an admin command.").complete();
 		}
 		return owner;
 	}

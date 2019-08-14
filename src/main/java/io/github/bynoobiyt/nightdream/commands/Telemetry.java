@@ -10,7 +10,7 @@ import java.util.Properties;
 
 import io.github.bynoobiyt.nightdream.core.CommandHandler;
 import io.github.bynoobiyt.nightdream.util.BotData;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("telemetry")
 public class Telemetry implements Command {
@@ -40,7 +40,7 @@ public class Telemetry implements Command {
 	}
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		StringBuilder sb=new StringBuilder();
 		for(Command cmd:CommandHandler.getCommands().values()) {
 			sb.append(BotData.getPrefix(event.getGuild())).append(cmd.getClass().getSimpleName().toLowerCase());
@@ -50,7 +50,7 @@ public class Telemetry implements Command {
 				sb.append(" not used at all\n");
 			}
 		}
-		event.getTextChannel().sendMessage(sb.toString()).complete();
+		event.getChannel().sendMessage(sb.toString()).complete();
 	}
 
 	@Override

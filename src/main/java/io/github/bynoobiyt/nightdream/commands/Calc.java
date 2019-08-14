@@ -2,7 +2,7 @@ package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.Color;
 
@@ -11,7 +11,7 @@ public class Calc implements Command {
 
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		String operation="";
 		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/,%%,**,root] num2`", BotData.getDefaultPrefix());
 		if (args.length < 2) {
@@ -58,7 +58,7 @@ public class Calc implements Command {
 			}
 			EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle(String.format("%s %s %s", num1, operation, num2))
 					.setDescription(String.valueOf(result));
-			event.getTextChannel().sendMessage(eb.build()).queue();
+			event.getChannel().sendMessage(eb.build()).queue();
         } catch (NumberFormatException e) {
 	        event.getChannel().sendMessage(wrongFormat).queue();
         }

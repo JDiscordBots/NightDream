@@ -3,7 +3,7 @@ package io.github.bynoobiyt.nightdream.commands;
 import io.github.bynoobiyt.nightdream.core.NightDream;
 import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 
@@ -11,7 +11,7 @@ import java.awt.*;
 public class BugReport implements Command {
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		int latestBugId = BotData.getBugID();
 
 		int thisId = latestBugId + 1;
@@ -30,7 +30,7 @@ public class BugReport implements Command {
 	}
 
 	@Override
-	public boolean allowExecute(String[] args, MessageReceivedEvent event) {
+	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		if (BotData.getBugReportChannel() == null) {
 			BotData.setBugReportChannel("");
 			System.out.println("Bug report command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");

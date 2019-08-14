@@ -7,17 +7,17 @@ import java.time.ZoneId;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("ping")
 public class Ping implements Command {
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		EmbedBuilder builder = new EmbedBuilder();
 		builder.setDescription(":alarm_clock:");
 		builder.setColor(Color.white);
-		Message msg = JDAUtils.msg(event.getTextChannel(), builder.build(),false);
+		Message msg = JDAUtils.msg(event.getChannel(), builder.build(),false);
 		builder.setColor(Color.GREEN);
 		System.out.println();
 		long ms= getMilliSeconds(msg.getTimeCreated()) - getMilliSeconds(event.getMessage().getTimeCreated());

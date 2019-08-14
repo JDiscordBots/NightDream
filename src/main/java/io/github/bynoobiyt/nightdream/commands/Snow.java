@@ -6,7 +6,7 @@ import java.util.Date;
 
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("snow")
 public class Snow implements Command {
@@ -15,12 +15,12 @@ public class Snow implements Command {
 	private static final long EPOCH=1420070400000L;//Discord epoch/1.1.2015 0:00
 	
 	@Override
-	public boolean allowExecute(String[] args, MessageReceivedEvent event) {
+	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		return JDAUtils.checkOwner(event);	
 	}
 	
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
 			event.getChannel().sendMessage("`"+generate()+"` made `"+new Date()+"`").complete();
 		}else {
@@ -32,7 +32,7 @@ public class Snow implements Command {
 			eb.addField("Date", new Date(Long.valueOf(binStr.substring(0,42),2)+EPOCH).toString(), false);
 			eb.addField("Increment", Integer.valueOf(binStr.substring(52,64),2).toString(), false);
 			eb.addField("Worker, Process ID", args[0]+" has worker ID "+Integer.valueOf(binStr.substring(42,47),2)+" with process ID "+Integer.valueOf(binStr.substring(47,52),2), false);
-			event.getTextChannel().sendMessage(eb.build()).complete();
+			event.getChannel().sendMessage(eb.build()).complete();
 		}
 	}
 	@Override

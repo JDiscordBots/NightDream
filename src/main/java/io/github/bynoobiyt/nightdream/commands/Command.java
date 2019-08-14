@@ -1,7 +1,7 @@
 package io.github.bynoobiyt.nightdream.commands;
 
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 /**
  * Interface for Commands<br>
@@ -11,24 +11,24 @@ public interface Command {
 	/**
 	 * returns if the Command is blocked or something
 	 * @param args the Command-Arguments
-	 * @param event The {@link MessageReceivedEvent} of the incoming {@link Message}
+	 * @param event The {@link GuildMessageReceivedEvent} of the incoming {@link Message}
 	 * @return true if Command should be executed, else false
 	 */
-	public default boolean allowExecute(String[] args, MessageReceivedEvent event) {
+	public default boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		return true;
 	}
 	/**
 	 * The Execution of the Command
 	 * @param args the Command-Arguments
-	 * @param event The {@link MessageReceivedEvent} of the incoming {@link Message}
+	 * @param event The {@link GuildMessageReceivedEvent} of the incoming {@link Message}
 	 */
-	public void action(String[] args, MessageReceivedEvent event);
+	public void action(String[] args, GuildMessageReceivedEvent event);
 	/**
 	 * after Command execution
 	 * @param success has the command been executed?
-	 * @param event The {@link MessageReceivedEvent} of the incoming {@link Message}
+	 * @param event The {@link GuildMessageReceivedEvent} of the incoming {@link Message}
 	 */
-	public default void executed(boolean success, MessageReceivedEvent event) {
+	public default void executed(boolean success, GuildMessageReceivedEvent event) {
 		Telemetry.addTelemetry(getClass());
 	}
 	/**

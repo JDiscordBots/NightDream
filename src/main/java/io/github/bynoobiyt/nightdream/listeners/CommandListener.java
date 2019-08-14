@@ -6,6 +6,7 @@ import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 /**
  * Listener for Commands
@@ -19,17 +20,14 @@ public class CommandListener extends ListenerAdapter {
 	 * @see CommandHandler
 	 */
 	@Override
-	public void onMessageReceived(final MessageReceivedEvent event) {
-		if (!event.isFromGuild()){
-			// return
-		}
-		else if(event.getMessage().getContentRaw().equals(event.getGuild().getMember(event.getJDA().getSelfUser()).getAsMention())&& !event.getAuthor().isBot()) {
-			event.getTextChannel().sendMessage("My prefix here: `"+BotData.getPrefix(event.getGuild())+"`").complete();
+	public void onGuildMessageReceived(final GuildMessageReceivedEvent event) {
+		if(event.getMessage().getContentRaw().equals(event.getGuild().getMember(event.getJDA().getSelfUser()).getAsMention())&& !event.getAuthor().isBot()) {
+			event.getChannel().sendMessage("My prefix here: `"+BotData.getPrefix(event.getGuild())+"`").complete();
 		}
 		else if (event.getMessage().getContentRaw().startsWith(event.getGuild().getMember(event.getJDA().getSelfUser()).getAsMention()+" ") && !event.getMessage().getAuthor().isBot()) {
 			if(event.getMessage().getContentRaw().toLowerCase().endsWith("> i messed up")) {
 				BotData.setPrefix(event.getGuild(), BotData.getDefaultPrefix());
-				event.getTextChannel().sendMessage("It's fine :smiley:\nI reset the prefix on this guild.").complete();
+				event.getChannel().sendMessage("It's fine :smiley:\nI reset the prefix on this guild.").complete();
 			}else {
 				CommandHandler.handleCommand(CommandParser.parser(event,event.getMessage().getContentRaw().split(" ")[0]+" "));
 			}

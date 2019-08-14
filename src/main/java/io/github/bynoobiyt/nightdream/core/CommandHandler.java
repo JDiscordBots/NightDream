@@ -42,7 +42,7 @@ public class CommandHandler {
 			}
 			commands.get(cmd.invoke.toLowerCase()).executed(save, cmd.event);
 		} else {
-			JDAUtils.msg(cmd.event.getTextChannel(), "Unknown Command");
+			JDAUtils.msg(cmd.event.getChannel(), "Unknown Command");
 		}
 	}
 }

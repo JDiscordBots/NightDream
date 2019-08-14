@@ -8,22 +8,22 @@ import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("mvn")
 public class MVN implements Command{
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getTextChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").complete();
+			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").complete();
 		}
 		String url="http://search.maven.org/solrsearch/select?q="+args[0]+"&wt=json";
 		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
 			String json=scan.nextLine();
 			String id=GeneralUtils.getJSONString(json,"id");
 			if(id.equals("?")) {
-				JDAUtils.errmsg(event.getTextChannel(), "Not found.");
+				JDAUtils.errmsg(event.getChannel(), "Not found.");
 				return;
 			}
 			EmbedBuilder builder=new EmbedBuilder();
@@ -34,9 +34,9 @@ public class MVN implements Command{
 			.addField(new Field("Current Version", GeneralUtils.getJSONString(json, "latestVersion"), true))
 			.addField(new Field("Repository", GeneralUtils.getJSONString(json, "repositoryId"), true));
 			
-			JDAUtils.msg(event.getTextChannel(), builder.build(),false);
+			JDAUtils.msg(event.getChannel(), builder.build(),false);
 		}catch (IOException e) {
-			JDAUtils.errmsg(event.getTextChannel(), "An error occurred, maybe your query is invalid");
+			JDAUtils.errmsg(event.getChannel(), "An error occurred, maybe your query is invalid");
 		}
 	}
 	@Override

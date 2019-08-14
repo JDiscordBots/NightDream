@@ -4,7 +4,7 @@ import io.github.bynoobiyt.nightdream.core.CommandHandler;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 
@@ -12,7 +12,7 @@ import java.awt.*;
 public class Help implements Command {
 
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		EmbedBuilder builder=new EmbedBuilder().setColor(Color.white);
 		builder.setTitle("Nightdream Commands");
 		CommandHandler.getCommands().forEach((k,v)->{
@@ -21,7 +21,7 @@ public class Help implements Command {
 				builder.addField(new Field(k, v.help(), true));
 			}
 		});
-		JDAUtils.msg(event.getTextChannel(), builder.build(),false);
+		JDAUtils.msg(event.getChannel(), builder.build(),false);
 	}
 
 	@Override

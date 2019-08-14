@@ -6,7 +6,7 @@ import io.github.bynoobiyt.nightdream.util.TextToGraphics;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -34,10 +34,10 @@ public class Info implements Command {
     }
 
     @Override
-    public void action(String[] args, MessageReceivedEvent event) {
+    public void action(String[] args, GuildMessageReceivedEvent event) {
     	final JDA jda=event.getJDA();
         if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI)) {
-        	TextToGraphics.sendTextAsImage(event.getTextChannel(), "info.png", String.format(
+        	TextToGraphics.sendTextAsImage(event.getChannel(), "info.png", String.format(
         			"Bot Info\n" +
         			"\tIn %s guilds, serving %s users and %s bots.\n" +
                             "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map(id ->jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n" +

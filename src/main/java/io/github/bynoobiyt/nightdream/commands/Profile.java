@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("profile")
 public class Profile implements Command {
@@ -26,14 +26,14 @@ public class Profile implements Command {
 	}
 	
 	@Override
-	public void action(String[] args, MessageReceivedEvent event) {
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(!event.getMessage().getMentionedUsers().isEmpty()) {
 			User user = event.getMessage().getMentionedUsers().get(0);
-			showProfile(event.getTextChannel(),user);
+			showProfile(event.getChannel(),user);
 			return;
 		}
 		if(args.length<1) {
-			showProfile(event.getTextChannel(), event.getAuthor());
+			showProfile(event.getChannel(), event.getAuthor());
 			return;
 		}
 		EmbedBuilder builder=new EmbedBuilder();
@@ -41,7 +41,7 @@ public class Profile implements Command {
 		case "description":
 		case "desc":
 			if(args.length<2) {
-				event.getTextChannel().sendMessage("<:IconProvide:553870022125027329> I need more than 1 argument.").complete();
+				event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than 1 argument.").complete();
 				return;
 			}
 			
@@ -51,7 +51,7 @@ public class Profile implements Command {
 			break;
 		case "color":
 			if(args.length<2||args[1].length()!=7) {
-				event.getTextChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").complete();
+				event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").complete();
 				return;
 			}
 			builder.setTitle("Set color!");
@@ -67,7 +67,7 @@ public class Profile implements Command {
 			break;
 		case "name":
 			if(args.length<2) {
-				event.getTextChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").complete();
+				event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").complete();
 				return;
 			}
 			String name=String.join(" ", Arrays.copyOfRange(args, 1, args.length));
@@ -76,17 +76,17 @@ public class Profile implements Command {
 			break;
 		case "link":
 			if(args.length<3) {
-				event.getTextChannel().sendMessage("<:IconProvide:553870022125027329> I need more than 1 argument.").queue();
+				event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than 1 argument.").queue();
 				return;
 			}
 			name=args[1];
 			String link=String.join(" ",Arrays.copyOfRange(args, 2, args.length));
 			if(name.contains("|")||link.contains("|")) {
-				event.getTextChannel().sendMessage("<:IconX:553868311960748044> Sorry, Links cannot contain pipes. Use `%7C` instead.").queue();
+				event.getChannel().sendMessage("<:IconX:553868311960748044> Sorry, Links cannot contain pipes. Use `%7C` instead.").queue();
 				return;
 			}
 			if(!link.startsWith("http")) {
-				event.getTextChannel().sendMessage("<:IconX:553868311960748044> Sorry, this is not a link. Make sure to include `http/s`.").queue();
+				event.getChannel().sendMessage("<:IconX:553868311960748044> Sorry, this is not a link. Make sure to include `http/s`.").queue();
 				return;
 			}
 			
@@ -104,10 +104,10 @@ public class Profile implements Command {
 			setProp(event.getAuthor(), "links", links);
 			break;
 		default:
-			showProfile(event.getTextChannel(), event.getAuthor());
+			showProfile(event.getChannel(), event.getAuthor());
 			return;
 		}
-		JDAUtils.msg(event.getTextChannel(), builder.build(),false);
+		JDAUtils.msg(event.getChannel(), builder.build(),false);
 	}
 	private void showProfile(TextChannel tc,User user) {
 		EmbedBuilder builder=new EmbedBuilder();
