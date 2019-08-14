@@ -1,6 +1,8 @@
 # NightDream [![Build Status](https://travis-ci.com/byNoobiYT/NightDream.svg?branch=master)](https://travis-ci.com/byNoobiYT/NightDream)
 a Clone of the Discord Bot [Daydream](https://gitlab.com/botstudio/daydream) in Java
 
+This is not an exact clone, there are a few differences to the original.
+
 ## Build NightDream
 * (optional) execute `gradlew clean` in the project directory
 * execute `gradlew jar` in the project directory
