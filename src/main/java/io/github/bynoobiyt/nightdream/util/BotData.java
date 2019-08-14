@@ -24,6 +24,12 @@ public class BotData {
 	private static final String PREFIX_PROP_NAME = "prefix";
 	public static final File DATA_DIR = new File("NightDream");
 	
+	public static final String INSTANCE_OWNER_PROP_NAME="admin";
+	public static final String BUG_ID_PROP_NAME="BugID";
+	public static final String BUG_CHAN_PROP_NAME="BugReportChannel";
+	public static final String BUG_FIXED_PROP_NAME="FixedBugsChannel";
+	public static final String MSGLOG_CHAN_PROP_NAME="MsgLogChannel";
+	
 	static {
 		if(!DATA_DIR.exists()) {
 			DATA_DIR.mkdirs();
@@ -75,7 +81,7 @@ public class BotData {
 	 * @param guild the {@link Guild} where the prefix should be set
 	 */
 	public static void setMsgLogChannel(String channelId, Guild guild) {
-		setProperty("MsgLogChannel", channelId, guild);
+		setProperty(MSGLOG_CHAN_PROP_NAME, channelId, guild);
 	}
 	/**
 	 * gets the channel for message (delete) logs
@@ -83,14 +89,14 @@ public class BotData {
 	 * @return the ISnowflake id of the channel
 	 */
 	public static String getMsgLogChannel(Guild guild) {
-		return getProperty("MsgLogChannel", guild);
+		return getProperty(MSGLOG_CHAN_PROP_NAME, guild);
 	}
 	/**
 	 * resets/unsets the channel for message (delete) logs
 	 * @param guild the {@link Guild} where the prefix should be reset
 	 */
 	public static void resetMsgLogChannel(Guild guild) {
-		setProperty("MsgLogChannel", "", guild);
+		setProperty(MSGLOG_CHAN_PROP_NAME, "", guild);
 	}
 	/**
 	 * resets the prefix for a {@link Guild} (sets it to the default prefix for all Guilds)
@@ -104,14 +110,14 @@ public class BotData {
 	 * @return the instance owners as array of ISnowflake IDs
 	 */
 	public static String[] getAdminIDs() {
-		return getGlobalProperty("admin").split(" ");
+		return getGlobalProperty(INSTANCE_OWNER_PROP_NAME).split(" ");
 	}
 	/**
 	 * sets the instance owners of the bot
 	 * @param adminIDs the instance owners as array of ISnowflake IDs
 	 */
 	public static void setAdminIDs(String[] adminIDs) {
-		setGlobalProperty("admin", String.join(" ",adminIDs));
+		setGlobalProperty(INSTANCE_OWNER_PROP_NAME, String.join(" ",adminIDs));
 	}
 	/**
 	 * gets a Property for a {@link Guild}
@@ -176,7 +182,7 @@ public class BotData {
 	private static Properties loadGuildDefaultProperties() {
 		Map<String,String> defaults=new HashMap<>();
 		defaults.put(PREFIX_PROP_NAME, "nd-");
-		defaults.put("MsgLogChannel", "");
+		defaults.put(MSGLOG_CHAN_PROP_NAME, "");
 		return loadProperties("Guild.properties", defaults, "Default Properties of Nightdream");
 	}
 	/**
@@ -217,10 +223,10 @@ public class BotData {
 			Map<String,String> defaults=new HashMap<>();
 			defaults.put("token", "");
 			defaults.put("game","Nightdreaming...");
-			defaults.put("admin", String.join(" ","358291050957111296","321227144791326730","299556333097844736"));
-			defaults.put("BugReportChannel", "");
-			defaults.put("FixedBugsChannel", "");
-			defaults.put("BugID", "0");
+			defaults.put(INSTANCE_OWNER_PROP_NAME, String.join(" ","358291050957111296","321227144791326730","299556333097844736"));
+			defaults.put(BUG_CHAN_PROP_NAME, "");
+			defaults.put(BUG_FIXED_PROP_NAME, "");
+			defaults.put(BUG_ID_PROP_NAME, "0");
 
 			globalProps=loadProperties("NightDream.properties", defaults, "Nightdream Properties");
 		}
@@ -288,42 +294,42 @@ public class BotData {
 	 * @param channelID the ISnowflake ID of the channel
 	 */
 	public static void setBugReportChannel(String channelID) {
-		setGlobalProperty("BugReportChannel", channelID);
+		setGlobalProperty(BUG_CHAN_PROP_NAME, channelID);
 	}
 	/**
 	 * gets the Bug Report channel of the Bot
 	 * @return the ISnowflake ID of the channel
 	 */
 	public static String getBugReportChannel() {
-		return getGlobalProperty("BugReportChannel");
+		return getGlobalProperty(BUG_CHAN_PROP_NAME);
 	}
 	/**
 	 * sets the bug current bug ID of the Bot
 	 * @param bugID the Bug id
 	 */
 	public static void setBugID(int bugID) {
-		setGlobalProperty("BugID", String.valueOf(bugID));
+		setGlobalProperty(BUG_ID_PROP_NAME, String.valueOf(bugID));
 	}
 	/**
 	 * gets the bug current bug ID of the Bot
 	 * @return the Bug id
 	 */
 	public static int getBugID() {
-		return Integer.parseInt(getGlobalProperty("BugID"));
+		return Integer.parseInt(getGlobalProperty(BUG_ID_PROP_NAME));
 	}
 	/**
 	 * sets the channel for fixed bugs of the bot
 	 * @param channelID the id of the channel
 	 */
 	public static void setFixedBugsChannel(String channelID) {
-		setGlobalProperty("FixedBugsChannel", channelID);
+		setGlobalProperty(BUG_FIXED_PROP_NAME, channelID);
 	}
 	/**
 	 * gets the channel for fixed bugs of the bot
 	 * @return the id of the channel
 	 */
 	public static String getFixedBugsChannel() {
-		return getGlobalProperty("FixedBugsChannel");
+		return getGlobalProperty(BUG_FIXED_PROP_NAME);
 	}
 	/**
 	 * reloads all Properties

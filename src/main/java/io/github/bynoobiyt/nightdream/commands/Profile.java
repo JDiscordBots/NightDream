@@ -18,6 +18,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class Profile implements Command {
 	private static Properties props;
 	
+	private static final String COLOR_PROP_NAME="color";
+	private static final String DESC_PROP_NAME="description";
+	private static final String LINK_PROP_NAME="links";
+	
 	static {
 		reload();
 	}
@@ -47,7 +51,7 @@ public class Profile implements Command {
 			
 			String desc=String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 			builder.setDescription(desc).setTitle("Your description is now").setColor(0x212121);
-			setProp(event.getAuthor(), "description", desc);
+			setProp(event.getAuthor(), DESC_PROP_NAME, desc);
 			break;
 		case "color":
 			if(args.length<2||args[1].length()!=7) {
@@ -57,7 +61,7 @@ public class Profile implements Command {
 			builder.setTitle("Set color!");
 			String color=args[1].substring(1);
 			builder.setColor(Integer.valueOf(color,16));
-			setProp(event.getAuthor(), "color", color);
+			setProp(event.getAuthor(), COLOR_PROP_NAME, color);
 			break;
 		case "help":
 			builder.setColor(0x212121).setTitle("Profile Help");
@@ -94,14 +98,14 @@ public class Profile implements Command {
 			.setColor(0x212121)
 			.addField("`"+name+"`", link, false);
 			
-			String links=getProp(event.getAuthor(), "links");
+			String links=getProp(event.getAuthor(), LINK_PROP_NAME);
 			link=name+"|"+link.replace("[", "%5B").replace("]", "%5D").replace("(", "%28").replace(")", "%29");
 			if(links.equals("")) {
 				links=link;
 			}else {
 				links+="||"+link;
 			}
-			setProp(event.getAuthor(), "links", links);
+			setProp(event.getAuthor(), LINK_PROP_NAME, links);
 			break;
 		default:
 			showProfile(event.getChannel(), event.getAuthor());
@@ -113,15 +117,15 @@ public class Profile implements Command {
 		EmbedBuilder builder=new EmbedBuilder();
 		int color=0x212121;
 		try {
-			color=Integer.valueOf(getProp(user, "color"),16);
+			color=Integer.valueOf(getProp(user, COLOR_PROP_NAME),16);
 		}catch(NumberFormatException e) {
 			//ignore
 		}
 		
 		builder.setColor(color);
 		builder.setTitle(getProp(user, "name", user.getAsTag()));
-		builder.setDescription(getProp(user, "description", "A Ghost... yet"));
-		String links=getProp(user,"links");
+		builder.setDescription(getProp(user, DESC_PROP_NAME, "A Ghost... yet"));
+		String links=getProp(user,LINK_PROP_NAME);
 		if(!links.equals("")) {
 			builder.addField("Links",
 					Stream.of(links.split("\\|\\|"))
