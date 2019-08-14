@@ -14,10 +14,10 @@ public class GeneralUtils {
 		//prevent instantiation
 	}
 	/**
-	 * gets the string value of the first occurence of a key in a json String
+	 * gets the string value of the first occurrence of a key in a json String
 	 * @param json the JSON String
 	 * @param query the key to look for
-	 * @return the value of the first occurence
+	 * @return the value of the first occurrence
 	 */
 	public static String getJSONString(String json,String query) {
 		String str="\""+query+"\":\"";
@@ -28,10 +28,10 @@ public class GeneralUtils {
 		return json.substring(startIndex,json.indexOf('\"', startIndex));
 	}
 	/**
-	 * gets the string array value of the first occurence of a key in a json String
+	 * gets the string array value of the first occurrence of a key in a json String
 	 * @param json the JSON String
 	 * @param query the key to look for
-	 * @return the value of the first occurence
+	 * @return the value of the first occurrence
 	 */
 	public static String getMultipleJSONStrings(String json,String query) {
 		String str="\""+query+"\":[\"";
