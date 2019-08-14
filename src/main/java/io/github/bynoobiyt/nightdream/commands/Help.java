@@ -21,7 +21,7 @@ public class Help implements Command {
 				builder.addField(new Field(k, v.help(), true));
 			}
 		});
-		JDAUtils.msg(event.getChannel(), builder.build(),false);
+		JDAUtils.msg(event.getChannel(), builder.build());
 	}
 
 	@Override

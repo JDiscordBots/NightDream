@@ -21,13 +21,13 @@ public class Dice implements Command {
         try {
             d = Math.floor(Math.random() * Double.parseDouble(args[0]) + 1);
         } catch (NumberFormatException e) {
-            JDAUtils.errmsg(event.getChannel(), "<:IconProvide:553870022125027329> Not enough arguments!");
+            event.getChannel().sendMessage("<:IconProvide:553870022125027329> Not enough arguments!").queue();
             return;
         }
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("Rolling the dice...")
                 .setDescription(String.format("From 1 to %s", args[0]));
 
-        Message msg = JDAUtils.msg(event.getChannel(), eb.build(), false);
+        Message msg = JDAUtils.msg(event.getChannel(), eb.build());
 
         eb.clear();
 

@@ -24,7 +24,7 @@ public class Rate implements Command {
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white)
                 .setTitle(String.format("Rating %s", mentioned.getName()))
                 .setDescription(String.format("%s/100", i));
-        JDAUtils.msg(event.getChannel(), eb.build(), false);
+        JDAUtils.msg(event.getChannel(), eb.build());
     }
 
     @Override

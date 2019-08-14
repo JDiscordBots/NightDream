@@ -23,7 +23,7 @@ public class Reload implements Command {
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		final TextChannel tc=event.getChannel();
 		if(args.length==0) {
-			JDAUtils.msg(event.getChannel(), "reloading all Properties...",Color.YELLOW,false);
+			JDAUtils.msg(event.getChannel(), "reloading all Properties...",Color.YELLOW);
 			BotData.reloadAllProperties();
 			JDAUtils.msg(event.getChannel(), "reloaded!");
 			return;
@@ -32,7 +32,7 @@ public class Reload implements Command {
 		case "login":
 		case "reconnect"://TODO fix console error(InterruptedException)
 			try {
-				JDAUtils.msg(event.getChannel(), "reconnecting...",Color.YELLOW,false);
+				JDAUtils.msg(event.getChannel(), "reconnecting...",Color.YELLOW);
 				JDAImpl jda=((JDAImpl)event.getJDA());
 				jda.setAutoReconnect(false);
 				jda.getClient().socket.disconnect();

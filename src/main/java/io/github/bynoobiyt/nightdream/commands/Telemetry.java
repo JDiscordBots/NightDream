@@ -50,7 +50,7 @@ public class Telemetry implements Command {
 				sb.append(" not used at all\n");
 			}
 		}
-		event.getChannel().sendMessage(sb.toString()).complete();
+		event.getChannel().sendMessage(sb.toString()).queue();
 	}
 
 	@Override

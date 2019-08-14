@@ -13,7 +13,7 @@ public class Choose implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         if (args.length <= 1) {
-            JDAUtils.errmsg(event.getChannel(), "<IconX:55386311960748044> Please give me some options!");
+            event.getChannel().sendMessage("<IconX:55386311960748044> Please give me some options!").queue();
             return;
         }
         String chosen = args[GeneralUtils.getRandInt(args.length)];
@@ -21,7 +21,7 @@ public class Choose implements Command {
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("I've chosen!")
                 .setDescription(chosen);
 
-        JDAUtils.msg(event.getChannel(), eb.build(), false);
+        JDAUtils.msg(event.getChannel(), eb.build());
     }
 
     @Override

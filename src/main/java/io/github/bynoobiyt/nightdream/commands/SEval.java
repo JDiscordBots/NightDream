@@ -49,7 +49,7 @@ public class SEval implements Command {
 		} catch (ScriptException e) {
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
 			final Message msg = event.getChannel().sendMessage("No...").complete();
-			msg.addReaction("\u274C").complete();
+			msg.addReaction("\u274C").queue();
 			new Timer().schedule(new TimerTask() {
 				
 				@Override
@@ -57,7 +57,7 @@ public class SEval implements Command {
 					Message message = event.getChannel().retrieveMessageById(msg.getId()).complete();
 					for (MessageReaction reaction : message.getReactions()) {
 						if(reaction.getReactionEmote().getEmoji().equals("\u274C") && reaction.retrieveUsers().complete().contains(event.getAuthor())) {
-							message.delete().complete();
+							message.delete().queue();
 							return;
 						}
 					}

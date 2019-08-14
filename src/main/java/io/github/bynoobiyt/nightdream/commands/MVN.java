@@ -16,14 +16,17 @@ public class MVN implements Command{
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").complete();
+			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
 		}
 		String url="http://search.maven.org/solrsearch/select?q="+args[0]+"&wt=json";
 		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
 			String json=scan.nextLine();
 			String id=GeneralUtils.getJSONString(json,"id");
 			if(id.equals("?")) {
-				JDAUtils.errmsg(event.getChannel(), "Not found.");
+				EmbedBuilder builder=new EmbedBuilder();
+				builder.setColor(0xdc6328)
+				.addField("<:IconProvide:553870022125027329> Nothing found", "Try something different.", false);
+				event.getChannel().sendMessage(builder.build()).queue();
 				return;
 			}
 			EmbedBuilder builder=new EmbedBuilder();
@@ -34,7 +37,7 @@ public class MVN implements Command{
 			.addField(new Field("Current Version", GeneralUtils.getJSONString(json, "latestVersion"), true))
 			.addField(new Field("Repository", GeneralUtils.getJSONString(json, "repositoryId"), true));
 			
-			JDAUtils.msg(event.getChannel(), builder.build(),false);
+			JDAUtils.msg(event.getChannel(), builder.build());
 		}catch (IOException e) {
 			JDAUtils.errmsg(event.getChannel(), "An error occurred, maybe your query is invalid");
 		}

@@ -17,7 +17,7 @@ public class NPM implements Command{
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").complete();
+			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
 		}
 		String url="http://registry.npmjs.org/"+args[0];
 		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
@@ -38,7 +38,7 @@ public class NPM implements Command{
 			.addField(new Field("Author", GeneralUtils.getJSONString(json, "author\":{\"name"), true))
 			.addField(new Field("Scope", "`"+scope+"`", true));
 			
-			JDAUtils.msg(event.getChannel(), builder.build(),false);
+			JDAUtils.msg(event.getChannel(), builder.build());
 		}catch(FileNotFoundException e) {
 			JDAUtils.errmsg(event.getChannel(), "Not found");
 		}catch (IOException e) {

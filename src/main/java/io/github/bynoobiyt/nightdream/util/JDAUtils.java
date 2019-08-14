@@ -1,8 +1,6 @@
 package io.github.bynoobiyt.nightdream.util;
 
 import java.awt.Color;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -13,9 +11,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class JDAUtils {
 
-	public static final long INFO_TIMEOUT=5000;
-	
-	
 	private JDAUtils() {
 		//prevent instantiation
 	}
@@ -26,7 +21,7 @@ public class JDAUtils {
 	 * @param text The text of the Message as {@link String}
 	 */
 	public static void errmsg(TextChannel channel, String text) {
-		msg(channel, text, Color.RED, false);
+		msg(channel, text, Color.RED);
 	}
 	/**
 	 * send a Message
@@ -36,18 +31,7 @@ public class JDAUtils {
 	 * @return the sent {@link Message}
 	 */
 	public static Message msg(TextChannel channel, String text) {
-		return msg(channel, text, Color.GREEN, false);
-	}
-	/**
-	 * send a Message
-	 * standardColor: {@link Color#GREEN}
-	 * @param channel The {@link TextChannel} where the Message should be sent
-	 * @param text The text of the Message as {@link String}
-	 * @param timeout should the Message be deleted automatically
-	 * @return the sent {@link Message}
-	 */
-	public static Message msg(TextChannel channel, String text,boolean timeout) {
-		return msg(channel, text, Color.GREEN, timeout);
+		return msg(channel, text, Color.GREEN);
 	}
 	
 	/**
@@ -55,38 +39,23 @@ public class JDAUtils {
 	 * @param channel The {@link TextChannel} where the Message should be sent
 	 * @param text The text of the Message as {@link String}
 	 * @param color the {@link Color} of the Message
-	 * @param timeout should the Message be deleted automatically
 	 * @return the sent {@link Message}
 	 */
-	public static Message msg(TextChannel channel, String text,Color color,boolean timeout) {
+	public static Message msg(TextChannel channel, String text,Color color) {
 		return msg(channel, new EmbedBuilder()
 					.setColor(color)
 					.setDescription(text)
-					.build(), timeout);
+					.build());
 	}
 	/**
 	 * send a Message
 	 * @param channel The {@link TextChannel} where the Message should be sent
 	 * @param message The content of the Message as {@link MessageEmbed}
-	 * @param timeout should the Message be deleted automatically
 	 * @return the sent {@link Message}
 	 */
-	public static Message msg(TextChannel channel, MessageEmbed message,boolean timeout) {
+	public static Message msg(TextChannel channel, MessageEmbed message) {
 		try {
-			Message msg = channel.sendMessage(message).complete();
-			if (timeout) {
-				new Timer().schedule(new TimerTask() {
-					@Override
-					public void run() {
-						try {
-							msg.delete().queue();
-						} catch (IllegalArgumentException e) {
-							//continue with execution
-						}
-					}
-				}, INFO_TIMEOUT);
-			}
-			return msg;
+			return channel.sendMessage(message).complete();
 		} catch (Exception e) {
 			System.err.println("Cannot send Message \""+message.getDescription()+"\" in channel "+channel.getName()+"["+channel.getGuild().getName()+"] because of a "+e.getClass().getSimpleName());
 			return null;
@@ -125,7 +94,7 @@ public class JDAUtils {
 	public static boolean checkOwner(GuildMessageReceivedEvent event,boolean doErrMsg) {
 		boolean owner=isOwner(event.getAuthor());
 		if (!owner&&doErrMsg) {
-			event.getChannel().sendMessage("<:IconInfo:553868326581829643> This is an admin command.").complete();
+			event.getChannel().sendMessage("<:IconInfo:553868326581829643> This is an admin command.").queue();
 		}
 		return owner;
 	}

@@ -22,7 +22,7 @@ public class Snow implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getChannel().sendMessage("`"+generate()+"` made `"+new Date()+"`").complete();
+			event.getChannel().sendMessage("`"+generate()+"` made `"+new Date()+"`").queue();
 		}else {
 			EmbedBuilder eb=new EmbedBuilder();
 			eb.setTitle(args[0]);
@@ -32,7 +32,7 @@ public class Snow implements Command {
 			eb.addField("Date", new Date(Long.valueOf(binStr.substring(0,42),2)+EPOCH).toString(), false);
 			eb.addField("Increment", Integer.valueOf(binStr.substring(52,64),2).toString(), false);
 			eb.addField("Worker, Process ID", args[0]+" has worker ID "+Integer.valueOf(binStr.substring(42,47),2)+" with process ID "+Integer.valueOf(binStr.substring(47,52),2), false);
-			event.getChannel().sendMessage(eb.build()).complete();
+			event.getChannel().sendMessage(eb.build()).queue();
 		}
 	}
 	@Override

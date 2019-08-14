@@ -41,7 +41,7 @@ public class Profile implements Command {
 		case "description":
 		case "desc":
 			if(args.length<2) {
-				event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than 1 argument.").complete();
+				event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than 1 argument.").queue();
 				return;
 			}
 			
@@ -51,7 +51,7 @@ public class Profile implements Command {
 			break;
 		case "color":
 			if(args.length<2||args[1].length()!=7) {
-				event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").complete();
+				event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").queue();
 				return;
 			}
 			builder.setTitle("Set color!");
@@ -67,7 +67,7 @@ public class Profile implements Command {
 			break;
 		case "name":
 			if(args.length<2) {
-				event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").complete();
+				event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").queue();
 				return;
 			}
 			String name=String.join(" ", Arrays.copyOfRange(args, 1, args.length));
@@ -107,7 +107,7 @@ public class Profile implements Command {
 			showProfile(event.getChannel(), event.getAuthor());
 			return;
 		}
-		JDAUtils.msg(event.getChannel(), builder.build(),false);
+		JDAUtils.msg(event.getChannel(), builder.build());
 	}
 	private void showProfile(TextChannel tc,User user) {
 		EmbedBuilder builder=new EmbedBuilder();
@@ -131,7 +131,7 @@ public class Profile implements Command {
 		if(JDAUtils.isOwner(user)) {
 			builder.addField(new Field("<:IconInfo:553868326581829643> Bot Admin!", "This is a bot admin.", false));
 		}
-		JDAUtils.msg(tc, builder.build(),false);
+		JDAUtils.msg(tc, builder.build());
 	}
 	private static String getProp(User user,String name) {
 		return getProp(user,name,"");

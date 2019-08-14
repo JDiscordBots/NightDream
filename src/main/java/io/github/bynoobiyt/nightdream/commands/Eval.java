@@ -47,9 +47,9 @@ public class Eval implements Command {
 			Object result = null;
 			result = se.eval(scriptBuilder.toString());
 			if (result != null) {
-	        	event.getChannel().sendMessage("```js\n"+result.toString()+"\n```").complete();
+	        	event.getChannel().sendMessage("```js\n"+result.toString()+"\n```").queue();
 			}else {
-				event.getChannel().sendMessage("`undefined` or `null`").complete();
+				event.getChannel().sendMessage("`undefined` or `null`").queue();
 			}
 		} catch (ScriptException e) {
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
@@ -61,7 +61,7 @@ public class Eval implements Command {
 				if(len>1000) {
 					len=1000;
 				}
-				event.getChannel().sendMessage("`ERROR` ```java\n"+exStr.substring(0,len)+"\n```").complete();
+				event.getChannel().sendMessage("`ERROR` ```java\n"+exStr.substring(0,len)+"\n```").queue();
 			} catch (IOException e1) {
 				//ignore 
 			}
