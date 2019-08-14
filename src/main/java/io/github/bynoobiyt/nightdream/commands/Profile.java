@@ -68,6 +68,7 @@ public class Profile implements Command {
 			builder.addField(new Field("color", "Sets a profile color in #123456 format",false));
 			builder.addField(new Field("description/desc", "Sets a profile description",false));
 			builder.addField(new Field("name", "Sets your name",false));
+			builder.addField(new Field("link", "adds link to your profile", false));
 			break;
 		case "name":
 			if(args.length<2) {
