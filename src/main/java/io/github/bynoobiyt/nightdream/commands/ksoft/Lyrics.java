@@ -1,5 +1,6 @@
-package io.github.bynoobiyt.nightdream.commands;
+package io.github.bynoobiyt.nightdream.commands.ksoft;
 
+import io.github.bynoobiyt.nightdream.commands.Command;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import io.github.bynoobiyt.nightdream.util.KSoftUtil;
 import net.dv8tion.jda.api.EmbedBuilder;

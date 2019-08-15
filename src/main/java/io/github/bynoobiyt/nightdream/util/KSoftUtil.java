@@ -1,6 +1,8 @@
 package io.github.bynoobiyt.nightdream.util;
 
 import net.explodingbush.ksoftapi.KSoftAPI;
+import net.explodingbush.ksoftapi.entities.TaggedImage;
+import net.explodingbush.ksoftapi.enums.ImageTag;
 
 public class KSoftUtil {
 	
@@ -21,6 +23,12 @@ public class KSoftUtil {
 	
 	public static KSoftAPI getApi() {
 		return api;
+	}
+	public static TaggedImage getImage(ImageTag tag) {
+		if(api==null) {
+			return null;
+		}
+		return api.getTaggedImage(tag).allowNsfw(false).execute();
 	}
 
 }

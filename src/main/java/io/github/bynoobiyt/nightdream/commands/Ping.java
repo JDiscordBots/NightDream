@@ -15,7 +15,7 @@ public class Ping implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		EmbedBuilder builder = new EmbedBuilder();
-		builder.setDescription(":alarm_clock:");
+		builder.setDescription(":stopwatch:");
 		builder.setColor(Color.white);
 		Message msg = JDAUtils.msg(event.getChannel(), builder.build());
 		builder.setColor(Color.GREEN);
