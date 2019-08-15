@@ -24,11 +24,12 @@ public class BotData {
 	private static final String PREFIX_PROP_NAME = "prefix";
 	public static final File DATA_DIR = new File("NightDream");
 	
-	public static final String INSTANCE_OWNER_PROP_NAME="admin";
-	public static final String BUG_ID_PROP_NAME="BugID";
-	public static final String BUG_CHAN_PROP_NAME="BugReportChannel";
-	public static final String BUG_FIXED_PROP_NAME="FixedBugsChannel";
-	public static final String MSGLOG_CHAN_PROP_NAME="MsgLogChannel";
+	private static final String INSTANCE_OWNER_PROP_NAME="admin";
+	private static final String BUG_ID_PROP_NAME="BugID";
+	private static final String BUG_CHAN_PROP_NAME="BugReportChannel";
+	private static final String BUG_FIXED_PROP_NAME="FixedBugsChannel";
+	private static final String MSGLOG_CHAN_PROP_NAME="MsgLogChannel";
+	private static final String KSOFT_TOKEN_PROP_NAME="KSoftToken";
 	
 	static {
 		if(!DATA_DIR.exists()) {
@@ -118,6 +119,9 @@ public class BotData {
 	 */
 	public static void setAdminIDs(String[] adminIDs) {
 		setGlobalProperty(INSTANCE_OWNER_PROP_NAME, String.join(" ",adminIDs));
+	}
+	public static String getKSoftToken() {
+		return getGlobalProperty(KSOFT_TOKEN_PROP_NAME);
 	}
 	/**
 	 * gets a Property for a {@link Guild}
@@ -227,7 +231,8 @@ public class BotData {
 			defaults.put(BUG_CHAN_PROP_NAME, "");
 			defaults.put(BUG_FIXED_PROP_NAME, "");
 			defaults.put(BUG_ID_PROP_NAME, "0");
-
+			defaults.put(KSOFT_TOKEN_PROP_NAME, "");
+			
 			globalProps=loadProperties("NightDream.properties", defaults, "Nightdream Properties");
 		}
 		return globalProps;
