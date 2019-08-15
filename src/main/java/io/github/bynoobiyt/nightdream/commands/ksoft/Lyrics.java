@@ -38,7 +38,7 @@ public class Lyrics implements Command {
 			builder.addField(lyric.getArtistName(), "in no albums", false);
 		}else {
 			builder.addField(lyric.getArtistName(),lyric.getAlbums()[0],false)
-			.addField(lyric.getFullTitle(), "released "+lyric.getAlbumReleaseYears(), false);
+			.addField(lyric.getFullTitle(), "released "+lyric.getAlbumReleaseYears()[0], false);
 		}
 		event.getChannel().sendMessage(builder.build()).queue();
 	}

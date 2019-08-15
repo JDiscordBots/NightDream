@@ -29,6 +29,7 @@ public class MsgLog implements Command {
 			channel = event.getMessage().getMentionedChannels().get(0);
 		} catch (Exception e) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a mentioned channel").queue();
+			return;
 		}
 		BotData.setMsgLogChannel(channel.getId(), event.getGuild());
 		event.getChannel().sendMessage("Set! `" + BotData.getPrefix(event.getGuild()) + "msglog none` to disable.").queue();

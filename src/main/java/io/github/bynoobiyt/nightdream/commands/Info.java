@@ -38,12 +38,12 @@ public class Info implements Command {
     	final JDA jda=event.getJDA();
         if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI)) {
         	TextToGraphics.sendTextAsImage(event.getChannel(), "info.png", String.format(
-        			"Bot Info\n" +
-        			"\tIn %s guilds, serving %s users and %s bots.\n" +
-                            "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map(id ->jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n" +
-                            "\tJDA v4.0.0_39\n" +
-                            "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n" +
-                            "\t(c) dan1st and Gehasstes %s, Release %s.\n ", event.getJDA().getGuilds().size(), getUsers(), getBots(), Year.now().getValue(), NightDream.VERSION
+        			"Bot Info\n"
+        			+ "\tIn %s guilds, serving %s users and %s bots.\n"
+                    + "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map(id ->jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n"
+                    + "\tJDA v4.0.0_39\n"
+                    + "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n"
+                    + "\t(c) dan1st and Gehasstes %s, Release %s.\n ", event.getJDA().getGuilds().size(), getUsers(), getBots(), Year.now().getValue(), NightDream.VERSION
         			), event.getAuthor().getAsMention());
         }
     }
