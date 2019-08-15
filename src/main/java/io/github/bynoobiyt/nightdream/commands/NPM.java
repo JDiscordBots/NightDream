@@ -19,7 +19,7 @@ public class NPM implements Command{
 		if(args.length==0) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
 		}
-		String url="http://registry.npmjs.org/"+args[0];
+		String url="http://registry.yarnpkg.com/"+args[0];
 		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
 			String json=scan.nextLine();
 			String scope;
