@@ -8,11 +8,13 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("msglog")
 public class MsgLog implements Command {
+	
+	private static final String NEED_MENTIONED_CHANNEL="<:IconProvide:553870022125027329> I need a mentioned channel";
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if (args.length == 0) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a mentioned channel").queue();
+			event.getChannel().sendMessage(NEED_MENTIONED_CHANNEL).queue();
 			return;
 		}
 		if (args[0].equals("none")) {
@@ -21,14 +23,14 @@ public class MsgLog implements Command {
 			return;
 		}
 		if (event.getMessage().getMentionedChannels().isEmpty()) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a mentioned channel").queue();
+			event.getChannel().sendMessage(NEED_MENTIONED_CHANNEL).queue();
 			return;
 		}
 		TextChannel channel = null;
 		try {
 			channel = event.getMessage().getMentionedChannels().get(0);
 		} catch (Exception e) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a mentioned channel").queue();
+			event.getChannel().sendMessage(NEED_MENTIONED_CHANNEL).queue();
 			return;
 		}
 		BotData.setMsgLogChannel(channel.getId(), event.getGuild());
