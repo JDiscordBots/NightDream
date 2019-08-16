@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 /**
  * Class to parse a Command into a {@link CommandContainer}
