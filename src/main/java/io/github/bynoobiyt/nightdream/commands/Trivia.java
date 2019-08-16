@@ -5,9 +5,9 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import io.github.bynoobiyt.nightdream.listeners.TriviaListener;
 import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
-import io.github.bynoobiyt.nightdream.util.TriviaListener;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -31,7 +31,7 @@ public class Trivia implements Command{
 			.addField("Choices:",String.join(", ", answers),false)
 			.setFooter("Type your answer in this channel!");
 			event.getChannel().sendMessage(builder.build()).complete();
-			TriviaListener.addQuestion(event.getChannel(), correct, incorrect.split(", "));
+			TriviaListener.addQuestion(event.getChannel(), correct);
 		}catch (IOException e) {
 			JDAUtils.errmsg(event.getChannel(), "<:IconX:553868311960748044> Errored while trying to connect to server.");
 		}

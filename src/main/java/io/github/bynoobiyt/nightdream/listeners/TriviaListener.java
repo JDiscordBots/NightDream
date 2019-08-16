@@ -1,10 +1,8 @@
-package io.github.bynoobiyt.nightdream.util;
+package io.github.bynoobiyt.nightdream.listeners;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
@@ -17,7 +15,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public final class TriviaListener extends ListenerAdapter {
 	private static TriviaListener listener;
-	private Map<String, Set<List<String>>> questions=new HashMap<>();
+	private Map<String, Set<Set<String>>> questions=new HashMap<>();
 	private Timer timer=new Timer();
 	private JDA jda;
 	private TriviaListener(JDA jda) {
@@ -34,15 +32,14 @@ public final class TriviaListener extends ListenerAdapter {
 		
 	}
 	
-	public static  void addQuestion(final TextChannel chan,String correct, String[] wrong) {
+	public static  void addQuestion(final TextChannel chan,String... correct) {
+		for (int i = 0; i < correct.length; i++) {
+			correct[i]=correct[i].toLowerCase();
+		}
+		final Set<String> correctAnswers=new HashSet<>(Arrays.asList(correct));
 		synchronized(TriviaListener.class) {
-			for (int i = 0; i < wrong.length; i++) {
-				wrong[i]=wrong[i].toLowerCase();
-			}
-			final List<String> question=new ArrayList<>(Arrays.asList(wrong));
-			question.add(correct.toLowerCase());
 			getListener(chan.getJDA());
-			Set<List<String>> questions;
+			Set<Set<String>> questions;
 			if(listener.questions.containsKey(chan.getId())) {
 				questions=listener.questions.get(chan.getId());
 				
@@ -50,19 +47,21 @@ public final class TriviaListener extends ListenerAdapter {
 				questions=new HashSet<>();
 				listener.questions.put(chan.getId(), questions);
 			}
-			questions.add(question);
+			questions.add(correctAnswers);
 			listener.timer.schedule(new TimerTask() {
 				@Override
-				public synchronized void run() {
-					if(listener!=null&&listener.questions.containsKey(chan.getId())&&listener.questions.get(chan.getId()).contains(question)) {
-						chan.sendMessage("Nobody got the answer this time. Sad.").queue();
-						
-						listener.questions.get(chan.getId()).remove(question);
-						if(listener.questions.get(chan.getId()).isEmpty()) {
-							listener.questions.remove(chan.getId());
-							if(listener.questions.isEmpty()) {
-								listener.jda.removeEventListener(listener);
-								listener=null;
+				public void run() {
+					synchronized(TriviaListener.class) {
+						if(listener!=null&&listener.questions.containsKey(chan.getId())&&listener.questions.get(chan.getId()).contains(correctAnswers)) {
+							chan.sendMessage("Nobody got the answer this time. Sad.").queue();
+							
+							listener.questions.get(chan.getId()).remove(correctAnswers);
+							if(listener.questions.get(chan.getId()).isEmpty()) {
+								listener.questions.remove(chan.getId());
+								if(listener.questions.isEmpty()) {
+									listener.jda.removeEventListener(listener);
+									listener=null;
+								}
 							}
 						}
 					}
@@ -75,19 +74,15 @@ public final class TriviaListener extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if(questions.containsKey(event.getChannel().getId())) {
 			synchronized (getClass()) {
-				List<String> q=null;
-				for (List<String> question : questions.get(event.getChannel().getId())) {
-					if(question.contains(event.getMessage().getContentDisplay().toLowerCase())) {
-						if(event.getMessage().getContentDisplay().equalsIgnoreCase(question.get(question.size()-1))) {
-							event.getChannel().sendMessage(event.getMember().getEffectiveName()+" got it!").queue();
-						}else {
-							event.getChannel().sendMessage("wrong!").queue();
-						}
-						q=question;
+				Set<String> toDelete=null;
+				for (Set<String> answers : questions.get(event.getChannel().getId())) {
+					if(answers.contains((event.getMessage().getContentDisplay().toLowerCase()))){
+						event.getChannel().sendMessage(event.getMember().getEffectiveName()+" got it!").queue();
+						toDelete=answers;
 					}
 				}
-				if(q!=null) {
-					questions.get(event.getChannel().getId()).remove(q);
+				if(toDelete!=null) {
+					questions.get(event.getChannel().getId()).remove(toDelete);
 					if(questions.get(event.getChannel().getId()).isEmpty()) {
 						questions.remove(event.getChannel().getId());
 						if(questions.isEmpty()) {

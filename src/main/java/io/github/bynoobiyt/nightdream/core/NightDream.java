@@ -74,8 +74,8 @@ public class NightDream {
     		for (String alias : cmdAsBotCommand.value()) {
 				CommandHandler.addCommand(alias.toLowerCase(), cmd);
 			}
-    	});
-    	addAction(ref, BotListener.class,(cmdAsAnnotation,annotatedAsObject)->{
+		});
+		addAction(ref, BotListener.class,(cmdAsAnnotation,annotatedAsObject)->{
     		ListenerAdapter listener = (ListenerAdapter) annotatedAsObject;
 			jdaBuilder.addEventListeners(listener);
     	});

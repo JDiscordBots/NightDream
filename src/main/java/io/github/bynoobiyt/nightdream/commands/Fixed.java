@@ -26,7 +26,7 @@ public class Fixed implements Command {
 		try {
 			bugID = Integer.parseInt(args[0]);
 		} catch (Exception e) {
-			JDAUtils.errmsg(event.getChannel(), "Please enter a correct number for the bug id!");//TODO Daydream bug #17?
+			JDAUtils.errmsg(event.getChannel(), "Please enter a correct number for the bug id!");
 		}
 		if (BotData.getBugID() < bugID) {
 			event.getChannel().sendMessage("This bug id is not valid!").queue();
