@@ -1,0 +1,22 @@
+[
+	{
+		"question": "Who made me?",
+		"answers": ["dan1st#7327", "dan1st", "daniel","gehasstes#0000", "gehasstes", "lucas"]
+	},
+	{
+		"question": "How many letters are there in the alphabet?",
+		"answers": ["26", "twenty-six", "twenty six", "twentysix"]
+	},
+	{
+		"question": "In which city did Romeo and Julia live?",
+		"answers": ["verona"]
+	},
+	{
+		"question": "Which nuts are used in marzipan?",
+		"answers": ["almonds"]
+	},
+	{
+		"question": "From which cactus is tequila made?",
+		"answers": ["agave"]
+	}
+]
