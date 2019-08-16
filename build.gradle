@@ -19,12 +19,8 @@ sourceCompatibility = 8
 targetCompatibility = 8
 
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-math3:3.6.1'
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:23.0'
-
+	//for commands and listeners(to find annotated classes)
     compile 'org.reflections:reflections:0.9.11'
     
     //should be the same as in io.github.bynoobiyt.nightdream.commands.Info
@@ -33,7 +29,7 @@ dependencies {
     //lyrics etc
     compile 'net.explodingbush.KSoft4J:KSoft4J:1.0.6'
     
-    //logging
+    //logging(JDA needs it)
     compile 'org.slf4j:slf4j-simple:2.0.0-alpha0'
     compile 'org.slf4j:slf4j-api:2.0.0-alpha0'
 }
