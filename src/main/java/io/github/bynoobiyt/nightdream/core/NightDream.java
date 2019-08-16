@@ -2,10 +2,14 @@ package io.github.bynoobiyt.nightdream.core;
 
 import java.lang.annotation.Annotation;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import javax.security.auth.login.LoginException;
 
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.bynoobiyt.nightdream.commands.BotCommand;
 import io.github.bynoobiyt.nightdream.commands.Command;
 import io.github.bynoobiyt.nightdream.listeners.BotListener;
@@ -23,6 +27,8 @@ public class NightDream {
 	private static final String ANNOTATED_WITH=" is annotated with @";
 	public static final String VERSION = "0.0.4";
 	private static JDA jda;
+	
+	private static final Logger LOG=LoggerFactory.getLogger(NightDream.class);
 	
 	public static void main(String[] args) {
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
@@ -47,17 +53,26 @@ public class NightDream {
 			.setRequestTimeoutRetry(true);
 		//initialize listeners
 		Reflections ref = new Reflections("io.github.bynoobiyt.nightdream");
+		LOG.info("Loading Commands and Listeners...");
 		addCommandsAndListeners(ref, builder);
+		LOG.info("Loaded Commands and Listeners");
+		if(LOG.isDebugEnabled()) {
+			String cmdStr=CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", "));
+			LOG.debug("available Commands: {}",cmdStr);
+		}
+		
 		try {
+			LOG.info("Logging in...");
 			jda = builder.build();
 			jda.awaitReady();
+			LOG.info("Logged in.");
 			((JDAImpl) jda).getGuildSetupController().clearCache();
 		} catch (final LoginException e) {
-			System.err.println("The entered token is not valid!");
+			LOG.error("The entered token is not valid!");
 		} catch (final IllegalArgumentException e) {
-			System.err.println("There is no token entered!");
+			LOG.error("There is no token entered!");
 		} catch (final InterruptedException e) {
-			e.printStackTrace();
+			LOG.error("The main thread got interrupted while logging in",e);
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -93,11 +108,20 @@ public class NightDream {
 				Annotation cmdAsAnnotation = cl.getAnnotation(annotClass);
 				function.accept(cmdAsAnnotation, annotatedAsObject);
 			} catch (InstantiationException e) {
-				System.err.println(cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but cannot be instantiated");
+				if(LOG.isWarnEnabled()) {
+					String msg=cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but cannot be instantiated";
+					LOG.warn(msg);
+				}
 			} catch (IllegalAccessException e) {
-				System.err.println(cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but the no-args constructor is not visible");
+				if(LOG.isWarnEnabled()) {
+					String msg=cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but the no-args constructor is not visible";
+					LOG.warn(msg);
+				}
 			} catch (Exception e) {
-				System.err.println(cl.getName() + ANNOTATED_WITH+annotClass.getName() + " but there was an unknown Error: " + e.getClass().getName()+": "+e.getCause());
+				if(LOG.isWarnEnabled()) {
+					String msg=cl.getName() + ANNOTATED_WITH+annotClass.getName() + " but there was an unknown Error: " + e.getClass().getName()+": "+e.getCause();
+					LOG.warn(msg);
+				}
 			}
         }
     }

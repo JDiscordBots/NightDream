@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -11,6 +14,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("yn")
 public class YN implements Command {
+	
+	private static final Logger LOG=LoggerFactory.getLogger(YN.class);
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -28,7 +33,7 @@ public class YN implements Command {
 					.build()).queue();
 		} catch (IOException e) {
 			JDAUtils.errmsg(event.getChannel(), "something went wrong.");
-			e.printStackTrace();
+			LOG.warn("IO Error while executing a yes-no query",e);
 		}
 	}
 

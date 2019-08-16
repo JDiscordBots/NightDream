@@ -8,9 +8,14 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @BotCommand("fixed")
 public class Fixed implements Command {
 
+	private static final Logger LOG=LoggerFactory.getLogger(Fixed.class);
+	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		StringBuilder sb = new StringBuilder();
@@ -48,13 +53,13 @@ public class Fixed implements Command {
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		if (BotData.getFixedBugsChannel() == null) {
 			BotData.setFixedBugsChannel("");
-			System.out.println("Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
+			LOG.warn("Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
 			return false;
 		}
 		try {
 			NightDream.getJDA().getTextChannelById(BotData.getFixedBugsChannel());
 		} catch (Exception e) {
-			System.out.println("Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
+			LOG.warn("Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
 			return false;
 		}
 		return JDAUtils.checkOwner(event);

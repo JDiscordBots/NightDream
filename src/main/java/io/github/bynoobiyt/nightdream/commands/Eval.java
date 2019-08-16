@@ -9,6 +9,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -17,6 +20,7 @@ public class Eval implements Command {
 
 	private ScriptEngine se;
 	private static final String LATEST_EXCEPTION_KEY_NAME="err";
+	private static final Logger LOG=LoggerFactory.getLogger(Eval.class);
 	
 	public Eval() {
 		se = new ScriptEngineManager().getEngineByName("Nashorn");
@@ -24,7 +28,7 @@ public class Eval implements Command {
         try {
 			se.eval("System=System.static");
 		} catch (ScriptException e) {
-			e.printStackTrace();
+			LOG.warn("An Exception occured while setting up System in eval",e);
 		}
 	}
 	@Override

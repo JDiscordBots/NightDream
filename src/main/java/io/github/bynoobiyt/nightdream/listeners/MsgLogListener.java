@@ -3,6 +3,8 @@ package io.github.bynoobiyt.nightdream.listeners;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -27,7 +29,7 @@ public class MsgLogListener extends ListenerAdapter{
 		if(!BotData.getMsgLogChannel(event.getGuild()).equals("")) {
 			Message msg=messages.get(event.getMessageId());
 			if(msg==null) {
-				System.err.println("A message that has not been cached was deleted.");
+				Logger.getGlobal().log(Level.INFO,"A message that has not been cached was deleted.");
 			}else {
 				EmbedBuilder builder=new EmbedBuilder();
 				builder.setColor(0x212121)

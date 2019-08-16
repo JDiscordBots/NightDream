@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,6 +17,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 @BotCommand("npm")
 public class NPM implements Command{
 
+	private static final Logger LOG=LoggerFactory.getLogger(NPM.class);
+	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
@@ -43,7 +48,7 @@ public class NPM implements Command{
 			JDAUtils.errmsg(event.getChannel(), "Not found");
 		}catch (IOException e) {
 			JDAUtils.errmsg(event.getChannel(), "An error occured.");
-			e.printStackTrace();
+			LOG.warn("IO Error while executing an npm query",e);
 		}
 	}
 	@Override

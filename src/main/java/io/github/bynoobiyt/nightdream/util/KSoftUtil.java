@@ -1,5 +1,8 @@
 package io.github.bynoobiyt.nightdream.util;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.TaggedImage;
 import net.explodingbush.ksoftapi.enums.ImageTag;
@@ -11,7 +14,7 @@ public class KSoftUtil {
 	static {
 		String token=BotData.getKSoftToken();
 		if(token.equals("")) {
-			System.err.println("no ksoft token defined");
+			Logger.getGlobal().log(Level.WARNING,"no ksoft token defined");
 			api=null;
 		}else {
 			api=new KSoftAPI(token);

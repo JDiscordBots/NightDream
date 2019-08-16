@@ -13,6 +13,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,7 +37,7 @@ public class TextToGraphics {
 			body = Font.createFont(Font.TRUETYPE_FONT, bodyStream);
 			heading = Font.createFont(Font.TRUETYPE_FONT, headingStream);
 		} catch (IOException|FontFormatException e) {
-			e.printStackTrace();
+			Logger.getLogger("graphics").log(Level.WARNING,"Error while loading fonts - Using Arial",e);
 		}
 		FONT_BODY=body.deriveFont(48f);
 		FONT_NOSPACE=heading.deriveFont(52f).deriveFont(Font.BOLD);
@@ -51,7 +53,7 @@ public class TextToGraphics {
 			baos.flush();
 			chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName).complete();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.getLogger("graphics").log(Level.WARNING,"Error while generating image from text: \n"+imgText,e);
 		}
 	}
     private static void createImage(String text,OutputStream out) throws IOException {

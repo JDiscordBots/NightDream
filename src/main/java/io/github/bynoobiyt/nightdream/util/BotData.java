@@ -9,6 +9,8 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import io.github.bynoobiyt.nightdream.commands.Profile;
 import net.dv8tion.jda.api.entities.Guild;
@@ -252,13 +254,13 @@ public class BotData {
 			try(Reader reader=new FileReader(file)){
 				props.load(reader);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.getGlobal().log(Level.WARNING,"Cannot load Properties from file: "+file.getAbsolutePath(),e);
 			}
 		}else {
 			try(Writer writer=new FileWriter(file)){
 				props.store(writer,comment);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.getGlobal().log(Level.WARNING,"Cannot create file or save Properties: "+file.getAbsolutePath(),e);
 			}
 		}
 		return props;
@@ -276,7 +278,7 @@ public class BotData {
 			try(Reader reader=new FileReader(file)){
 				props.load(reader);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.getGlobal().log(Level.WARNING,"Cannot load Properties from file: "+file.getAbsolutePath(),e);
 			}
 		}
 		return props;

@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.bynoobiyt.nightdream.commands.Command;
 import io.github.bynoobiyt.nightdream.core.CommandParser.CommandContainer;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
@@ -13,6 +16,8 @@ import io.github.bynoobiyt.nightdream.util.JDAUtils;
  */
 public class CommandHandler {
 	private static final Map<String, Command> commands = new HashMap<>();
+	
+	private static final Logger LOG=LoggerFactory.getLogger(CommandHandler.class);
 	
 	private CommandHandler() {
 		//no instantiation
@@ -36,7 +41,7 @@ public class CommandHandler {
 				try {
 					commands.get(cmd.invoke.toLowerCase()).action(cmd.args, cmd.event);
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOG.warn("An exception while executing the command "+cmd.event.getMessage().getContentRaw(),e);
 					save = false;
 				}
 			}
