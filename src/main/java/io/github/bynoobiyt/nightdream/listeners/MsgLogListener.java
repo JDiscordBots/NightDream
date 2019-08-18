@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 @BotListener
-public class MsgLogListener extends ListenerAdapter{
+public class MsgLogListener extends ListenerAdapter {
 
 	private Map<String, Message> messages=new HashMap<>();
 	
