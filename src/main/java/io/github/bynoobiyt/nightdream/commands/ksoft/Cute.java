@@ -1,8 +1,9 @@
 package io.github.bynoobiyt.nightdream.commands.ksoft;
 
+import io.github.bynoobiyt.nightdream.commands.BotCommand;
 import net.explodingbush.ksoftapi.enums.ImageTag;
 
-//@BotCommand("cute")//TODO
+@BotCommand("cute")
 public class Cute extends KSoftImageCommand {
 
 	@Override
@@ -12,7 +13,7 @@ public class Cute extends KSoftImageCommand {
 
 	@Override
 	protected String getTitle() {
-		return "Here's a cute cat :3";
+		return "Here's a cute dog :3";
 	}
 
 	@Override
