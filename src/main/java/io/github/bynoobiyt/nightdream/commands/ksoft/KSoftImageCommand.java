@@ -15,7 +15,7 @@ public abstract class KSoftImageCommand implements Command {
 	protected abstract ImageTag getImageTag();
 	
 	@Override
-	public void action(String[] args, GuildMessageReceivedEvent event) {//TODO test
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		event.getChannel().sendTyping().complete();
 		TaggedImage img = KSoftUtil.getImage(getImageTag());
 		if(img==null) {

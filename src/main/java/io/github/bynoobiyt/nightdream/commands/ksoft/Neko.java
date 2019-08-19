@@ -1,6 +1,7 @@
 package io.github.bynoobiyt.nightdream.commands.ksoft;
 
 import io.github.bynoobiyt.nightdream.commands.BotCommand;
+
 import net.explodingbush.ksoftapi.enums.ImageTag;
 @BotCommand("neko")
 public class Neko extends KSoftImageCommand{

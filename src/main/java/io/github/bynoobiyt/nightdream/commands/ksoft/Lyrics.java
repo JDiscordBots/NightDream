@@ -1,5 +1,6 @@
 package io.github.bynoobiyt.nightdream.commands.ksoft;
 
+import io.github.bynoobiyt.nightdream.commands.BotCommand;
 import io.github.bynoobiyt.nightdream.commands.Command;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import io.github.bynoobiyt.nightdream.util.KSoftUtil;
@@ -7,7 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.Lyric;
-//@BotCommand("lyrics")//TODO test
+@BotCommand("lyrics")
 public class Lyrics implements Command {
 
 	@Override

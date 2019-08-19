@@ -1,9 +1,10 @@
 package io.github.bynoobiyt.nightdream.commands.ksoft;
 
+import io.github.bynoobiyt.nightdream.commands.BotCommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.enums.ImageTag;
 
-//@BotCommand("hug")//TODO
+@BotCommand("hug")
 public class Hug extends KSoftImageCommand {
 
 	private String executor;
