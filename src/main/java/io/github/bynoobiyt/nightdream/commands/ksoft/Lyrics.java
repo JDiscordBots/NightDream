@@ -22,7 +22,7 @@ public class Lyrics implements Command {
 			JDAUtils.errmsg(event.getChannel(), "not enough arguments");
 		}
 		
-		event.getChannel().sendTyping().complete();
+		event.getChannel().sendTyping().queue();
 		String query=String.join(" ", args);
 		
 		Lyric lyric = api.getLyrics().search(query).execute().get(0);

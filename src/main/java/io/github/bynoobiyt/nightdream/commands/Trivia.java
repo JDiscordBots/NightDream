@@ -30,7 +30,7 @@ public class Trivia implements Command{
 			.addField(GeneralUtils.getJSONString(json, "category"), GeneralUtils.getJSONString(json, "question"), false)
 			.addField("Choices:",String.join(", ", answers),false)
 			.setFooter("Type your answer in this channel!");
-			event.getChannel().sendMessage(builder.build()).complete();
+			event.getChannel().sendMessage(builder.build()).queue();
 			TriviaListener.addQuestion(event.getChannel(), correct);
 		}catch (IOException e) {
 			JDAUtils.errmsg(event.getChannel(), "<:IconX:553868311960748044> Errored while trying to connect to server.");

@@ -51,7 +51,7 @@ public class TextToGraphics {
 		try(ByteArrayOutputStream baos=new ByteArrayOutputStream()){
 			createImage(imgText,baos);
 			baos.flush();
-			chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName).complete();
+			chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName).queue();
 		} catch (IOException e) {
 			Logger.getLogger("graphics").log(Level.WARNING,"Error while generating image from text: \n"+imgText,e);
 		}
