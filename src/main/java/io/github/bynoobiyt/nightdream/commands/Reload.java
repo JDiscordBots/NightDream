@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.events.ReconnectedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.internal.JDAImpl;
+import org.jetbrains.annotations.NotNull;
 
 @BotCommand("reload")
 public class Reload implements Command {
@@ -39,7 +40,7 @@ public class Reload implements Command {
 				jda.getClient().reconnect(false);
 				jda.addEventListener(new ListenerAdapter() {
 					@Override
-					public void onReconnect(ReconnectedEvent event) {
+					public void onReconnect(@NotNull ReconnectedEvent event) {
 						JDAUtils.msg(tc, "reconnected!");
 						jda.removeEventListener(this);
 					}

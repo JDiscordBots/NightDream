@@ -17,7 +17,7 @@ public class CommandParser {
 	}
 	/**
 	 * parses the command to a <code>CommandContainer</code>
-	 * @param event the {@link MessageReceivedEvent} from the Message
+	 * @param event the {@link GuildMessageReceivedEvent} from the Message
 	 * @return the parsed Command
 	 */
 	public static CommandContainer parser(final GuildMessageReceivedEvent event) {
@@ -26,7 +26,7 @@ public class CommandParser {
 	}
 	/**
 	 * parses the command to a <code>CommandContainer</code>
-	 * @param event the {@link MessageReceivedEvent} from the Message
+	 * @param event the {@link GuildMessageReceivedEvent} from the Message
 	 * @param prefix the {@link Guild} prefix
 	 * @return the parsed Command
 	 */
@@ -57,7 +57,7 @@ public class CommandParser {
 	}
 	/**
 	 * Container for parsed Commands
-	 * contains {@link MessageReceivedEvent} and splitted Message Content
+	 * contains {@link GuildMessageReceivedEvent} and splitted Message Content
 	 * @author Daniel Schmid
 	 *
 	 */
