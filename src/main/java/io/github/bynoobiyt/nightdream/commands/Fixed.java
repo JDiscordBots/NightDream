@@ -1,6 +1,5 @@
 package io.github.bynoobiyt.nightdream.commands;
 
-import io.github.bynoobiyt.nightdream.core.NightDream;
 import io.github.bynoobiyt.nightdream.util.BotData;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -41,7 +40,7 @@ public class Fixed implements Command {
 				.addField("Original bug", bugDescription, false);
 		if (comment != null) eb.addField("Additional comment", comment, false);
 
-		NightDream.getJDA().getTextChannelById(BotData.getFixedBugsChannel()).sendMessage(eb.build()).queue();
+		event.getJDA().getTextChannelById(BotData.getFixedBugsChannel()).sendMessage(eb.build()).queue();
 	}
 
 	@Override
@@ -57,7 +56,7 @@ public class Fixed implements Command {
 			return false;
 		}
 		try {
-			NightDream.getJDA().getTextChannelById(BotData.getFixedBugsChannel());
+			event.getJDA().getTextChannelById(BotData.getFixedBugsChannel());
 		} catch (Exception e) {
 			LOG.warn("Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
 			return false;

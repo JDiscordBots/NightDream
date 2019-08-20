@@ -26,7 +26,6 @@ public class NightDream {
 
 	private static final String ANNOTATED_WITH=" is annotated with @";
 	public static final String VERSION = "0.0.4";
-	private static JDA jda;
 	
 	private static final Logger LOG=LoggerFactory.getLogger(NightDream.class);
 	
@@ -63,7 +62,7 @@ public class NightDream {
 		
 		try {
 			LOG.info("Logging in...");
-			jda = builder.build();
+			JDA jda = builder.build();
 			jda.awaitReady();
 			LOG.info("Logged in.");
 			((JDAImpl) jda).getGuildSetupController().clearCache();
@@ -125,8 +124,4 @@ public class NightDream {
 			}
         }
     }
-
-	public static JDA getJDA() {
-		return jda;
-	}
 }

@@ -9,28 +9,30 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @BotCommand("info")
 public class Info implements Command {
 
-    private static int getUsers() {
-        List<User> list = new ArrayList<>();
-        NightDream.getJDA().getUsers().forEach(user -> {
-            if (!user.isBot()) list.add(user);
-        });
-        return list.size();
+    private static int getUsers(JDA jda) {
+        int count=0;
+        for (User user : jda.getUsers()) {
+        	if (!user.isBot()) {
+        		count++;
+        	}
+		}
+        return count;
     }
 
-    private static int getBots() {
-        List<User> list = new ArrayList<>();
-        NightDream.getJDA().getUsers().forEach(user -> {
-            if (user.isBot()) list.add(user);
-        });
-        return list.size();
+    private static int getBots(JDA jda) {
+    	int count=0;
+        for (User user : jda.getUsers()) {
+        	if (user.isBot()) {
+        		count++;
+        	}
+		}
+        return count;
     }
 
     @Override
@@ -44,7 +46,7 @@ public class Info implements Command {
                     + "\tJDA v4.0.0_39\n"
                     + "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n"
                     + "\t(c) dan1st and Gehasstes %s, Release %s.\n "
-                    + "\tThis is a copy of Daydream (https://gitlab.com/botstudio/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(), getBots(), Year.now().getValue(), NightDream.VERSION
+                    + "\tThis is a copy of Daydream (https://gitlab.com/botstudio/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda), Year.now().getValue(), NightDream.VERSION
         			), event.getAuthor().getAsMention());
         }
     }

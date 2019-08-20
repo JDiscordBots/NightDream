@@ -1,6 +1,5 @@
 package io.github.bynoobiyt.nightdream.commands;
 
-import io.github.bynoobiyt.nightdream.core.NightDream;
 import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -29,7 +28,7 @@ public class BugReport implements Command {
 		EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("New Bug").setDescription(sb.toString())
 				.setFooter(event.getAuthor().getAsTag() + " | Bug ID " + thisId);
 
-		NightDream.getJDA().getTextChannelById(BotData.getBugReportChannel()).sendMessage(eb.build()).queue();
+		event.getJDA().getTextChannelById(BotData.getBugReportChannel()).sendMessage(eb.build()).queue();
 
 		event.getChannel().sendMessage("Send with ID " + thisId).queue();
 	}
@@ -42,7 +41,7 @@ public class BugReport implements Command {
 			return false;
 		}
 		try {
-			NightDream.getJDA().getTextChannelById(BotData.getBugReportChannel());
+			event.getJDA().getTextChannelById(BotData.getBugReportChannel());
 		} catch (Exception e) {
 			LOG.warn("Bug report command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
 			return false;
