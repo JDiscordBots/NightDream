@@ -1,7 +1,7 @@
 package io.github.bynoobiyt.nightdream.util;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.TaggedImage;
@@ -11,10 +11,12 @@ public class KSoftUtil {
 	
 	private static KSoftAPI api;
 	
+	private static final Logger LOG=LoggerFactory.getLogger(KSoftUtil.class);
+	
 	static {
 		String token=BotData.getKSoftToken();
 		if(token.equals("")) {
-			Logger.getGlobal().log(Level.WARNING,"no ksoft token defined");
+			LOG.warn("no ksoft token defined");
 			api=null;
 		}else {
 			api=new KSoftAPI(token);

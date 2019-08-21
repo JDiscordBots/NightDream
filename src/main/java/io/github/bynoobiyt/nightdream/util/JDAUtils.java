@@ -1,8 +1,9 @@
 package io.github.bynoobiyt.nightdream.util;
 
 import java.awt.Color;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -12,6 +13,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class JDAUtils {
+	
+	private static final Logger LOG=LoggerFactory.getLogger(JDAUtils.class);
 
 	private JDAUtils() {
 		//prevent instantiation
@@ -59,7 +62,7 @@ public class JDAUtils {
 		try {
 			return channel.sendMessage(message).complete();
 		} catch (Exception e) {
-			Logger.getGlobal().log(Level.FINE,"Cannot send Message \""+message.getDescription()+"\" in channel "+channel.getName()+"["+channel.getGuild().getName()+"] because of a "+e.getClass().getSimpleName());
+			LOG.trace("Cannot send Message \""+message.getDescription()+"\" in channel "+channel.getName()+"["+channel.getGuild().getName()+"] because of a "+e.getClass().getSimpleName());
 			return null;
 		}
 	}

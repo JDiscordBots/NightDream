@@ -9,8 +9,9 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.github.bynoobiyt.nightdream.commands.Profile;
 import net.dv8tion.jda.api.entities.Guild;
@@ -33,6 +34,8 @@ public class BotData {
 	private static final String MSGLOG_CHAN_PROP_NAME="MsgLogChannel";
 	private static final String KSOFT_TOKEN_PROP_NAME="KSoftToken";
 	private static final String PIXA_KEY_PROP_NAME="PixabayAPIKey";
+	
+	private static final Logger LOG=LoggerFactory.getLogger(BotData.class);
 	
 	static {
 		if(!DATA_DIR.exists()) {
@@ -267,13 +270,13 @@ public class BotData {
 			try(Reader reader=new FileReader(file)){
 				props.load(reader);
 			} catch (IOException e) {
-				Logger.getGlobal().log(Level.WARNING,"Cannot load Properties from file: "+file.getAbsolutePath(),e);
+				LOG.warn("Cannot load Properties from file: "+file.getAbsolutePath(),e);
 			}
 		}else {
 			try(Writer writer=new FileWriter(file)){
 				props.store(writer,comment);
 			} catch (IOException e) {
-				Logger.getGlobal().log(Level.WARNING,"Cannot create file or save Properties: "+file.getAbsolutePath(),e);
+				LOG.warn("Cannot create file or save Properties: "+file.getAbsolutePath(),e);
 			}
 		}
 		return props;
@@ -291,7 +294,7 @@ public class BotData {
 			try(Reader reader=new FileReader(file)){
 				props.load(reader);
 			} catch (IOException e) {
-				Logger.getGlobal().log(Level.WARNING,"Cannot load Properties from file: "+file.getAbsolutePath(),e);
+				LOG.warn("Cannot load Properties from file: "+file.getAbsolutePath(),e);
 			}
 		}
 		return props;
