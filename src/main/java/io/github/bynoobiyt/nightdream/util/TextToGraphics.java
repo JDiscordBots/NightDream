@@ -86,13 +86,13 @@ public class TextToGraphics {
         g2d.setColor(FG_COLOR);
         
         //System.out.println("draw Strings "+(System.currentTimeMillis()-time));
-        time=System.currentTimeMillis();
+        //time=System.currentTimeMillis();
         
         drawString(g2d,text,0,0);
         g2d.dispose();
         
         //System.out.println("write Image "+(System.currentTimeMillis()-time));
-        time=System.currentTimeMillis();
+        //time=System.currentTimeMillis();
         
         ImageIO.write(img, "JPG", out);
 
