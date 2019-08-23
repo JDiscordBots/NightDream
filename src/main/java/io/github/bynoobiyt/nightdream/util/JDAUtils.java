@@ -62,7 +62,8 @@ public class JDAUtils {
 		try {
 			return channel.sendMessage(message).complete();
 		} catch (Exception e) {
-			LOG.trace("Cannot send Message \""+message.getDescription()+"\" in channel "+channel.getName()+"["+channel.getGuild().getName()+"] because of a "+e.getClass().getSimpleName());
+			LOG.trace("Cannot send Message \"{}\" in channel {}[{}] because of a {}",
+					message.getDescription(),channel.getName(),channel.getGuild().getName(),e.getClass().getSimpleName());
 			return null;
 		}
 	}
