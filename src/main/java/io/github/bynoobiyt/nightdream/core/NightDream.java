@@ -33,7 +33,7 @@ public class NightDream {
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
 			.setToken(BotData.getGlobalProperty("token"))
 			.setAutoReconnect(true) //should the Bot reconnect?
-			.setStatus(OnlineStatus.ONLINE)//the online Status
+			.setStatus(OnlineStatus.ONLINE) //the online Status
 			/*	possible statuses:
 				OnlineStatus.DO_NOT_DISTURB
 				OnlineStatus.IDLE
