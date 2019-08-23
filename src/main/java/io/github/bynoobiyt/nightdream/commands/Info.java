@@ -38,7 +38,7 @@ public class Info implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
     	final JDA jda=event.getJDA();
-        if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI)) {
+        if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI)) {//TODO embed and image depending on Permission
         	TextToGraphics.sendTextAsImage(event.getChannel(), "info.jpg", String.format(
         			"Bot Info\n"
         			+ "\tIn %s guilds, serving %s users and %s bots.\n"
