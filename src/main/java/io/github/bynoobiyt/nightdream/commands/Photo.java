@@ -2,6 +2,8 @@ package io.github.bynoobiyt.nightdream.commands;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -30,8 +32,9 @@ public class Photo implements Command {
 			return;
 		}
 		event.getChannel().sendTyping();
-		String url="https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+String.join(" ", args);//TODO encode
-		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
+		try(Scanner scan=new Scanner(new URL(
+				"https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+URLEncoder.encode(String.join(" ", args), StandardCharsets.UTF_8.toString())
+				).openConnection().getInputStream())){
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0x212121);
 			String imgUrl=GeneralUtils.getJSONString(scan.nextLine(), "largeImageURL");
