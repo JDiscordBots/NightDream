@@ -58,9 +58,9 @@ public class Reload implements Command {
 			JDAUtils.msg(event.getChannel(), "reloaded!");
 			break;
 		case "guild":
-			JDAUtils.msg(event.getChannel(), "reloading all Properties...");
+			JDAUtils.msg(event.getChannel(), "reloading guild Properties...");
 			BotData.reloadGuildProperties(event.getGuild());
-			JDAUtils.msg(event.getChannel(), "reloaded!");
+			JDAUtils.msg(event.getChannel(), "reloaded guild Properties!");
 			break;
 		case "msgcache":
 			for (Object obj : event.getJDA().getRegisteredListeners()) {
