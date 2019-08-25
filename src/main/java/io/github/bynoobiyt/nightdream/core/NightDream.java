@@ -1,6 +1,7 @@
 package io.github.bynoobiyt.nightdream.core;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -116,7 +117,7 @@ public class NightDream {
 					String msg=cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but the no-args constructor is not visible";
 					LOG.warn(msg);
 				}
-			} catch (Exception e) {
+			} catch (NoSuchMethodException|InvocationTargetException e) {
 				if(LOG.isWarnEnabled()) {
 					String msg=cl.getName() + ANNOTATED_WITH+annotClass.getName() + " but there was an unknown Error: " + e.getClass().getName()+": "+e.getCause();
 					LOG.warn(msg);

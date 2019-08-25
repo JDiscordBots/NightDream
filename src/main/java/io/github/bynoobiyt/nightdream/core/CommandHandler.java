@@ -50,7 +50,7 @@ public class CommandHandler {
 			if (save) {
 				try {
 					commands.get(cmd.invoke.toLowerCase()).action(cmd.args, cmd.event);
-				} catch (Exception e) {
+				} catch (RuntimeException e) {
 					LOG.warn("An exception while executing the command "+cmd.event.getMessage().getContentRaw(),e);
 					save = false;
 				}

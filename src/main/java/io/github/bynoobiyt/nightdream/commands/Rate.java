@@ -15,12 +15,12 @@ public class Rate implements Command {
     public void action(String[] args, GuildMessageReceivedEvent event) {
         int i = GeneralUtils.getRandInt(1, 100);
         User mentioned;
-        try {
-            mentioned = event.getMessage().getMentionedMembers().get(0).getUser();
-        } catch (Exception ignored) {
-            mentioned = event.getAuthor();
+        if(event.getMessage().getMentionedMembers().isEmpty()) {
+        	mentioned = event.getAuthor();
+        }else {
+        	mentioned = event.getMessage().getMentionedMembers().get(0).getUser();
         }
-
+        
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white)
                 .setTitle(String.format("Rating %s", mentioned.getName()))
                 .setDescription(String.format("%s/100", i));

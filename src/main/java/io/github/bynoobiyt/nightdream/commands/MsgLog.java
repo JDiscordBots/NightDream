@@ -26,12 +26,9 @@ public class MsgLog implements Command {
 			event.getChannel().sendMessage(NEED_MENTIONED_CHANNEL).queue();
 			return;
 		}
-		TextChannel channel = null;
-		try {
-			channel = event.getMessage().getMentionedChannels().get(0);
-		} catch (Exception e) {
+		TextChannel channel = event.getMessage().getMentionedChannels().get(0);;
+		if(channel==null) {
 			event.getChannel().sendMessage(NEED_MENTIONED_CHANNEL).queue();
-			return;
 		}
 		BotData.setMsgLogChannel(channel.getId(), event.getGuild());
 		event.getChannel().sendMessage("Set! `" + BotData.getPrefix(event.getGuild()) + "msglog none` to disable.").queue();

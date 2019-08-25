@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 public class Fixed implements Command {
 
 	private static final Logger LOG=LoggerFactory.getLogger(Fixed.class);
+	private static final String DISABLED_INVALID_CHAN="Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.";
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -29,7 +30,7 @@ public class Fixed implements Command {
 
 		try {
 			bugID = Integer.parseInt(args[0]);
-		} catch (Exception e) {
+		} catch (NumberFormatException e) {
 			JDAUtils.errmsg(event.getChannel(), "Please enter a correct number for the bug id!");
 		}
 		if (BotData.getBugID() < bugID) {
@@ -52,13 +53,15 @@ public class Fixed implements Command {
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		if (BotData.getFixedBugsChannel() == null) {
 			BotData.setFixedBugsChannel("");
-			LOG.warn("Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
+			LOG.warn(DISABLED_INVALID_CHAN);
 			return false;
 		}
 		try {
-			event.getJDA().getTextChannelById(BotData.getFixedBugsChannel());
-		} catch (Exception e) {
-			LOG.warn("Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.");
+			if(event.getJDA().getTextChannelById(BotData.getFixedBugsChannel())==null) {
+				LOG.warn(DISABLED_INVALID_CHAN);
+			}
+		} catch (NumberFormatException e) {
+			LOG.warn(DISABLED_INVALID_CHAN);
 			return false;
 		}
 		return JDAUtils.checkOwner(event);
