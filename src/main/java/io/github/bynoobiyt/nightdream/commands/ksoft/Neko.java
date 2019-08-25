@@ -4,7 +4,7 @@ import io.github.bynoobiyt.nightdream.commands.BotCommand;
 
 import net.explodingbush.ksoftapi.enums.ImageTag;
 @BotCommand("neko")
-public class Neko extends KSoftImageCommand{
+public class Neko extends KSoftImageCommand {
 
 	@Override
 	public String help() {

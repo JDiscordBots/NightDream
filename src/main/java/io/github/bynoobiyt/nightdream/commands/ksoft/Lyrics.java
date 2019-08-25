@@ -8,6 +8,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.Lyric;
+
+import java.awt.*;
+
 @BotCommand("lyrics")
 public class Lyrics implements Command {
 
@@ -32,7 +35,7 @@ public class Lyrics implements Command {
 			return;
 		}
 		EmbedBuilder builder=new EmbedBuilder();
-		builder.setColor(0x212121)
+		builder.setColor(Color.white)
 		.setFooter("Results from Genius")
 		.setTitle("Result");
 		if(lyric.getAlbums().length==0) {
