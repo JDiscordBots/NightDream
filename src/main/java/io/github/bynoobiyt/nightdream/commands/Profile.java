@@ -186,7 +186,7 @@ public class Profile implements Command {
 		builder.addField(new Field(COLOR_CMD, "Sets a profile color in #123456 format",false));
 		builder.addField(new Field(DESC_CMD_1+"/"+DESC_CMD_2, "Sets a profile description",false));
 		builder.addField(new Field(NAME_CMD, "Sets your name",false));
-		builder.addField(new Field(LINK_CMD, "adds link to your profile", false));
+		builder.addField(new Field(LINK_CMD, "adds a link to your profile or resets all links (`"+LINK_CMD+" reset`)", false));
 	}
 	
 	@Override
