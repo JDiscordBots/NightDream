@@ -3,6 +3,7 @@ package io.github.bynoobiyt.nightdream.commands;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,9 +23,19 @@ public class Profile implements Command {
 	private static final String DESC_PROP_NAME="description";
 	private static final String LINK_PROP_NAME="links";
 	
+	private static final String DESC_CMD_1="description";
+	private static final String DESC_CMD_2="desc";
+	private static final String COLOR_CMD="color";
+	private static final String HELP_CMD="help";
+	private static final String NAME_CMD="name";
+	private static final String LINK_CMD="link";
+	
+	private static final Pattern LINK_REGEX=Pattern.compile("https?://([A-Za-z0-9].*)?([.].+)|/.*");
+	
 	static {
 		reload();
 	}
+	
 	public static void reload() {
 		props=BotData.loadProperties("Profiles.properties", new HashMap<>(), "Profile data");
 	}
@@ -42,77 +53,30 @@ public class Profile implements Command {
 		}
 		EmbedBuilder builder=new EmbedBuilder();
 		switch(args[0]) {
-		case "description":
-		case "desc":
-			if(args.length<2) {
-				event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than 1 argument.").queue();
-				return;
-			}
-			
-			String desc=String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-			builder.setDescription(desc).setTitle("Your description is now").setColor(0x212121);
-			setProp(event.getAuthor(), DESC_PROP_NAME, desc);
+		case DESC_CMD_1:
+		case DESC_CMD_2:
+			desc(builder,args,1,event);
 			break;
-		case "color":
-			if(args.length<2||args[1].length()!=7) {
-				event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").queue();
-				return;
-			}
-			builder.setTitle("Set color!");
-			String color=args[1].substring(1);
-			builder.setColor(Integer.valueOf(color,16));
-			setProp(event.getAuthor(), COLOR_PROP_NAME, color);
+		case COLOR_CMD:
+			color(builder,args,1,event);
 			break;
-		case "help":
-			builder.setColor(0x212121).setTitle("Profile Help");
-			builder.addField(new Field("color", "Sets a profile color in #123456 format",false));
-			builder.addField(new Field("description/desc", "Sets a profile description",false));
-			builder.addField(new Field("name", "Sets your name",false));
-			builder.addField(new Field("link", "adds link to your profile", false));
+		case HELP_CMD:
+			help(builder);
 			break;
-		case "name":
-			if(args.length<2) {
-				event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").queue();
-				return;
-			}
-			String name=String.join(" ", Arrays.copyOfRange(args, 1, args.length));
-			setProp(event.getAuthor(), "name", name);
-			builder.setDescription("It is now "+name+".");
+		case NAME_CMD:
+			name(builder,args,1,event);
 			break;
-		case "link":
-			if(args.length<3) {
-				event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than 1 argument.").queue();
-				return;
-			}
-			name=args[1];
-			String link=String.join(" ",Arrays.copyOfRange(args, 2, args.length));
-			if(name.contains("|")||link.contains("|")) {
-				event.getChannel().sendMessage("<:IconX:553868311960748044> Sorry, Links cannot contain pipes. Use `%7C` instead.").queue();
-				return;
-			}
-			if(!link.startsWith("http")) {
-				event.getChannel().sendMessage("<:IconX:553868311960748044> Sorry, this is not a link. Make sure to include `http/s`.").queue();
-				return;
-			}
-			
-			builder.setTitle("Link added!")
-			.setColor(0x212121)
-			.addField("`"+name+"`", link, false);
-			
-			String links=getProp(event.getAuthor(), LINK_PROP_NAME);
-			link=name+"|"+link.replace("[", "%5B").replace("]", "%5D").replace("(", "%28").replace(")", "%29");
-			if(links.equals("")) {
-				links=link;
-			}else {
-				links+="||"+link;
-			}
-			setProp(event.getAuthor(), LINK_PROP_NAME, links);
+		case LINK_CMD:
+			link(builder,args,1,event);
 			break;
 		default:
 			showProfile(event.getChannel(), event.getAuthor());
 			return;
 		}
-		JDAUtils.msg(event.getChannel(), builder.build());
+		if(!builder.isEmpty()) {
+			JDAUtils.msg(event.getChannel(), builder.build());
+		}
+		
 	}
 	private void showProfile(TextChannel tc,User user) {
 		EmbedBuilder builder=new EmbedBuilder();
@@ -148,6 +112,74 @@ public class Profile implements Command {
 		props.setProperty(user.getId()+"."+name, value);
 		BotData.saveProperties("Profiles.properties", props, "Profile data");
 	}
+	
+	private void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
+		if(args.length<offset+1) {
+			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than "+offset+" argument"+(offset==1?"":"s")+".").queue();
+			return;
+		}
+		
+		String desc=String.join(" ", Arrays.copyOfRange(args, offset, args.length));
+		builder.setDescription(desc).setTitle("Your description is now").setColor(0x212121);
+		setProp(event.getAuthor(), DESC_PROP_NAME, desc);
+	}
+	private void color(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
+		if(args.length<offset+1||args[offset].length()!=7) {
+			event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").queue();
+			return;
+		}
+		builder.setTitle("Set color!");
+		String color=args[offset].substring(1);
+		builder.setColor(Integer.valueOf(color,16));
+		setProp(event.getAuthor(), COLOR_PROP_NAME, color);
+	}
+	private void name(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
+		if(args.length<offset+1) {
+			event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").queue();
+			return;
+		}
+		String name=String.join(" ", Arrays.copyOfRange(args, offset, args.length));
+		setProp(event.getAuthor(), "name", name);
+		builder.setDescription("It is now "+name+".");
+	}
+	private void link(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
+		if(args.length<offset+2) {
+			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than "+offset+" argument"+(offset==0?"":"s")+".").queue();
+			return;
+		}
+		String name=args[offset];
+		String link=String.join("+",Arrays.copyOfRange(args, offset+1, args.length));
+		
+		
+		link=link.replace("[", "%5B").replace("]", "%5D").replace("(", "%28").replace(")", "%29").replace("|", "%7C");
+		name=name.replace("[", "\\[").replace("]", "\\]").replace("(", "\\(").replace(")", "\\)");
+		
+		if(!LINK_REGEX.matcher(link).matches()) {
+			event.getChannel().sendMessage("<:IconX:553868311960748044> Sorry, this is not a link.").queue();
+			return;
+		}
+		
+		builder.setTitle("Link added!")
+		.setColor(0x212121)
+		.addField("`"+name+"`", link, false);
+		
+		String links=getProp(event.getAuthor(), LINK_PROP_NAME);
+		link=name+"|"+link;
+		if(links.equals("")) {
+			links=link;
+		}else {
+			links+="||"+link;
+		}
+		setProp(event.getAuthor(), LINK_PROP_NAME, links);
+	}
+	private void help(EmbedBuilder builder) {
+		builder.setColor(0x212121).setTitle("Profile Help");
+		builder.addField(new Field(COLOR_CMD, "Sets a profile color in #123456 format",false));
+		builder.addField(new Field(DESC_CMD_1+"/"+DESC_CMD_2, "Sets a profile description",false));
+		builder.addField(new Field(NAME_CMD, "Sets your name",false));
+		builder.addField(new Field(LINK_CMD, "adds link to your profile", false));
+	}
+	
 	@Override
 	public String help() {
 		return "Shows & manages your profile, `profile help` for more";
