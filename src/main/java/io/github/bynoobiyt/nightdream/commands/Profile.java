@@ -112,7 +112,10 @@ public class Profile implements Command {
 		props.setProperty(user.getId()+"."+name, value);
 		BotData.saveProperties("Profiles.properties", props, "Profile data");
 	}
-	
+	private static void unsetProp(User user,String name) {
+		props.remove(user.getId()+"."+name);
+		BotData.saveProperties("Profiles.properties", props, "Profile data");
+	}
 	private void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than "+offset+" argument"+(offset==1?"":"s")+".").queue();
@@ -143,6 +146,12 @@ public class Profile implements Command {
 		builder.setDescription("It is now "+name+".");
 	}
 	private void link(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
+		if(args.length==offset+1&&args[offset].equalsIgnoreCase("reset")) {
+			unsetProp(event.getAuthor(), LINK_PROP_NAME);
+			builder.setTitle("resetted links")
+			.setColor(0x212121);
+			return;
+		}
 		if(args.length<offset+2) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than "+offset+" argument"+(offset==0?"":"s")+".").queue();
 			return;
