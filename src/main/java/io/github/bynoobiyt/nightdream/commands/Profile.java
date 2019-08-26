@@ -30,7 +30,7 @@ public class Profile implements Command {
 	private static final String NAME_CMD="name";
 	private static final String LINK_CMD="link";
 	
-	private static final Pattern LINK_REGEX=Pattern.compile("https?://([A-Za-z0-9].*)?([.].+)|/.*");
+	private static final Pattern LINK_REGEX=Pattern.compile("https?://([A-Za-z0-9+-].*)?([.].+)|/.*");
 	
 	static {
 		reload();
