@@ -14,7 +14,7 @@ public class Prefix implements Command {
             event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a prefix to begin with.").queue();
             return;
         }
-        if (args[0].equals("reset")) {
+        if ("reset".equals(args[0])) {
             event.getChannel().sendMessage("Prefix reset.").queue();
             BotData.resetPrefix(event.getGuild());
         } else {

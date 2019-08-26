@@ -17,7 +17,7 @@ public class MsgLog implements Command {
 			event.getChannel().sendMessage(NEED_MENTIONED_CHANNEL).queue();
 			return;
 		}
-		if (args[0].equals("none")) {
+		if ("none".equals(args[0])) {
 			BotData.resetMsgLogChannel(event.getGuild());
 			event.getChannel().sendMessage("Removed").queue();
 			return;

@@ -5,7 +5,7 @@ import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.*;
+import java.awt.Color;
 
 @BotCommand("choose")
 public class Choose implements Command {

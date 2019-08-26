@@ -22,7 +22,7 @@ public class MVN implements Command{
 		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
 			String json=scan.nextLine();
 			String id=GeneralUtils.getJSONString(json,"id");
-			if(id.equals("?")) {
+			if("?".equals(id)) {
 				EmbedBuilder builder=new EmbedBuilder();
 				builder.setColor(0xdc6328)
 				.addField("<:IconProvide:553870022125027329> Nothing found", "Try something different.", false);

@@ -5,7 +5,7 @@ import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.*;
+import java.awt.Color;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,7 @@ public class Fixed implements Command {
 		args = sb.toString().split("\\|");
 
 		int bugID = 0;
-		String bugDescription = args[1];
-		String comment = args[2];
+		
 
 		try {
 			bugID = Integer.parseInt(args[0]);
@@ -37,9 +36,13 @@ public class Fixed implements Command {
 			event.getChannel().sendMessage("This bug id is not valid!").queue();
 			return;
 		}
+		String bugDescription = args[1];
+		String comment = args[2];
 		EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setFooter("Reported as fixed by " + event.getAuthor().getName()).setTitle("Fixed bug " + bugID)
 				.addField("Original bug", bugDescription, false);
-		if (comment != null) eb.addField("Additional comment", comment, false);
+		if (comment != null) {
+			eb.addField("Additional comment", comment, false);
+		}
 
 		event.getJDA().getTextChannelById(BotData.getFixedBugsChannel()).sendMessage(eb.build()).queue();
 	}

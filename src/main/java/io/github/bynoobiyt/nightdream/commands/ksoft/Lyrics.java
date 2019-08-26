@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.Lyric;
 
-import java.awt.*;
+import java.awt.Color;
 
 @BotCommand("lyrics")
 public class Lyrics implements Command {

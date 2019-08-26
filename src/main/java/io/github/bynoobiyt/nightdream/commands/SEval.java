@@ -61,7 +61,7 @@ public class SEval implements Command {
 				public void run() {
 					Message message = event.getChannel().retrieveMessageById(msg.getId()).complete();
 					for (MessageReaction reaction : message.getReactions()) {
-						if(reaction.getReactionEmote().getEmoji().equals("\u274C") && reaction.retrieveUsers().complete().contains(event.getAuthor())) {
+						if("\u274C".equals(reaction.getReactionEmote().getEmoji()) && reaction.retrieveUsers().complete().contains(event.getAuthor())) {
 							message.delete().queue();
 							return;
 						}

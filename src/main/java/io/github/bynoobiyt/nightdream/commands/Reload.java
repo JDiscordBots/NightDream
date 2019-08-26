@@ -22,7 +22,7 @@ public class Reload implements Command {
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		final TextChannel tc=event.getChannel();
+		
 		if(args.length==0) {
 			JDAUtils.msg(event.getChannel(), "reloading all Properties...",Color.YELLOW);
 			BotData.reloadAllProperties();
@@ -35,6 +35,7 @@ public class Reload implements Command {
 			JDAUtils.msg(event.getChannel(), "reconnecting...",Color.YELLOW);
 			JDAImpl jda=((JDAImpl)event.getJDA());
 			jda.getClient().close();
+			final TextChannel tc=event.getChannel();
 			jda.addEventListener(new ListenerAdapter() {
 				@Override
 				public void onReconnect(@NotNull ReconnectedEvent event) {

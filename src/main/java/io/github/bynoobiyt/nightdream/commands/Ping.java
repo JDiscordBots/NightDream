@@ -15,7 +15,7 @@ public class Ping implements Command {
 		long ms= getMilliSeconds(msg.getTimeCreated()) - getMilliSeconds(event.getMessage().getTimeCreated());
 		msg.editMessage("<:IconThis:553869005820002324> Latency: " + ms + "ms. API Latency is " + event.getJDA().getGatewayPing() + "ms").queue();
 	}
-	private long getMilliSeconds(OffsetDateTime time) {
+	private static long getMilliSeconds(OffsetDateTime time) {
 		return time.atZoneSameInstant(ZoneId.of("Z")).toInstant().toEpochMilli();
 	}
 

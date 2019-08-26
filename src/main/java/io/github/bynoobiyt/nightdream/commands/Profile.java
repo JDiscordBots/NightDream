@@ -31,6 +31,8 @@ public class Profile implements Command {
 	private static final String LINK_CMD="link";
 	
 	private static final Pattern LINK_REGEX=Pattern.compile("https?://([A-Za-z0-9+-].*)?([.].+)|/.*");
+	private static final Pattern DIFFERENT_LINKS_SPLITTER=Pattern.compile("\\|\\|");
+	private static final Pattern LINK_NAME_SPLITTER=Pattern.compile("\\|");
 	
 	static {
 		reload();
@@ -79,9 +81,8 @@ public class Profile implements Command {
 		if(!builder.isEmpty()) {
 			JDAUtils.msg(event.getChannel(), builder.build());
 		}
-		
 	}
-	private void showProfile(TextChannel tc,User user) {
+	private static void showProfile(TextChannel tc,User user) {
 		EmbedBuilder builder=new EmbedBuilder();
 		int color=0x212121;
 		try {
@@ -94,10 +95,10 @@ public class Profile implements Command {
 		builder.setTitle(getProp(user, "name", user.getAsTag()));
 		builder.setDescription(getProp(user, DESC_PROP_NAME, "A Ghost... yet"));
 		String links=getProp(user,LINK_PROP_NAME);
-		if(!links.equals("")) {
+		if(!"".equals(links)) {
 			builder.addField("Links",
-					Stream.of(links.split("\\|\\|"))
-					.map(link->"["+link.split("\\|")[0]+"]("+link.split("\\|")[1]+")")
+					Stream.of(DIFFERENT_LINKS_SPLITTER.split(links))
+					.map(link->"["+LINK_NAME_SPLITTER.split(link)[0]+"]("+LINK_NAME_SPLITTER.split(link)[1]+")")
 					.collect(Collectors.joining("\n")),false);
 		}
 		if(JDAUtils.isOwner(user)) {
@@ -119,7 +120,7 @@ public class Profile implements Command {
 		props.remove(user.getId()+"."+name);
 		save();
 	}
-	private void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
+	private static void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than "+offset+" argument"+(offset==1?"":"s")+".").queue();
 			return;
@@ -129,7 +130,7 @@ public class Profile implements Command {
 		builder.setDescription(desc).setTitle("Your description is now").setColor(0x212121);
 		setProp(event.getAuthor(), DESC_PROP_NAME, desc);
 	}
-	private void color(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
+	private static void color(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1||args[offset].length()!=7) {
 			event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").queue();
 			return;
@@ -139,7 +140,7 @@ public class Profile implements Command {
 		builder.setColor(Integer.valueOf(color,16));
 		setProp(event.getAuthor(), COLOR_PROP_NAME, color);
 	}
-	private void name(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
+	private static void name(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {
 			event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").queue();
 			return;
@@ -148,8 +149,8 @@ public class Profile implements Command {
 		setProp(event.getAuthor(), "name", name);
 		builder.setDescription("It is now "+name+".");
 	}
-	private void link(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
-		if(args.length==offset+1&&args[offset].equalsIgnoreCase("reset")) {
+	private static void link(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
+		if(args.length==offset+1&&"reset".equalsIgnoreCase(args[offset])) {
 			unsetProp(event.getAuthor(), LINK_PROP_NAME);
 			builder.setTitle("resetted links")
 			.setColor(0x212121);
@@ -177,14 +178,14 @@ public class Profile implements Command {
 		
 		String links=getProp(event.getAuthor(), LINK_PROP_NAME);
 		link=name+"|"+link;
-		if(links.equals("")) {
+		if("".equals(links)) {
 			links=link;
 		}else {
 			links+="||"+link;
 		}
 		setProp(event.getAuthor(), LINK_PROP_NAME, links);
 	}
-	private void help(EmbedBuilder builder) {
+	private static void help(EmbedBuilder builder) {
 		builder.setColor(0x212121).setTitle("Profile Help");
 		builder.addField(new Field(COLOR_CMD, "Sets a profile color in #123456 format",false));
 		builder.addField(new Field(DESC_CMD_1+"/"+DESC_CMD_2, "Sets a profile description",false));

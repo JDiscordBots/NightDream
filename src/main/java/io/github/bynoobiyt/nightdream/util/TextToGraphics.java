@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,7 +24,7 @@ import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class TextToGraphics implements Runnable{
 	
@@ -37,6 +38,8 @@ public class TextToGraphics implements Runnable{
 	
 	private Queue<Runnable> waiting=new LinkedBlockingQueue<>();
 	
+	private static final Pattern NEWLINE_REGEX=Pattern.compile("\n");
+	
 	static {
 		Font body = new Font("Arial", Font.PLAIN, 1);
 		Font heading = new Font("Arial", Font.BOLD, 1);
@@ -47,8 +50,8 @@ public class TextToGraphics implements Runnable{
 		} catch (IOException|FontFormatException e) {
 			LOG.warn("Error while loading fonts - Using Arial",e);
 		}
-		FONT_BODY=body.deriveFont(10f);
-		FONT_NOSPACE=heading.deriveFont(12f).deriveFont(Font.BOLD);
+		FONT_BODY=body.deriveFont(10F);
+		FONT_NOSPACE=heading.deriveFont(12F).deriveFont(Font.BOLD);
 		
 		graphicsThread.start();
 	}
@@ -56,7 +59,7 @@ public class TextToGraphics implements Runnable{
 	private TextToGraphics() {
 		//prevent instantiation
 	}
-	public static void sendTextAsImage(TextChannel chan, String imgName, String imgText, String metaText) {
+	public static void sendTextAsImage(MessageChannel chan, String imgName, String imgText, String metaText) {
 		synchronized (executor) {
 			executor.waiting.add(()->{
 				try(ByteArrayOutputStream baos=new ByteArrayOutputStream()){
@@ -76,8 +79,8 @@ public class TextToGraphics implements Runnable{
         Graphics2D g2d = img.createGraphics();
         g2d.setFont(FONT_NOSPACE);
         final FontMetrics fm = g2d.getFontMetrics();
-        int width = Stream.of(text.split("\n")).collect(Collectors.summarizingInt(fm::stringWidth)).getMax();
-        int height = fm.getHeight()*text.split("\n").length+1;
+        int width = Stream.of(NEWLINE_REGEX.split(text)).collect(Collectors.summarizingInt(fm::stringWidth)).getMax();
+        int height = fm.getHeight()*NEWLINE_REGEX.split(text).length+1;
         
         g2d.dispose();
 
@@ -102,7 +105,7 @@ public class TextToGraphics implements Runnable{
         ImageIO.write(img, "JPG", out);
     }
     private static void drawString(Graphics g, String text, int x, int y) {
-        for (String line : text.split("\n")) {
+        for (String line : NEWLINE_REGEX.split(text)) {
         	if(line.startsWith(" ")) {
         		g.setFont(FONT_BODY);
         	}else {

@@ -9,7 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -32,7 +32,7 @@ public final class TriviaListener extends ListenerAdapter {
 		
 	}
 	
-	public static  void addQuestion(final TextChannel chan,String... correct) {
+	public static  void addQuestion(final MessageChannel chan,String... correct) {
 		for (int i = 0; i < correct.length; i++) {
 			correct[i]=correct[i].toLowerCase();
 		}

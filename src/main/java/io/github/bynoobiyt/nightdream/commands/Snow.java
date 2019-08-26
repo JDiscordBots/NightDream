@@ -1,6 +1,6 @@
 package io.github.bynoobiyt.nightdream.commands;
 
-import java.awt.*;
+import java.awt.Color;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class Snow implements Command {
 
 	private static int increment=0;
-	private static final long EPOCH=1420070400000L;//Discord epoch/1.1.2015 0:00
+	private static final long EPOCH=1_420_070_400_000L;//Discord epoch/1.1.2015 0:00
 	
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {

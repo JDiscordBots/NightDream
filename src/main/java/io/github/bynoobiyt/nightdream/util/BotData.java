@@ -59,7 +59,7 @@ public class BotData {
 	 * @param prefix the prefix
 	 */
 	public static void setDefaultPrefix(String prefix) {
-		if (prefix == null || prefix.equals("")) {
+		if (prefix == null || "".equals(prefix)) {
 			prefix = "nd-";
 		}
 		Properties props=getDefaultProperties();

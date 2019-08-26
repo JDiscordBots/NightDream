@@ -12,13 +12,13 @@ public class Calc implements Command {
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		String operation="";
 		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/,%%,**,root] num2`", BotData.getDefaultPrefix());
 		if (args.length < 2) {
 			event.getChannel().sendMessage(wrongFormat).queue();
 			return;
 		}
 		try {
+			String operation="";
 			double num1 = Float.parseFloat(args[0]);
 			double num2 = Float.parseFloat(args[2]);
 			String operator = args[1];

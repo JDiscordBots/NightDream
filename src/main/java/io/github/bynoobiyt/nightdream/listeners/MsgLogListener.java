@@ -3,6 +3,7 @@ package io.github.bynoobiyt.nightdream.listeners;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ public class MsgLogListener extends ListenerAdapter {
 
 	private Map<String, Message> messages=new HashMap<>();
 	private static final Logger LOG=LoggerFactory.getLogger(MsgLogListener.class);
+	private static final Pattern SIZE_SPLIT=Pattern.compile("\\	?size");
 	
 	public void clearCache() {
 		messages.clear();
@@ -28,7 +30,7 @@ public class MsgLogListener extends ListenerAdapter {
 	
 	@Override
 	public void onGuildMessageDelete(GuildMessageDeleteEvent event) {
-		if(!BotData.getMsgLogChannel(event.getGuild()).equals("")) {
+		if(!"".equals(BotData.getMsgLogChannel(event.getGuild()))) {
 			Message msg=messages.get(event.getMessageId());
 			if(msg==null) {
 				LOG.info("A message that has not been cached was deleted.");
@@ -44,7 +46,7 @@ public class MsgLogListener extends ListenerAdapter {
 				}
 				builder.addField("Message", text, false);
 				if(msg.getAuthor().getAvatarUrl()!=null) {
-					builder.setThumbnail(msg.getAuthor().getAvatarUrl().split("\\	?size")[0]);
+					builder.setThumbnail(SIZE_SPLIT.split(msg.getAuthor().getAvatarUrl())[0]);
 				}
 				if(!msg.getAttachments().isEmpty()) {
 					StringBuilder attachmentsBuilder=new StringBuilder("\n\n");
@@ -68,7 +70,7 @@ public class MsgLogListener extends ListenerAdapter {
 	
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		if(!BotData.getMsgLogChannel(event.getGuild()).equals("")) {
+		if(!"".equals(BotData.getMsgLogChannel(event.getGuild()))) {
 			messages.put(event.getMessageId(), event.getMessage());
 		}
 	}

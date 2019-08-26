@@ -15,7 +15,7 @@ public class KSoftUtil {
 	
 	static {
 		String token=BotData.getKSoftToken();
-		if(token.equals("")) {
+		if("".equals(token)) {
 			LOG.warn("no ksoft token defined");
 			api=null;
 		}else {
