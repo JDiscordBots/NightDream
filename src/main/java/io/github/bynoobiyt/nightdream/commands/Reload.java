@@ -31,26 +31,17 @@ public class Reload implements Command {
 		}
 		switch(args[0]) {
 		case "login":
-		case "reconnect"://TODO fix console error(InterruptedException)
-			try {
-				JDAUtils.msg(event.getChannel(), "reconnecting...",Color.YELLOW);
-				JDAImpl jda=((JDAImpl)event.getJDA());
-				jda.setAutoReconnect(false);
-				jda.getClient().socket.disconnect();
-				jda.getClient().reconnect(false);
-				jda.addEventListener(new ListenerAdapter() {
-					@Override
-					public void onReconnect(@NotNull ReconnectedEvent event) {
-						JDAUtils.msg(tc, "reconnected!");
-						jda.removeEventListener(this);
-					}
-				});
-				
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}finally {
-				event.getJDA().setAutoReconnect(true);
-			}
+		case "reconnect":
+			JDAUtils.msg(event.getChannel(), "reconnecting...",Color.YELLOW);
+			JDAImpl jda=((JDAImpl)event.getJDA());
+			jda.getClient().close();
+			jda.addEventListener(new ListenerAdapter() {
+				@Override
+				public void onReconnect(@NotNull ReconnectedEvent event) {
+					JDAUtils.msg(tc, "reconnected!");
+					jda.removeEventListener(this);
+				}
+			});
 			break;
 		case "props":
 			JDAUtils.msg(event.getChannel(), "reloading all Properties...");

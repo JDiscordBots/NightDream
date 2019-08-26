@@ -61,10 +61,10 @@ public class MsgLogListener extends ListenerAdapter {
 				}
 				event.getGuild().getTextChannelById(BotData.getMsgLogChannel(event.getGuild())).sendMessage(builder.build()).queue();
 			}
-			
 		}
-		
 	}
+	
+	
 	
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {

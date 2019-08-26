@@ -71,7 +71,6 @@ public class TextToGraphics implements Runnable{
 		}
 	}
     private static void createImage(String text,OutputStream out) throws IOException {
-    	//long time=System.currentTimeMillis();
     	text=text.replace("\t", "    ");
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
@@ -97,18 +96,10 @@ public class TextToGraphics implements Runnable{
         g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         g2d.setColor(FG_COLOR);
         
-        //System.out.println("init "+(System.currentTimeMillis()-time));
-        //time=System.currentTimeMillis();
-        
         drawString(g2d,text,0,0);
         g2d.dispose();
         
-        //System.out.println("draw Strings "+(System.currentTimeMillis()-time));
-        //time=System.currentTimeMillis();
-        
         ImageIO.write(img, "JPG", out);
-
-        //System.out.println("write Image "+(System.currentTimeMillis()-time));
     }
     private static void drawString(Graphics g, String text, int x, int y) {
         for (String line : text.split("\n")) {

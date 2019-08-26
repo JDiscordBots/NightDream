@@ -39,6 +39,9 @@ public class Profile implements Command {
 	public static void reload() {
 		props=BotData.loadProperties("Profiles.properties", new HashMap<>(), "Profile data");
 	}
+	private static void save() {
+		BotData.saveProperties("Profiles.properties", props, "Profile data");
+	}
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -110,11 +113,11 @@ public class Profile implements Command {
 	}
 	private static void setProp(User user,String name,String value) {
 		props.setProperty(user.getId()+"."+name, value);
-		BotData.saveProperties("Profiles.properties", props, "Profile data");
+		save();
 	}
 	private static void unsetProp(User user,String name) {
 		props.remove(user.getId()+"."+name);
-		BotData.saveProperties("Profiles.properties", props, "Profile data");
+		save();
 	}
 	private void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {

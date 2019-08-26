@@ -108,21 +108,20 @@ public class NightDream {
 				Annotation cmdAsAnnotation = cl.getAnnotation(annotClass);
 				function.accept(cmdAsAnnotation, annotatedAsObject);
 			} catch (InstantiationException e) {
-				if(LOG.isWarnEnabled()) {
-					String msg=cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but cannot be instantiated";
-					LOG.warn(msg);
-				}
+				addActionWarn(cl,annotClass,"cannot be instantiated");
 			} catch (IllegalAccessException e) {
-				if(LOG.isWarnEnabled()) {
-					String msg=cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but the no-args constructor is not visible";
-					LOG.warn(msg);
-				}
-			} catch (NoSuchMethodException|InvocationTargetException e) {
-				if(LOG.isWarnEnabled()) {
-					String msg=cl.getName() + ANNOTATED_WITH+annotClass.getName() + " but there was an unknown Error: " + e.getClass().getName()+": "+e.getCause();
-					LOG.warn(msg);
-				}
+				addActionWarn(cl,annotClass,"the no-args constructor is not visible");
+			} catch (NoSuchMethodException e) {
+				addActionWarn(cl,annotClass,"the there is no no-args constructor");
+			} catch (InvocationTargetException e) {
+				addActionWarn(cl,annotClass,"there was an unknown Error: " + e.getClass().getName()+": "+e.getCause());
 			}
         }
     }
+	private static void addActionWarn(Class<?> cl,Class<? extends Annotation> annotClass,String err) {
+		if(LOG.isWarnEnabled()) {
+			String msg=cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but "+err;
+			LOG.warn(msg);
+		}
+	}
 }
