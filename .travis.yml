@@ -24,7 +24,7 @@ jobs:
     - stage: "scan with SonarLint and upload results to SonarCloud"
       addons:
         sonarcloud:
-          organization: "NightDream"
+          organization: "nightdream"
       script:
       - sonar-scanner -Dsonar.projectKey=NightDream -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=src/ -Dsonar.java.binaries=build/classes
     - stage: "Upload to Wiki"
