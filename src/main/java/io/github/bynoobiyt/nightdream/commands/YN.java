@@ -2,6 +2,7 @@ package io.github.bynoobiyt.nightdream.commands;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class YN implements Command {
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		try(Scanner scan=new Scanner(new URL("https://yesno.wtf/api").openConnection().getInputStream())){
+		try(Scanner scan=new Scanner(new URL("https://yesno.wtf/api").openConnection().getInputStream(), StandardCharsets.UTF_8.toString())){
 			String json=scan.nextLine();
 			
 			String answer=GeneralUtils.getJSONString(json, "answer");

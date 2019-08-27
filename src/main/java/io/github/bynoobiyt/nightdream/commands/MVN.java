@@ -2,6 +2,7 @@ package io.github.bynoobiyt.nightdream.commands;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import io.github.bynoobiyt.nightdream.util.GeneralUtils;
@@ -19,7 +20,7 @@ public class MVN implements Command{
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
 		}
 		String url="http://search.maven.org/solrsearch/select?q="+args[0]+"&wt=json";
-		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
+		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream(),StandardCharsets.UTF_8.name())){
 			String json=scan.nextLine();
 			String id=GeneralUtils.getJSONString(json,"id");
 			if("?".equals(id)) {

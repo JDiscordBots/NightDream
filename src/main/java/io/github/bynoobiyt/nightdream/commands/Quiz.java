@@ -1,5 +1,6 @@
 package io.github.bynoobiyt.nightdream.commands;
 
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Quiz implements Command{
 	private List<Map.Entry<String, String[]>> questions;
 	public Quiz() {
 		questions=new ArrayList<>();
-		try(Scanner scan=new Scanner(Quiz.class.getClassLoader().getResourceAsStream("quiz.json"))){
+		try(Scanner scan=new Scanner(Quiz.class.getClassLoader().getResourceAsStream("quiz.json"), StandardCharsets.UTF_8.name())){
 			StringBuilder sb=new StringBuilder();
 			while(scan.hasNext()) {
 				sb.append(scan.nextLine());
