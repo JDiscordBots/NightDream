@@ -6,16 +6,25 @@ jobs:
     - stage: "compile with different Java versions"
       jdk:
       - openjdk8
+      install: true
+      script: ./gradlew assemble
+    - jdk:
       - openjdk12
       install: true
       script: ./gradlew assemble
     - stage: "check different Java versions"
       jdk:
         - openjdk8
+      install: true
+      script: ./gradlew check
+    - jdk:
         - openjdk12
       install: true
       script: ./gradlew check
     - stage: "scan with SonarLint and upload results to SonarCloud"
+      addons:
+        sonarcloud:
+          organization: "NightDream"
       script:
       - sonar-scanner -Dsonar.projectKey=NightDream -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=src/ -Dsonar.java.binaries=build/classes
     - stage: "Upload to Wiki"
