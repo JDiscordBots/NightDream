@@ -1,17 +1,18 @@
-package io.github.bynoobiyt.nightdream.listeners;
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: TriviaListener.java
+ * Project: NightDream
+ * All rights reserved!
+ */
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
+package io.github.bynoobiyt.nightdream.listeners;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import java.util.*;
 
 public final class TriviaListener extends ListenerAdapter {
 	private static TriviaListener listener;

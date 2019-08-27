@@ -1,19 +1,25 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: Photo.java
+ * Project: NightDream
+ * All rights reserved!
+ */
+
 package io.github.bynoobiyt.nightdream.commands;
-
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
 import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 @BotCommand("photo")
 public class Photo implements Command {

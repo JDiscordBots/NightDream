@@ -1,4 +1,17 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: Trivia.java
+ * Project: NightDream
+ * All rights reserved!
+ */
+
 package io.github.bynoobiyt.nightdream.commands;
+
+import io.github.bynoobiyt.nightdream.listeners.TriviaListener;
+import io.github.bynoobiyt.nightdream.util.GeneralUtils;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -6,12 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
-import io.github.bynoobiyt.nightdream.listeners.TriviaListener;
-import io.github.bynoobiyt.nightdream.util.GeneralUtils;
-import io.github.bynoobiyt.nightdream.util.JDAUtils;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("trivia")
 public class Trivia implements Command{

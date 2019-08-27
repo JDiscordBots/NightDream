@@ -1,15 +1,22 @@
-package io.github.bynoobiyt.nightdream.commands;
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: MVN.java
+ * Project: NightDream
+ * All rights reserved!
+ */
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
+package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 @BotCommand("mvn")
 public class MVN implements Command{

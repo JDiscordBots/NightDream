@@ -1,14 +1,21 @@
-package io.github.bynoobiyt.nightdream.commands;
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: Snow.java
+ * Project: NightDream
+ * All rights reserved!
+ */
 
-import java.awt.Color;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import java.awt.*;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
 @BotCommand("snow")
 public class Snow implements Command {

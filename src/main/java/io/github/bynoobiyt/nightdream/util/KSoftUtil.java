@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: KSoftUtil.java
+ * Project: NightDream
+ * All rights reserved!
+ */
+
 package io.github.bynoobiyt.nightdream.util;
 
 import org.slf4j.Logger;

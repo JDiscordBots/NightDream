@@ -1,32 +1,27 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: TextToGraphics.java
+ * Project: NightDream
+ * All rights reserved!
+ */
+
 package io.github.bynoobiyt.nightdream.util;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.imageio.ImageIO;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.dv8tion.jda.api.entities.MessageChannel;
-
-public class TextToGraphics implements Runnable{
+public class TextToGraphics implements Runnable {
 	
 	private static final Font FONT_BODY;
 	private static final Font FONT_NOSPACE;

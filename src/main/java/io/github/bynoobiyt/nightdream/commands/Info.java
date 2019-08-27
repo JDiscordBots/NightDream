@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: Info.java
+ * Project: NightDream
+ * All rights reserved!
+ */
+
 package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.core.NightDream;
@@ -16,7 +23,7 @@ import java.util.stream.Stream;
 public class Info implements Command {
 
     private static int getUsers(JDA jda) {
-        int count=0;
+        int count = 0;
         for (User user : jda.getUsers()) {
         	if (!user.isBot()) {
         		count++;
@@ -26,7 +33,7 @@ public class Info implements Command {
     }
 
     private static int getBots(JDA jda) {
-    	int count=0;
+    	int count = 0;
         for (User user : jda.getUsers()) {
         	if (user.isBot()) {
         		count++;
@@ -37,7 +44,7 @@ public class Info implements Command {
 
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
-    	final JDA jda=event.getJDA();
+    	final JDA jda = event.getJDA();
     	String send=String.format(
     			"Bot Info\n"
     			+ "\tIn %s guilds, serving %s users and %s bots.\n"

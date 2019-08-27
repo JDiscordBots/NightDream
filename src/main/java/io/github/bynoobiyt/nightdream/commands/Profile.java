@@ -1,11 +1,11 @@
-package io.github.bynoobiyt.nightdream.commands;
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: Profile.java
+ * Project: NightDream
+ * All rights reserved!
+ */
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
@@ -14,6 +14,13 @@ import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Properties;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @BotCommand("profile")
 public class Profile implements Command {

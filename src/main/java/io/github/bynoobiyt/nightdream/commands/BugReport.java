@@ -1,13 +1,19 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: BugReport.java
+ * Project: NightDream
+ * All rights reserved!
+ */
+
 package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-
-import java.awt.Color;
-
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 
 @BotCommand("bugreport")
 public class BugReport implements Command {

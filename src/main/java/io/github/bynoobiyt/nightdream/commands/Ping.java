@@ -1,10 +1,17 @@
-package io.github.bynoobiyt.nightdream.commands;
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: Ping.java
+ * Project: NightDream
+ * All rights reserved!
+ */
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+package io.github.bynoobiyt.nightdream.commands;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 
 @BotCommand("ping")
 public class Ping implements Command {

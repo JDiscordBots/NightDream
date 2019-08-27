@@ -1,12 +1,19 @@
-package io.github.bynoobiyt.nightdream.commands;
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: Telemetry.java
+ * Project: NightDream
+ * All rights reserved!
+ */
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Properties;
+package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.core.CommandHandler;
 import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 @BotCommand("telemetry")
 public class Telemetry implements Command {

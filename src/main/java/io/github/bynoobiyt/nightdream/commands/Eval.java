@@ -28,7 +28,7 @@ public class Eval implements Command {
         try {
 			se.eval("System=System.static");
 		} catch (ScriptException e) {
-			LOG.warn("An Exception occurred while setting up System in eval",e);
+			LOG.warn("An Exception occurred while setting up System in eval", e);
 		}
 	}
 	@Override
@@ -48,27 +48,25 @@ public class Eval implements Command {
 			scriptBuilder.append(string).append(" ");
 		}
 		try {
-			Object result = null;
+			Object result;
 			result = se.eval(scriptBuilder.toString());
 			if (result != null) {
 	        	event.getChannel().sendMessage("```js\n"+result.toString()+"\n```").queue();
-			}else {
+			} else {
 				event.getChannel().sendMessage("`undefined` or `null`").queue();
 			}
 		} catch (ScriptException e) {
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
-			try(StringWriter sw=new StringWriter();
-					PrintWriter pw=new PrintWriter(sw)){
+			try(StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw)){
 				e.printStackTrace(pw);
-				String exStr=sw.getBuffer().toString();
-				int len=exStr.length();
-				if(len>1000) {
-					len=1000;
+				String exStr = sw.getBuffer().toString();
+				int len = exStr.length();
+				if(len > 1000) {
+					len = 1000;
 				}
-				event.getChannel().sendMessage("`ERROR` ```java\n"+exStr.substring(0,len)+"\n```").queue();
-			} catch (IOException e1) {
-				//ignore 
-			}
+				event.getChannel().sendMessage("`ERROR` ```java\n" + exStr.substring(0, len) + "\n```").queue();
+			} catch (IOException ignored) {}
 		}
         
 	}

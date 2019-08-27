@@ -1,12 +1,11 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: MsgLogListener.java
+ * Project: NightDream
+ * All rights reserved!
+ */
+
 package io.github.bynoobiyt.nightdream.listeners;
-
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -16,6 +15,13 @@ import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 @BotListener
 public class MsgLogListener extends ListenerAdapter {

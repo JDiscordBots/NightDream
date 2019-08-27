@@ -1,27 +1,32 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: NightDream.java
+ * Project: NightDream
+ * All rights reserved!
+ */
+
 package io.github.bynoobiyt.nightdream.core;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
-
-import javax.security.auth.login.LoginException;
-
-import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.github.bynoobiyt.nightdream.commands.BotCommand;
 import io.github.bynoobiyt.nightdream.commands.Command;
 import io.github.bynoobiyt.nightdream.listeners.BotListener;
 import io.github.bynoobiyt.nightdream.util.BotData;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.internal.JDAImpl;
+import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.security.auth.login.LoginException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 public class NightDream {
 

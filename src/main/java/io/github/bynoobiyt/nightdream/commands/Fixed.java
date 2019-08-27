@@ -4,17 +4,16 @@ import io.github.bynoobiyt.nightdream.util.BotData;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-
-import java.awt.Color;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 
 @BotCommand("fixed")
 public class Fixed implements Command {
 
 	private static final Logger LOG=LoggerFactory.getLogger(Fixed.class);
-	private static final String DISABLED_INVALID_CHAN="Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.";
+	private static final String DISABLED_INVALID_CHAN = "Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.";
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {

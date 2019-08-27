@@ -1,19 +1,21 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: Quiz.java
+ * Project: NightDream
+ * All rights reserved!
+ */
+
 package io.github.bynoobiyt.nightdream.commands;
-
-import java.nio.charset.StandardCharsets;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import io.github.bynoobiyt.nightdream.listeners.TriviaListener;
 import io.github.bynoobiyt.nightdream.util.BotData;
 import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @BotCommand("quiz")
 public class Quiz implements Command{

@@ -8,7 +8,7 @@ import java.util.Random;
  *
  */
 public class GeneralUtils {
-	private static final Random rand=new Random();
+	private static final Random rand = new Random();
 	
 	private GeneralUtils(){
 		//prevent instantiation
@@ -21,7 +21,7 @@ public class GeneralUtils {
 	 */
 	public static String getJSONString(String json,String query) {
 		String str="\""+query+"\":\"";
-		if(json.indexOf(str)<0) {
+		if(json.indexOf(str) < 0) {
 			return "?";
 		}
 		int startIndex=json.indexOf(str)+str.length();
