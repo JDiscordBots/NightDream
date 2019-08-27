@@ -28,7 +28,7 @@ public class Eval implements Command {
         try {
 			se.eval("System=System.static");
 		} catch (ScriptException e) {
-			LOG.warn("An Exception occured while setting up System in eval",e);
+			LOG.warn("An Exception occurred while setting up System in eval",e);
 		}
 	}
 	@Override
