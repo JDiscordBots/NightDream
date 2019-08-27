@@ -7,8 +7,8 @@ import net.explodingbush.ksoftapi.enums.ImageTag;
 @BotCommand("hug")
 public class Hug extends KSoftImageCommand {
 
-	private String executor;
-	private String target;
+	private String executor=null;
+	private String target=null;
 	
 	@Override
 	public String help() {

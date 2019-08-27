@@ -69,7 +69,7 @@ public class CommandParser {
 
         public CommandContainer(final String invoke, final String[] args, final GuildMessageReceivedEvent e) {
             this.invoke = invoke;
-            this.args = args;
+            this.args = args.clone();
             this.event = e;
         }
     }

@@ -13,6 +13,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,19 +24,25 @@ import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
 
-public class TextToGraphics {
+public class TextToGraphics implements Runnable{
 	
 	private static final Font FONT_BODY;
 	private static final Font FONT_NOSPACE;
 	private static final Color BG_COLOR=Color.WHITE;
 	private static final Color FG_COLOR=new Color(0x212121);
 	private static final Logger LOG=LoggerFactory.getLogger(TextToGraphics.class);
+	private static TextToGraphics executor=new TextToGraphics();
+	private static final Thread graphicsThread=new Thread(executor);
+	
+	private Queue<Runnable> waiting=new LinkedBlockingQueue<>();
+	
+	private static final Pattern NEWLINE_REGEX=Pattern.compile("\n");
 	
 	static {
-		Font body = new Font("Arial", Font.PLAIN, 48);
-		Font heading = new Font("Arial", Font.BOLD, 48);
+		Font body = new Font("Arial", Font.PLAIN, 1);
+		Font heading = new Font("Arial", Font.BOLD, 1);
 		try (InputStream bodyStream=new BufferedInputStream(TextToGraphics.class.getClassLoader().getResourceAsStream("fonts/RedHatDisplay-Black.ttf"));
 				InputStream headingStream=new BufferedInputStream(TextToGraphics.class.getClassLoader().getResourceAsStream("fonts/RedHatDisplay-Bold.ttf"))){
 			body = Font.createFont(Font.TRUETYPE_FONT, bodyStream);
@@ -41,32 +50,37 @@ public class TextToGraphics {
 		} catch (IOException|FontFormatException e) {
 			LOG.warn("Error while loading fonts - Using Arial",e);
 		}
-		FONT_BODY=body.deriveFont(48f);
-		FONT_NOSPACE=heading.deriveFont(52f).deriveFont(Font.BOLD);
+		FONT_BODY=body.deriveFont(10F);
+		FONT_NOSPACE=heading.deriveFont(12F).deriveFont(Font.BOLD);
 		
+		graphicsThread.start();
 	}
 	
 	private TextToGraphics() {
 		//prevent instantiation
 	}
-	public static void sendTextAsImage(TextChannel chan, String imgName, String imgText, String metaText) {
-		try(ByteArrayOutputStream baos=new ByteArrayOutputStream()){
-			createImage(imgText,baos);
-			baos.flush();
-			chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName).queue();
-		} catch (IOException e) {
-			LOG.warn("Error while generating image from text: \n"+imgText,e);
+	public static void sendTextAsImage(MessageChannel chan, String imgName, String imgText, String metaText) {
+		synchronized (executor) {
+			executor.waiting.add(()->{
+				try(ByteArrayOutputStream baos=new ByteArrayOutputStream()){
+					createImage(imgText,baos);
+					baos.flush();
+					chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName).queue();
+				} catch (IOException e) {
+					LOG.warn("Error while generating image from text: \n"+imgText,e);
+				}
+			});
+			executor.notifyAll();
 		}
 	}
     private static void createImage(String text,OutputStream out) throws IOException {
-    	//long time=System.currentTimeMillis();
     	text=text.replace("\t", "    ");
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
         g2d.setFont(FONT_NOSPACE);
         final FontMetrics fm = g2d.getFontMetrics();
-        int width = Stream.of(text.split("\n")).collect(Collectors.summarizingInt(fm::stringWidth)).getMax();
-        int height = fm.getHeight()*text.split("\n").length+1;
+        int width = Stream.of(NEWLINE_REGEX.split(text)).collect(Collectors.summarizingInt(fm::stringWidth)).getMax();
+        int height = fm.getHeight()*NEWLINE_REGEX.split(text).length+1;
         
         g2d.dispose();
 
@@ -85,21 +99,13 @@ public class TextToGraphics {
         g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
         g2d.setColor(FG_COLOR);
         
-        //System.out.println("draw Strings "+(System.currentTimeMillis()-time));
-        //time=System.currentTimeMillis();
-        
         drawString(g2d,text,0,0);
         g2d.dispose();
         
-        //System.out.println("write Image "+(System.currentTimeMillis()-time));
-        //time=System.currentTimeMillis();
-        
         ImageIO.write(img, "JPG", out);
-
-        //System.out.println("done "+(System.currentTimeMillis()-time));
     }
     private static void drawString(Graphics g, String text, int x, int y) {
-        for (String line : text.split("\n")) {
+        for (String line : NEWLINE_REGEX.split(text)) {
         	if(line.startsWith(" ")) {
         		g.setFont(FONT_BODY);
         	}else {
@@ -109,5 +115,21 @@ public class TextToGraphics {
             g.drawString(line, x+g.getFontMetrics().charWidth(' '), y);
         }
     }
-
+	@Override
+	public void run() {
+		while(!Thread.currentThread().isInterrupted()) {
+			try {
+				synchronized (this) {
+					if(waiting.isEmpty()) {
+						this.wait();
+					}
+				}
+				while(!waiting.isEmpty()) {
+					waiting.poll().run();
+				}
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
 }

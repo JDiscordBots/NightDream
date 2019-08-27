@@ -26,19 +26,19 @@ public class Photo implements Command {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> Search Query, please.").queue();
 			return;
 		}
-		if(BotData.getPixaBayAPIKey().equals("")) {
+		if("".equals(BotData.getPixaBayAPIKey())) {
 			JDAUtils.errmsg(event.getChannel(),"This command is disabled because there is no API Key set.");
 			LOG.warn("no Pixabay API Key provided");
 			return;
 		}
 		event.getChannel().sendTyping();
 		try(Scanner scan=new Scanner(new URL(
-				"https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+URLEncoder.encode(String.join(" ", args), StandardCharsets.UTF_8.toString())
-				).openConnection().getInputStream())){
+				"https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+URLEncoder.encode(String.join(" ", args),StandardCharsets.UTF_8.name())
+				).openConnection().getInputStream(), StandardCharsets.UTF_8.toString())){
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0x212121);
 			String imgUrl=GeneralUtils.getJSONString(scan.nextLine(), "largeImageURL");
-			if(imgUrl.equals("?")) {
+			if("?".equals(imgUrl)) {
 				builder.setTitle("<:IconProvide:553870022125027329> Nothing found")
                 .setDescription("Try something different.");
 			}else {

@@ -38,16 +38,21 @@ public class Info implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
     	final JDA jda=event.getJDA();
-        if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI)) {//TODO embed and image depending on Permission
-        	TextToGraphics.sendTextAsImage(event.getChannel(), "info.jpg", String.format(
-        			"Bot Info\n"
-        			+ "\tIn %s guilds, serving %s users and %s bots.\n"
-                    + "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map(id -> jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n"
-                    + "\tJDA v4.0.0_39\n"
-                    + "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n"
-                    + "\t(c) dan1st and Gehasstes %s, Release %s.\n "
-                    + "\tThis is a copy of Daydream (https://gitlab.com/botstudio/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda), Year.now().getValue(), NightDream.VERSION
-        			), event.getAuthor().getAsMention());
+    	String send=String.format(
+    			"Bot Info\n"
+    			+ "\tIn %s guilds, serving %s users and %s bots.\n"
+                + "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map(id -> jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n"
+                + "\tJDA v4.0.0_39\n"
+                + "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n"
+                + "\t(c) dan1st and Gehasstes %s, Release %s.\n "
+                + "\tThis is a copy of Daydream (https://gitlab.com/botstudio/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda), Year.now().getValue(), NightDream.VERSION
+    			);
+        if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES)) {
+        	TextToGraphics.sendTextAsImage(event.getChannel(), "info.jpg", send, event.getAuthor().getAsMention());
+        }else if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI)) {
+        	event.getChannel().sendMessage(send).queue();
+        }else {
+        	event.getChannel().sendMessage("**Unable to use external emojis, likely to break on other commands**\n\n"+send).queue();
         }
     }
 

@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.*;
+import java.awt.Color;
 
 @BotCommand("help")
 public class Help implements Command {

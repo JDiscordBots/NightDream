@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 public class JDAUtils {
 	
@@ -61,7 +62,7 @@ public class JDAUtils {
 	public static Message msg(TextChannel channel, MessageEmbed message) {
 		try {
 			return channel.sendMessage(message).complete();
-		} catch (Exception e) {
+		} catch (InsufficientPermissionException e) {
 			LOG.trace("Cannot send Message \"{}\" in channel {}[{}] because of a {}",
 					message.getDescription(),channel.getName(),channel.getGuild().getName(),e.getClass().getSimpleName());
 			return null;

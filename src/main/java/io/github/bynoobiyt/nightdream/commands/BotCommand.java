@@ -1,6 +1,9 @@
 package io.github.bynoobiyt.nightdream.commands;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.annotation.ElementType;
 
 /**
  * Annotation for a Command

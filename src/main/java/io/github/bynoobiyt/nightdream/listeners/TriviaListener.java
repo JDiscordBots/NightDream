@@ -9,7 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -32,7 +32,7 @@ public final class TriviaListener extends ListenerAdapter {
 		
 	}
 	
-	public static  void addQuestion(final TextChannel chan,String... correct) {
+	public static  void addQuestion(final MessageChannel chan,String... correct) {
 		for (int i = 0; i < correct.length; i++) {
 			correct[i]=correct[i].toLowerCase();
 		}
@@ -59,8 +59,7 @@ public final class TriviaListener extends ListenerAdapter {
 							if(listener.questions.get(chan.getId()).isEmpty()) {
 								listener.questions.remove(chan.getId());
 								if(listener.questions.isEmpty()) {
-									listener.jda.removeEventListener(listener);
-									listener=null;
+									removeListener(listener.jda);
 								}
 							}
 						}
@@ -88,12 +87,15 @@ public final class TriviaListener extends ListenerAdapter {
 						if(questions.isEmpty()) {
 							timer.cancel();
 							timer.purge();
-							jda.removeEventListener(this);
-							TriviaListener.listener=null;
+							removeListener(jda);
 						}
 					}
 				}
 			}
 		}
+	}
+	private static void removeListener(JDA jda) {
+		jda.removeEventListener(TriviaListener.listener);
+		TriviaListener.listener=null;
 	}
 }
