@@ -31,7 +31,7 @@ public class Snow implements Command {
 			EmbedBuilder eb=new EmbedBuilder();
 			eb.setTitle(args[0]);
 			eb.setColor(Color.white);
-			String binStr=fillWithZerosBefore(64,Long.toBinaryString(Long.valueOf(args[0])));
+			String binStr=fillWithZerosBefore(64,Long.toBinaryString(Long.parseLong(args[0])));
 			eb.addField("Binary",binStr , false);
 			eb.addField("Date", Instant.ofEpochMilli(Long.valueOf(binStr.substring(0,42),2)+EPOCH).atZone(ZoneId.systemDefault()).toLocalDate().toString(), false);
 			eb.addField("Increment", Integer.valueOf(binStr.substring(52,64),2).toString(), false);

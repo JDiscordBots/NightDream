@@ -59,8 +59,7 @@ public final class TriviaListener extends ListenerAdapter {
 							if(listener.questions.get(chan.getId()).isEmpty()) {
 								listener.questions.remove(chan.getId());
 								if(listener.questions.isEmpty()) {
-									listener.jda.removeEventListener(listener);
-									listener=null;
+									removeListener(listener.jda);
 								}
 							}
 						}
@@ -88,12 +87,15 @@ public final class TriviaListener extends ListenerAdapter {
 						if(questions.isEmpty()) {
 							timer.cancel();
 							timer.purge();
-							jda.removeEventListener(this);
-							TriviaListener.listener=null;
+							removeListener(jda);
 						}
 					}
 				}
 			}
 		}
+	}
+	private static void removeListener(JDA jda) {
+		jda.removeEventListener(TriviaListener.listener);
+		TriviaListener.listener=null;
 	}
 }

@@ -33,8 +33,8 @@ public class Photo implements Command {
 		}
 		event.getChannel().sendTyping();
 		try(Scanner scan=new Scanner(new URL(
-				"https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+URLEncoder.encode(String.join(" ", args), StandardCharsets.UTF_8.toString())
-				).openConnection().getInputStream())){
+				"https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+URLEncoder.encode(String.join(" ", args),StandardCharsets.UTF_8.name())
+				).openConnection().getInputStream(), StandardCharsets.UTF_8.toString())){
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0x212121);
 			String imgUrl=GeneralUtils.getJSONString(scan.nextLine(), "largeImageURL");

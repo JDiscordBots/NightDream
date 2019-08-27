@@ -1,11 +1,7 @@
 package io.github.bynoobiyt.nightdream.commands;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Writer;
-import java.io.Reader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 import io.github.bynoobiyt.nightdream.core.CommandHandler;
@@ -16,7 +12,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class Telemetry implements Command {
 	private static final Properties TELEMETRY_DATA=new Properties();
 	static {
-		try(Reader reader=new FileReader(new File(BotData.DATA_DIR,"telemetry.properties"))){
+		try(Reader reader=new InputStreamReader(new FileInputStream(new File(BotData.DATA_DIR,"telemetry.properties")),StandardCharsets.UTF_8)){
 			TELEMETRY_DATA.load(reader);
 		} catch (IOException e) {
 			//ignore
@@ -32,7 +28,7 @@ public class Telemetry implements Command {
 			int telemetry=Integer.parseInt(telStr.trim());
 			TELEMETRY_DATA.setProperty(name, String.valueOf(telemetry+1));
 		}
-		try(Writer writer=new FileWriter(new File(BotData.DATA_DIR,"telemetry.properties"))){
+		try(Writer writer=new OutputStreamWriter(new FileOutputStream(new File(BotData.DATA_DIR,"telemetry.properties")), StandardCharsets.UTF_8)){
 			TELEMETRY_DATA.store(writer,"Telemetry Data");
 		} catch (IOException e) {
 			//ignore

@@ -2,6 +2,7 @@ package io.github.bynoobiyt.nightdream.commands;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -20,7 +21,7 @@ public class Trivia implements Command{
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		String url="https://opentdb.com/api.php?amount=1";
-		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream())){
+		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream(), StandardCharsets.UTF_8.toString())){
 			String json=scan.nextLine();
 			String correct=GeneralUtils.getJSONString(json, "correct_answer");
 			String incorrect=GeneralUtils.getMultipleJSONStrings(json, "incorrect_answers");
