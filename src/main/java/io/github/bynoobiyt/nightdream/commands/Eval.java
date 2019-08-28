@@ -18,11 +18,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 @BotCommand("eval")
 public class Eval implements Command {
 
-	private ScriptEngine se;
+	private static final ScriptEngine se;
 	private static final String LATEST_EXCEPTION_KEY_NAME="err";
 	private static final Logger LOG=LoggerFactory.getLogger(Eval.class);
 	
-	public Eval() {
+	static {
 		se = new ScriptEngineManager().getEngineByName("Nashorn");
 		se.put("System", System.class);
         try {
@@ -48,29 +48,32 @@ public class Eval implements Command {
 			scriptBuilder.append(string).append(" ");
 		}
 		try {
-			Object result;
-			result = se.eval(scriptBuilder.toString());
-			if (result != null) {
-	        	event.getChannel().sendMessage("```js\n"+result.toString()+"\n```").queue();
-			} else {
-				event.getChannel().sendMessage("`undefined` or `null`").queue();
-			}
+			onSuccess(se.eval(scriptBuilder.toString()),event);
 		} catch (ScriptException e) {
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
-			try(StringWriter sw = new StringWriter();
-					PrintWriter pw = new PrintWriter(sw)){
-				e.printStackTrace(pw);
-				String exStr = sw.getBuffer().toString();
-				int len = exStr.length();
-				if(len > 1000) {
-					len = 1000;
-				}
-				event.getChannel().sendMessage("`ERROR` ```java\n" + exStr.substring(0, len) + "\n```").queue();
-			} catch (IOException ignored) {}
+			onError(e,event);
 		}
-        
 	}
-
+	
+	protected void onSuccess(Object result,GuildMessageReceivedEvent event) {
+		if (result != null) {
+        	event.getChannel().sendMessage("```js\n"+result.toString()+"\n```").queue();
+		} else {
+			event.getChannel().sendMessage("`undefined` or `null`").queue();
+		}
+	}
+	protected void onError(ScriptException e,GuildMessageReceivedEvent event) {
+		try(StringWriter sw = new StringWriter();
+				PrintWriter pw = new PrintWriter(sw)){
+			e.printStackTrace(pw);
+			String exStr = sw.getBuffer().toString();
+			int len = exStr.length();
+			if(len > 1000) {
+				len = 1000;
+			}
+			event.getChannel().sendMessage("`ERROR` ```java\n" + exStr.substring(0, len) + "\n```").queue();
+		} catch (IOException ignored) {}
+	}
 	@Override
 	public String help() {
 		return null;
