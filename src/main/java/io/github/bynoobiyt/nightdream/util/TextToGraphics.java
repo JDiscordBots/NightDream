@@ -40,7 +40,7 @@ public class TextToGraphics implements Runnable {
 	private static final Color FG_COLOR=new Color(0x212121);
 	private static final Logger LOG=LoggerFactory.getLogger(TextToGraphics.class);
 	private static TextToGraphics executor=new TextToGraphics();
-	private static final Thread graphicsThread=new Thread(executor);
+	private static final Thread graphicsThread;
 	
 	private Queue<Runnable> waiting=new LinkedBlockingQueue<>();
 	
@@ -58,7 +58,8 @@ public class TextToGraphics implements Runnable {
 		}
 		FONT_BODY=body.deriveFont(10F);
 		FONT_NOSPACE=heading.deriveFont(12F).deriveFont(Font.BOLD);
-		
+		graphicsThread=new Thread(executor);
+		graphicsThread.setDaemon(true);
 		graphicsThread.start();
 	}
 	
