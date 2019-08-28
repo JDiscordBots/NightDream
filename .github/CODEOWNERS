@@ -4,5 +4,6 @@
 /.travis.yml @danthe1st
 /saveJAR.sh @danthe1st
 /src/main/java/io/github/bynoobiyt/nightdream/core/ @danthe1st
+/src/main/java/io/github/bynoobiyt/nightdream/core/NightDream.java @byNoobiYT @danthe1st
 /src/main/java/io/github/bynoobiyt/nightdream/listeners/BotListener.java @danthe1st
 /src/main/java/io/github/bynoobiyt/nightdream/listeners/CommandListener.java @danthe1st
