@@ -2,13 +2,12 @@
  * Copyright (c) danthe1st and byNoobiYT 2019.
  * File: Neko.java
  * Project: NightDream
- * All rights reserved!
+ * Licenced under GNU GPL!
  */
 
 package io.github.bynoobiyt.nightdream.commands.ksoft;
 
 import io.github.bynoobiyt.nightdream.commands.BotCommand;
-
 import net.explodingbush.ksoftapi.enums.ImageTag;
 @BotCommand("neko")
 public class Neko extends KSoftImageCommand {

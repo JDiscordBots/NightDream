@@ -2,7 +2,7 @@
  * Copyright (c) danthe1st and byNoobiYT 2019.
  * File: NPM.java
  * Project: NightDream
- * All rights reserved!
+ * Licenced under GNU GPL!
  */
 
 package io.github.bynoobiyt.nightdream.commands;

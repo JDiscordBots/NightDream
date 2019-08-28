@@ -2,7 +2,7 @@
  * Copyright (c) danthe1st and byNoobiYT 2019.
  * File: Calc.java
  * Project: NightDream
- * All rights reserved!
+ * Licenced under GNU GPL!
  */
 
 package io.github.bynoobiyt.nightdream.commands;
@@ -11,7 +11,7 @@ import io.github.bynoobiyt.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.Color;
+import java.awt.*;
 
 @BotCommand("calc")
 public class Calc implements Command {
