@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +27,7 @@ public class YN implements Command {
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		try(Scanner scan=new Scanner(new URL("https://yesno.wtf/api").openConnection().getInputStream(), StandardCharsets.UTF_8.toString())){
+		try(Scanner scan=new Scanner(new BufferedInputStream(new URL("https://yesno.wtf/api").openConnection().getInputStream()), StandardCharsets.UTF_8.toString())){
 			String json=scan.nextLine();
 			
 			String answer=GeneralUtils.getJSONString(json, "answer");

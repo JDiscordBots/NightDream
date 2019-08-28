@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -27,7 +28,7 @@ public class MVN implements Command{
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
 		}
 		String url="http://search.maven.org/solrsearch/select?q="+args[0]+"&wt=json";
-		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream(),StandardCharsets.UTF_8.name())){
+		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(url).openConnection().getInputStream()),StandardCharsets.UTF_8.name())){
 			String json=scan.nextLine();
 			String id=GeneralUtils.getJSONString(json,"id");
 			if("?".equals(id)) {

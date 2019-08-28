@@ -1,6 +1,15 @@
 package io.github.bynoobiyt.nightdream.util;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -268,13 +277,13 @@ public class BotData {
 		props.putAll(defaults);
 		File file=new File(DATA_DIR,filename);
 		if(file.exists()) {
-			try(Reader reader=new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)){
+			try(Reader reader=new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), StandardCharsets.UTF_8)){
 				props.load(reader);
 			} catch (IOException e) {
 				LOG.warn("Cannot load Properties from file: "+file.getAbsolutePath(),e);
 			}
 		}else {
-			try(Writer writer=new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)){
+			try(Writer writer=new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(file)), StandardCharsets.UTF_8)){
 				props.store(writer,comment);
 			} catch (IOException e) {
 				LOG.warn("Cannot create file or save Properties: "+file.getAbsolutePath(),e);
@@ -292,7 +301,7 @@ public class BotData {
 		Properties props=new Properties(defaultProperties);
 		File file=new File(DATA_DIR,filename);
 		if(file.exists()) {
-			try(Reader reader=new InputStreamReader(new FileInputStream(file),StandardCharsets.UTF_8)){
+			try(Reader reader=new InputStreamReader(new BufferedInputStream(new FileInputStream(file)),StandardCharsets.UTF_8)){
 				props.load(reader);
 			} catch (IOException e) {
 				LOG.warn("Cannot load Properties from file: "+file.getAbsolutePath(),e);
@@ -307,7 +316,7 @@ public class BotData {
 	 * @param comment a comment for the newly generated file
 	 */
 	public static void saveProperties(String filename,Properties props, String comment) {
-		try(Writer writer=new OutputStreamWriter(new FileOutputStream(new File(DATA_DIR,filename)), StandardCharsets.UTF_8.toString())){
+		try(Writer writer=new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(new File(DATA_DIR,filename))), StandardCharsets.UTF_8.toString())){
 			props.store(writer,comment);
 		} catch (IOException e) {
 			// ignore

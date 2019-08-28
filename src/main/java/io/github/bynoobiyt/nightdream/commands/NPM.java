@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -32,7 +33,7 @@ public class NPM implements Command{
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
 		}
 		String url="http://registry.yarnpkg.com/"+args[0];
-		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream(), StandardCharsets.UTF_8.name())){
+		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(url).openConnection().getInputStream()), StandardCharsets.UTF_8.name())){
 			String json=scan.nextLine();
 			String scope;
 			if(args[0].startsWith("@")) {

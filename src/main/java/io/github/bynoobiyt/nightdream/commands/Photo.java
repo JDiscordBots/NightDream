@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -38,9 +39,9 @@ public class Photo implements Command {
 			return;
 		}
 		event.getChannel().sendTyping();
-		try(Scanner scan=new Scanner(new URL(
+		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(
 				"https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+URLEncoder.encode(String.join(" ", args),StandardCharsets.UTF_8.name())
-				).openConnection().getInputStream(), StandardCharsets.UTF_8.toString())){
+				).openConnection().getInputStream()), StandardCharsets.UTF_8.toString())){
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0x212121);
 			String imgUrl=GeneralUtils.getJSONString(scan.nextLine(), "largeImageURL");

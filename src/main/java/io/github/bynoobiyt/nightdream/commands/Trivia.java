@@ -13,6 +13,7 @@ import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +29,7 @@ public class Trivia implements Command{
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		String url="https://opentdb.com/api.php?amount=1";
-		try(Scanner scan=new Scanner(new URL(url).openConnection().getInputStream(), StandardCharsets.UTF_8.toString())){
+		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(url).openConnection().getInputStream()), StandardCharsets.UTF_8.toString())){
 			String json=scan.nextLine();
 			String correct=GeneralUtils.getJSONString(json, "correct_answer");
 			String incorrect=GeneralUtils.getMultipleJSONStrings(json, "incorrect_answers");
