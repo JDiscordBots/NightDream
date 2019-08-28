@@ -99,7 +99,7 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if(!(BotData.getMsgLogChannel(event.getGuild())==null||BotData.getMsgLogChannel(event.getGuild()).isEmpty())) {
 			messages.put(event.getMessageId(), event.getMessage());
-			cachedMessageIDs.offer(event.getMessageId());
+			cachedMessageIDs.add(event.getMessageId());
 		}
 	}
 
