@@ -1,4 +1,4 @@
-# NightDream [![Build Status](https://travis-ci.com/byNoobiYT/NightDream.svg?branch=master)](https://travis-ci.com/byNoobiYT/NightDream)
+# NightDream [![Build Status](https://travis-ci.com/byNoobiYT/NightDream.svg?branch=master)](https://travis-ci.com/byNoobiYT/NightDream) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=NightDream&metric=alert_status)](https://sonarcloud.io/dashboard?id=NightDream)
 a Clone of the Discord Bot [Daydream](https://gitlab.com/botstudio/daydream) in Java
 
 This is not an exact clone, there are a few differences to the original.
