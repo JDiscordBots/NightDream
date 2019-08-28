@@ -1,19 +1,23 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: Eval.java
+ * Project: NightDream
+ * Licenced under GNU GPL!
+ */
+
 package io.github.bynoobiyt.nightdream.commands;
 
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import io.github.bynoobiyt.nightdream.util.JDAUtils;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.github.bynoobiyt.nightdream.util.JDAUtils;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 @BotCommand("eval")
 public class Eval implements Command {

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: MsgLog.java
+ * Project: NightDream
+ * Licenced under GNU GPL!
+ */
+
 package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
