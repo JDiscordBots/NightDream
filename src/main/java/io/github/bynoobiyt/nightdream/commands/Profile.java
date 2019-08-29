@@ -2,7 +2,7 @@
  * Copyright (c) danthe1st and byNoobiYT 2019.
  * File: Profile.java
  * Project: NightDream
- * Licenced under GNU GPL!
+ * Licenced under Boost Software License 1.0
  */
 
 package io.github.bynoobiyt.nightdream.commands;
