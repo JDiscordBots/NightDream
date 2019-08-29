@@ -42,6 +42,8 @@ public class TextToGraphics implements Runnable {
 	private static TextToGraphics executor=new TextToGraphics();
 	private static final Thread graphicsThread;
 	
+	private static final Object LOCK=new Object();
+	
 	private Queue<Runnable> waiting=new LinkedBlockingQueue<>();
 	
 	private static final Pattern NEWLINE_REGEX=Pattern.compile("\n");
@@ -67,7 +69,7 @@ public class TextToGraphics implements Runnable {
 		//prevent instantiation
 	}
 	public static void sendTextAsImage(MessageChannel chan, String imgName, String imgText, String metaText) {
-		synchronized (executor) {
+		synchronized (LOCK) {
 			executor.waiting.add(()->{
 				try(ByteArrayOutputStream baos=new ByteArrayOutputStream()){
 					createImage(imgText,baos);
@@ -126,7 +128,7 @@ public class TextToGraphics implements Runnable {
 	public void run() {
 		while(!Thread.currentThread().isInterrupted()) {
 			try {
-				synchronized (this) {
+				synchronized (LOCK) {
 					if(waiting.isEmpty()) {
 						this.wait();
 					}

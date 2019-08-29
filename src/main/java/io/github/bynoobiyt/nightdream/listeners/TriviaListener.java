@@ -33,7 +33,7 @@ public final class TriviaListener extends ListenerAdapter {
 		
 	}
 	
-	public static  void addQuestion(final MessageChannel chan,String... correct) {
+	public static void addQuestion(final MessageChannel chan,String... correct) {
 		for (int i = 0; i < correct.length; i++) {
 			correct[i]=correct[i].toLowerCase();
 		}
