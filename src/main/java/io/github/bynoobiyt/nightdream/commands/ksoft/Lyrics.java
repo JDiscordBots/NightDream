@@ -2,7 +2,7 @@
  * Copyright (c) danthe1st and byNoobiYT 2019.
  * File: Lyrics.java
  * Project: NightDream
- * All rights reserved!
+ * Licenced under GNU GPL!
  */
 
 package io.github.bynoobiyt.nightdream.commands.ksoft;
@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.Lyric;
 
-import java.awt.Color;
+import java.awt.*;
 
 @BotCommand("lyrics")
 public class Lyrics implements Command {

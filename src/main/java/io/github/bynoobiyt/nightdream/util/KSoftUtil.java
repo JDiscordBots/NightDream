@@ -2,17 +2,16 @@
  * Copyright (c) danthe1st and byNoobiYT 2019.
  * File: KSoftUtil.java
  * Project: NightDream
- * All rights reserved!
+ * Licenced under GNU GPL!
  */
 
 package io.github.bynoobiyt.nightdream.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.TaggedImage;
 import net.explodingbush.ksoftapi.enums.ImageTag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class KSoftUtil {
 	

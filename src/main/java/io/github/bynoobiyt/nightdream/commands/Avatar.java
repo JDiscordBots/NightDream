@@ -2,7 +2,7 @@
  * Copyright (c) danthe1st and byNoobiYT 2019.
  * File: Avatar.java
  * Project: NightDream
- * All rights reserved!
+ * Licenced under GNU GPL!
  */
 
 package io.github.bynoobiyt.nightdream.commands;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.Color;
+import java.awt.*;
 
 @BotCommand("avatar")
 public class Avatar implements Command {
