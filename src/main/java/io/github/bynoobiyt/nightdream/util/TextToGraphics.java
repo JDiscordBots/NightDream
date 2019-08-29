@@ -68,7 +68,7 @@ public class TextToGraphics implements Runnable {
 					LOG.warn("Error while generating image from text: \n"+imgText,e);
 				}
 			});
-			executor.notifyAll();
+			LOCK.notifyAll();
 		}
 	}
     private static void createImage(String text,OutputStream out) throws IOException {
@@ -119,7 +119,7 @@ public class TextToGraphics implements Runnable {
 			try {
 				synchronized (LOCK) {
 					if(waiting.isEmpty()) {
-						this.wait();
+						LOCK.wait();
 					}
 				}
 				while(!waiting.isEmpty()) {
