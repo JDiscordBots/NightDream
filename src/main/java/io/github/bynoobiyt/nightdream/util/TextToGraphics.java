@@ -27,6 +27,8 @@ public class TextToGraphics implements Runnable {
 	private static final Font FONT_NOSPACE;
 	private static final Color BG_COLOR=Color.WHITE;
 	private static final Color FG_COLOR=new Color(0x212121);
+	private static final float FONT_SIZE_BODY=13F;
+	private static final float FONT_SIZE_NOSPACE=14F;
 	private static final Logger LOG=LoggerFactory.getLogger(TextToGraphics.class);
 	private static TextToGraphics executor=new TextToGraphics();
 	private static final Thread graphicsThread;
@@ -47,8 +49,8 @@ public class TextToGraphics implements Runnable {
 		} catch (IOException|FontFormatException e) {
 			LOG.warn("Error while loading fonts - Using Arial",e);
 		}
-		FONT_BODY=body.deriveFont(10F);
-		FONT_NOSPACE=heading.deriveFont(12F).deriveFont(Font.BOLD);
+		FONT_BODY=body.deriveFont(FONT_SIZE_BODY);
+		FONT_NOSPACE=heading.deriveFont(FONT_SIZE_NOSPACE).deriveFont(Font.BOLD);
 		graphicsThread=new Thread(executor);
 		graphicsThread.setDaemon(true);
 		graphicsThread.start();
