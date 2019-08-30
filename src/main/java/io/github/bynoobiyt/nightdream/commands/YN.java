@@ -7,10 +7,11 @@
 
 package io.github.bynoobiyt.nightdream.commands;
 
-import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,11 +29,11 @@ public class YN implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		try(Scanner scan=new Scanner(new BufferedInputStream(new URL("https://yesno.wtf/api").openConnection().getInputStream()), StandardCharsets.UTF_8.toString())){
-			String json=scan.nextLine();
+			JSONObject json=new JSONObject(scan.nextLine());
 			
-			String answer=GeneralUtils.getJSONString(json, "answer");
+			String answer=json.getString("answer");
 			answer=Character.toUpperCase(answer.charAt(0))+answer.substring(1);
-			String url=GeneralUtils.getJSONString(json, "image");
+			String url=json.getString("image");
 			event.getChannel().sendMessage(
 					new EmbedBuilder()
 					.setColor(0x212121)

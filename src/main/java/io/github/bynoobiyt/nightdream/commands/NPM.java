@@ -7,11 +7,14 @@
 
 package io.github.bynoobiyt.nightdream.commands;
 
-import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,22 +37,29 @@ public class NPM implements Command{
 		}
 		String url="http://registry.yarnpkg.com/"+args[0];
 		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(url).openConnection().getInputStream()), StandardCharsets.UTF_8.name())){
-			String json=scan.nextLine();
-			String scope;
-			if(args[0].startsWith("@")) {
-				scope=args[0].substring(1).split("/")[0];
-			}else {
-				scope="undefined";
+			JSONObject jsonObj=new JSONObject(scan.nextLine());
+			JSONObject versions=jsonObj.getJSONObject("versions");
+			JSONObject versionInfo=versions.getJSONObject(versions.keySet().stream().max((a,b)->a.compareTo(b)).get());
+			String keywordStr="<nothing>";
+			try{
+				JSONArray keywords=jsonObj.getJSONArray("keywords");
+				if(keywords.length()!=0) {
+					keywordStr=keywords.join(", ");
+				}
+			}catch(JSONException e) {
+				//handled by default
 			}
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0xfb3b49)
 			.setTitle("Result")
-			.addField(new Field("name", "`"+GeneralUtils.getJSONString(json, "name")+"`", true))
-			.addField(new Field("Description", GeneralUtils.getJSONString(json, "description"), true))
-			.addField(new Field("Current Version", GeneralUtils.getJSONString(json, "latest"), true))
-			.addField(new Field("Keywords", "`"+GeneralUtils.getMultipleJSONStrings(json, "keywords")+"`", true))
-			.addField(new Field("Author", GeneralUtils.getJSONString(json, "author\":{\"name"), true))
-			.addField(new Field("Scope", "`"+scope+"`", true));
+			.addField(new Field("name", "`"+jsonObj.getString("name")+"`", true))
+			.addField(new Field("Description", jsonObj.getString("description"), true))
+			.addField(new Field("Current Version", versionInfo.getString("version"), true))
+			.addField(new Field("Keywords", "`"+keywordStr+"`", true))
+			.addField(new Field("Author", "NPM says `"+jsonObj.getJSONArray("maintainers").getJSONObject(0).getString("name")+"` | package.json says "+versionInfo.getJSONObject("author").getString("name"), true));
+			if(args[0].startsWith("@")&&args[0].contains("/")) {
+				builder.addField(new Field("Scope", "`"+args[0].split("/")[0].substring(1)+"`", true));
+			}
 			
 			JDAUtils.msg(event.getChannel(), builder.build());
 		}catch(FileNotFoundException e) {

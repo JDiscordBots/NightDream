@@ -8,10 +8,12 @@
 package io.github.bynoobiyt.nightdream.commands;
 
 import io.github.bynoobiyt.nightdream.util.BotData;
-import io.github.bynoobiyt.nightdream.util.GeneralUtils;
 import io.github.bynoobiyt.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,15 +46,17 @@ public class Photo implements Command {
 				).openConnection().getInputStream()), StandardCharsets.UTF_8.toString())){
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0x212121);
-			String imgUrl=GeneralUtils.getJSONString(scan.nextLine(), "largeImageURL");
-			if("?".equals(imgUrl)) {
+			JSONArray hits=new JSONObject(scan.nextLine()).getJSONArray("hits");
+			if(hits.length()==0) {
 				builder.setTitle("<:IconProvide:553870022125027329> Nothing found")
                 .setDescription("Try something different.");
 			}else {
+				String imgUrl=hits.getJSONObject(0).getString("largeImageURL");
 				builder.setFooter("Results from Pixabay [https://pixabay.com]")
                 .setTitle("Result")
                 .setImage(imgUrl);
 			}
+			
 			event.getChannel().sendMessage(builder.build()).queue();
 		} catch (IOException e) {
 			event.getChannel().sendMessage("<:IconX:553868311960748044> Something went badly wrong - the server did not respond! Try again **in a few minutes**.").queue();

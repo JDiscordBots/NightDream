@@ -14,34 +14,6 @@ public class GeneralUtils {
 		//prevent instantiation
 	}
 	/**
-	 * gets the string value of the first occurrence of a key in a json String
-	 * @param json the JSON String
-	 * @param query the key to look for
-	 * @return the value of the first occurrence or <code>?</code> if nothing found
-	 */
-	public static String getJSONString(String json,String query) {
-		String str="\""+query+"\":\"";
-		if(json.indexOf(str) < 0) {
-			return "?";
-		}
-		int startIndex=json.indexOf(str)+str.length();
-		return json.substring(startIndex,json.indexOf('\"', startIndex));
-	}
-	/**
-	 * gets the string array value of the first occurrence of a key in a json String
-	 * @param json the JSON String
-	 * @param query the key to look for
-	 * @return the value of the first occurrence or <code>?</code> if nothing found
-	 */
-	public static String getMultipleJSONStrings(String json,String query) {
-		String str="\""+query+"\":[\"";
-		if(json.indexOf(str)<0) {
-			return "undefined";
-		}
-		int startIndex=json.indexOf(str)+str.length();
-		return json.substring(startIndex,json.indexOf("\"]", startIndex)).replace("\"", "").replace(",", ", ");
-	}
-	/**
 	 * calculates a random integer
 	 * @return the random integer
 	 */
