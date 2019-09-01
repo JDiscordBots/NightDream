@@ -53,7 +53,7 @@ public class Eval implements Command {
 		}
 		try {
 			onSuccess(se.eval(scriptBuilder.toString()),event);
-		} catch (ScriptException e) {
+		} catch (ScriptException|RuntimeException e) {
 			se.put(LATEST_EXCEPTION_KEY_NAME, e);
 			onError(e,event);
 		}
@@ -66,7 +66,7 @@ public class Eval implements Command {
 			event.getChannel().sendMessage("`undefined` or `null`").queue();
 		}
 	}
-	protected void onError(ScriptException e,GuildMessageReceivedEvent event) {
+	protected void onError(Exception e,GuildMessageReceivedEvent event) {
 		try(StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw)){
 			e.printStackTrace(pw);
