@@ -59,9 +59,14 @@ public class License implements Command{
 		}
 	}
 	private static void fillStringBuilderWithJSONArray(StringBuilder sb,JSONArray arr) {
-		for (Object object : arr) {
-			sb.append('\n').append(object);
+		if(arr.length()==0) {
+			sb.append("\n<nothing>");
+		}else {
+			for (Object object : arr) {
+				sb.append('\n').append(object);
+			}
 		}
+		
 	}
 	private static void addFieldWithJSONArrayInJSONObject(EmbedBuilder builder,JSONObject json,String jsonName,String fieldName) {
 		StringBuilder sb=new StringBuilder();
