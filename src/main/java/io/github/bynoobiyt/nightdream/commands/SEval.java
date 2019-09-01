@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageReaction;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import javax.script.ScriptException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,7 +23,7 @@ public class SEval extends Eval {
 	}
 	
 	@Override
-	protected void onError(ScriptException e, GuildMessageReceivedEvent event) {
+	protected void onError(Exception e, GuildMessageReceivedEvent event) {
 		final Message msg = event.getChannel().sendMessage("No...").complete();
 		msg.addReaction("\u274C").queue();
 		new Timer().schedule(new TimerTask() {

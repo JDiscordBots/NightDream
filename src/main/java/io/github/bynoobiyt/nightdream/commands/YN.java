@@ -31,7 +31,7 @@ public class YN implements Command {
 		try(Scanner scan=new Scanner(new BufferedInputStream(new URL("https://yesno.wtf/api").openConnection().getInputStream()), StandardCharsets.UTF_8.toString())){
 			JSONObject json=new JSONObject(scan.nextLine());
 			
-			String answer=json.getString("answer");
+			String answer=json.getString("answer")+"!";
 			answer=Character.toUpperCase(answer.charAt(0))+answer.substring(1);
 			String url=json.getString("image");
 			event.getChannel().sendMessage(

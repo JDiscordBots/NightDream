@@ -71,7 +71,7 @@ public class NPM implements Command{
 	}
 	@Override
 	public String help() {
-		return "Allows you to view info about an NPM package";
+		return "Allows you to view info about a npm package";
 	}
 	
 }

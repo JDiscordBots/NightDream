@@ -56,19 +56,22 @@ public class NightDream {
 				Game.watching(String)//watching...
 			*/
 			.setRequestTimeoutRetry(true);
-		//initialize listeners
-		Reflections ref = new Reflections("io.github.bynoobiyt.nightdream");
-		LOG.info("Loading Commands and Listeners...");
-		addCommandsAndListeners(ref, builder);
-		LOG.info("Loaded Commands and Listeners");
-		if(LOG.isDebugEnabled()) {
-			String cmdStr=CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", "));
-			LOG.debug("available Commands: {}",cmdStr);
-		}
+		
 		
 		try {
 			LOG.info("Logging in...");
 			JDA jda = builder.build();
+			
+			//initialize commands and listeners
+			Reflections ref = new Reflections("io.github.bynoobiyt.nightdream");
+			LOG.info("Loading Commands and Listeners...");
+			addCommandsAndListeners(ref, jda);
+			LOG.info("Loaded Commands and Listeners");
+			if(LOG.isDebugEnabled()) {
+				String cmdStr=CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", "));
+				LOG.debug("available Commands: {}",cmdStr);
+			}
+			
 			jda.awaitReady();
 			LOG.info("Logged in.");
 			((JDAImpl) jda).getGuildSetupController().clearCache();
@@ -87,7 +90,7 @@ public class NightDream {
 	 * @param ref The {@link Reflections} Object
 	 * @param jdaBuilder The Builder of the JDA
 	 */
-	private static void addCommandsAndListeners(Reflections ref,JDABuilder jdaBuilder) {
+	private static void addCommandsAndListeners(Reflections ref,JDA jda) {
 		addAction(ref, BotCommand.class,(cmdAsAnnotation,annotatedAsObject)->{
     		BotCommand cmdAsBotCommand = (BotCommand)cmdAsAnnotation;
     		Command cmd = (Command)annotatedAsObject;
@@ -97,7 +100,7 @@ public class NightDream {
 		});
 		addAction(ref, BotListener.class,(cmdAsAnnotation,annotatedAsObject)->{
     		ListenerAdapter listener = (ListenerAdapter) annotatedAsObject;
-			jdaBuilder.addEventListeners(listener);
+    		jda.addEventListener(listener);
     	});
 	}
 	/**
