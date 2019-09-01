@@ -75,7 +75,7 @@ public class Eval implements Command {
 			if(len > 1000) {
 				len = 1000;
 			}
-			event.getChannel().sendMessage("`ERROR` ```java\n" + exStr.substring(0, len) + "\n```").queue();
+			event.getChannel().sendMessage("`ERROR`\n```java\n" + exStr.substring(0, len) + "\n```").queue();
 		} catch (IOException ignored) {
 			LOG.error("Error within incorrect user input/eval execution error handling",e);
 		}
