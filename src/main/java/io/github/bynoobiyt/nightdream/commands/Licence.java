@@ -4,13 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -18,6 +18,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 @BotCommand("licence")
 public class Licence implements Command{
 
+	private static final Logger LOG=LoggerFactory.getLogger(Licence.class);
+	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length<1) {
@@ -51,7 +53,9 @@ public class Licence implements Command{
 		}catch (FileNotFoundException e) {
 			event.getChannel().sendMessage("No such license! Use the SPDX ID.").queue();
 		} catch (IOException e) {
-			e.printStackTrace();
+			event.getChannel().sendMessage("An Error occured - Please try again later").queue();
+			LOG.warn("Cannot load licence {}: {}",args[0],e.getClass().getName());
+			
 		}
 	}
 	private static void fillStringBuilderWithJSONArray(StringBuilder sb,JSONArray arr) {
