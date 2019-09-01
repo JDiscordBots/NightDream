@@ -56,19 +56,22 @@ public class NightDream {
 				Game.watching(String)//watching...
 			*/
 			.setRequestTimeoutRetry(true);
-		//initialize listeners
-		Reflections ref = new Reflections("io.github.bynoobiyt.nightdream");
-		LOG.info("Loading Commands and Listeners...");
-		addCommandsAndListeners(ref, builder);
-		LOG.info("Loaded Commands and Listeners");
-		if(LOG.isDebugEnabled()) {
-			String cmdStr=CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", "));
-			LOG.debug("available Commands: {}",cmdStr);
-		}
+		
 		
 		try {
 			LOG.info("Logging in...");
 			JDA jda = builder.build();
+			
+			//initialize commands and listeners
+			Reflections ref = new Reflections("io.github.bynoobiyt.nightdream");
+			LOG.info("Loading Commands and Listeners...");
+			addCommandsAndListeners(ref, builder);
+			LOG.info("Loaded Commands and Listeners");
+			if(LOG.isDebugEnabled()) {
+				String cmdStr=CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", "));
+				LOG.debug("available Commands: {}",cmdStr);
+			}
+			
 			jda.awaitReady();
 			LOG.info("Logged in.");
 			((JDAImpl) jda).getGuildSetupController().clearCache();
