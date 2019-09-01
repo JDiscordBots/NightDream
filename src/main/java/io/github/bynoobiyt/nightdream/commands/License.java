@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-@BotCommand("licence")
-public class Licence implements Command{
+@BotCommand("license")
+public class License implements Command{
 
-	private static final Logger LOG=LoggerFactory.getLogger(Licence.class);
+	private static final Logger LOG=LoggerFactory.getLogger(License.class);
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
