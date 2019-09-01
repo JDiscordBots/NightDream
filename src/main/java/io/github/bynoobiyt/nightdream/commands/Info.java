@@ -49,7 +49,7 @@ public class Info implements Command {
     			"Bot Info\n"
     			+ "\tIn %s guilds, serving %s users and %s bots.\n"
                 + "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map(id -> jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n"
-                + "\tJDA v4.0.0_39\n"
+                + "\tJDA v4.0.0_42\n"
                 + "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n"
                 + "\t(c) dan1st and Gehasstes %s, Release %s.\n "
                 + "\tThis is a copy of Daydream (https://gitlab.com/botstudio/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda), Year.now().getValue(), NightDream.VERSION
