@@ -15,7 +15,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-@BotCommand("telemetry")
+//@BotCommand("telemetry")
 public class Telemetry implements Command {
 	private static final Properties TELEMETRY_DATA=new Properties();
 	static {
