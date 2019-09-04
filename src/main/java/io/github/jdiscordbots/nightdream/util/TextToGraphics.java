@@ -1,5 +1,5 @@
 /*
- * Copyright (c) danthe1st and byNoobiYT 2019.
+ * Copyright (c) JDiscordBots 2019
  * File: TextToGraphics.java
  * Project: NightDream
  * Licenced under Boost Software License 1.0

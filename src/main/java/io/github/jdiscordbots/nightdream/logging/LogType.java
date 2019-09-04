@@ -1,8 +1,8 @@
 /*
- * Copyright (c) danthe1st and byNoobiYT 2019.
+ * Copyright (c) JDiscordBots 2019
  * File: LogType.java
  * Project: NightDream
- * Licenced under Boost Software License 1.0.
+ * Licenced under Boost Software License 1.0
  */
 
 package io.github.jdiscordbots.nightdream.logging;
