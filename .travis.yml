@@ -25,7 +25,7 @@ jobs:
           organization: "nightdream"
       script:
       - git fetch --unshallow
-      - sonar-scanner -Dsonar.projectKey=NightDream -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=src/ -Dsonar.java.binaries=build/classes
+      - sonar-scanner -Dsonar.projectKey=NightDream -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=src/ -Dsonar.java.binaries=target/ -Dsonar.java.libraries=target/
       if: type = push
     - stage: "Upload to Wiki"
       jdk:
