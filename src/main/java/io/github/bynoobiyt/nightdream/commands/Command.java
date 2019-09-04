@@ -29,7 +29,7 @@ public interface Command {
 	 * @param event The {@link GuildMessageReceivedEvent} of the incoming {@link Message}
 	 */
 	public default void executed(boolean success, GuildMessageReceivedEvent event) {
-		Telemetry.addTelemetry(getClass());
+		//Telemetry.addTelemetry(getClass());
 	}
 	/**
 	 * help for the Command<br>
