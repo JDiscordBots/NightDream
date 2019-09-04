@@ -1,31 +1,25 @@
 language: java
-before_install:
-  - gradle wrapper
 jobs:
   include:
     - stage: "compile with different Java versions"
       name: Java 8
       jdk:
       - openjdk8
-      install: true
-      script: ./gradlew assemble
+      script: mvn compile
     - name: Java 12
       jdk:
       - openjdk12
-      install: true
-      script: ./gradlew assemble
-    - stage: "check different Java versions"
-      name: Java 8
+      script: mvn compile
+    - stage: "static code analysis"
+      name: Spotbugs - Java 8
       jdk:
         - openjdk8
-      install: true
-      script: ./gradlew check
-    - name: Java 12
+      script: mvn spotbugs:check
+    - name: Spotbugs - Java 12
       jdk:
         - openjdk12
-      install: true
-      script: ./gradlew check
-    - stage: "scan with SonarLint and upload results to SonarCloud"
+      script: mvn spotbugs:check
+    - name: SonarLint/SonarCloud
       addons:
         sonarcloud:
           organization: "nightdream"

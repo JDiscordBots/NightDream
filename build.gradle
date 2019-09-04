@@ -28,7 +28,7 @@ dependencies {
     //for commands and listeners(to find annotated classes)
     compile 'org.reflections:reflections:0.9.11'
     
-    //should be the same as in io.github.bynoobiyt.nightdream.commands.Info
+    //should be the same as in io.github.jdiscordbots.nightdream.commands.Info
     compile 'net.dv8tion:JDA:4.0.0_42'
     
     //lyrics etc
@@ -49,7 +49,7 @@ repositories {
 
 jar {
   manifest { 
-    attributes "Main-Class": "io.github.bynoobiyt.nightdream.core.NightDream"
+    attributes "Main-Class": "io.github.jdiscordbots.nightdream.core.NightDream"
   }  
 
   from {
