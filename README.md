@@ -11,8 +11,7 @@ You can download NightDream [here](https://github.com/byNoobiYT/Nightdream/wiki/
 * Java 1.8.0_221
 
 ### Build your own NightDream instance
-* (optional) execute `gradlew clean` in the project directory
-* execute `gradlew jar` in the project directory
+* execute `mvn clean install package` in the project directory
 * the executeable JAR file is in the directory `build/libs`
 
 ## Invite Nightdream to your Server
