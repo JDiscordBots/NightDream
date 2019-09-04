@@ -88,7 +88,7 @@ public class NightDream {
 	/**
 	 * adds Commands and Listeners
 	 * @param ref The {@link Reflections} Object
-	 * @param jdaBuilder The Builder of the JDA
+	 * @param jda The Builder of the JDA
 	 */
 	private static void addCommandsAndListeners(Reflections ref,JDA jda) {
 		addAction(ref, BotCommand.class,(cmdAsAnnotation,annotatedAsObject)->{
