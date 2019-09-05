@@ -58,7 +58,7 @@ public class Telemetry implements Command {
 
 	@Override
 	public String help() {
-		return null;
+		return "shows telemetry data";
 	}
 
 }

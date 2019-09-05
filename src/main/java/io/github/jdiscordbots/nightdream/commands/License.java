@@ -18,8 +18,6 @@ import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

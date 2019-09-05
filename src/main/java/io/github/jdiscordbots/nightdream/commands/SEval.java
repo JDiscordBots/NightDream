@@ -40,5 +40,8 @@ public class SEval extends Eval {
 			}
 		}, 60000);
 	}
-
+	@Override
+	public String help() {
+		return super.help()+", but silently";
+	}
 }
