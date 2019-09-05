@@ -58,8 +58,14 @@ public class NDLogger {
 	public static void logWithoutModule(String message) {
 		getGlobalLogger().log(message);
 	}
+	public static void logWithoutModule(String message,Throwable throwable) {
+		getGlobalLogger().log(null,message,throwable);
+	}
 	public static void logWithoutModule(LogType level,String message) {
 		getGlobalLogger().log(level,message);
+	}
+	public static void logWithoutModule(LogType level,String message,Throwable throwable) {
+		getGlobalLogger().log(level,message,throwable);
 	}
 	public static void logWithModule(String module,String message) {
 		getGlobalLogger().log(message);
@@ -67,36 +73,51 @@ public class NDLogger {
 	public static void logWithModule(LogType level,String module,String message) {
 		getLogger(module).log(level,message);
 	}
+	public static void logWithModule(LogType level,String module,String message,Throwable throwable) {
+		getLogger(module).log(level,message,throwable);
+	}
 	public void log(String message) {
 		log(null,message);
 	}
-	public synchronized void log(LogType level,String message) {
-		
-		if(level==null) {
-			level=LogType.DEFAULT;
-		}
+	public void log(LogType level,String message,Throwable throwable) {
 		if(printer==null) {
-			System.out.print(String.format("%-6s",level.getPrefix())+"| "+message);
-			if(module!=null) {
-				System.out.print(" | "+module);
-			}
+			throwable.printStackTrace();
 		}else {
-			printer.print(String.format("%-6s",level.getPrefix()), Attribute.NONE, level.getfColor(), level.getbColor());
-			printer.clear();
-			printer.print("| ");
-			printer.print(message,Attribute.LIGHT,FColor.WHITE,BColor.NONE);
-			if(module!=null) {
+			synchronized (System.out) {
+				log(level,message);
+				throwable.printStackTrace(System.out);
 				printer.clear();
-				printer.print(" | ");
-				printer.print(module);
 			}
-			printer.clear();
-			
 		}
-		System.out.println();
+	}
+	public void log(LogType level,String message) {
+		synchronized (System.out) {
+			if(level==null) {
+				level=LogType.DEFAULT;
+			}
+			if(printer==null) {
+				System.out.print(String.format("%-6s",level.getPrefix())+"| "+message);
+				if(module!=null) {
+					System.out.print(" | "+module);
+				}
+			}else {
+				printer.print(String.format("%-6s",level.getPrefix()), Attribute.NONE, level.getfColor(), level.getbColor());
+				printer.clear();
+				printer.print("| ");
+				printer.print(message,Attribute.LIGHT,FColor.WHITE,BColor.NONE);
+				if(module!=null) {
+					printer.clear();
+					printer.print(" | ");
+					printer.print(module);
+				}
+				printer.clear();
+				
+			}
+			System.out.println();
+		}
 	}
 	
 	public static void main(String[] args) {
-		logWithModule(LogType.DONE, "TEST", "test message");
+		logWithModule(LogType.DONE, "TEST", "test message",new Exception());
 	}
 }
