@@ -49,7 +49,7 @@ public class NDLogger {
 	}
 
 	/**
-	 * @return a logger with no module name
+	 * @return a logger with no module name (global logger)
 	 */
 	public static NDLogger getGlobalLogger() {
 		return getLogger(null);

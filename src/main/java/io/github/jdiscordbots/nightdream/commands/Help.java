@@ -34,7 +34,7 @@ public class Help implements Command {
 			});
 		}else {
 			Set<Command> commandsShown=new HashSet<>();
-			builder.setTitle("Daydream Commands (Searching for " + String.join(", ", args) + ")");
+			builder.setTitle("Naydream Commands (Searching for " + String.join(", ", args) + ")");
 			boolean found=false;
 			for (String cmdName : args) {
 				Command cmd=commands.get(cmdName);
