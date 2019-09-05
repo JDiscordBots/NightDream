@@ -41,7 +41,7 @@ public class NPM implements Command{
 			JSONObject jsonObj=new JSONObject(scan.nextLine());
 			JSONObject versions=jsonObj.getJSONObject("versions");
 			Optional<String> infoHolder=versions.keySet().stream().max((a,b)->a.compareTo(b));
-			if(infoHolder==null) {
+			if(infoHolder.isPresent()) {
 				JDAUtils.errmsg(event.getChannel(), "No version info provided");
 				return;
 			}
