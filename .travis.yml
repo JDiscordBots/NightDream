@@ -5,10 +5,12 @@ jobs:
       name: Java 8
       jdk:
       - openjdk8
+      install: true
       script: mvn compile
     - name: Java 12
       jdk:
       - openjdk12
+      install: true
       script: mvn compile
     - stage: "static code analysis"
       name: Spotbugs - Java 8
