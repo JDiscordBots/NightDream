@@ -55,7 +55,7 @@ public class Fixed implements Command {
 
 	@Override
 	public String help() {
-		return null;
+		return "Reports a bug as fixed";
 	}
 
 	@Override

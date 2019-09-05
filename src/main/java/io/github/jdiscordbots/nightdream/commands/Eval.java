@@ -82,7 +82,7 @@ public class Eval implements Command {
 	}
 	@Override
 	public String help() {
-		return null;
+		return "Evaluates JS Code within Java (why JS????????)";
 	}
 
 }

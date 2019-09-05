@@ -33,7 +33,7 @@ public class Activity implements Command {
 
     @Override
     public String help() {
-        return null;
+        return "Changes the bot's activity";
     }
 
     @Override

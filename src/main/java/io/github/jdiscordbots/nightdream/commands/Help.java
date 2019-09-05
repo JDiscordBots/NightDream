@@ -8,12 +8,12 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.core.CommandHandler;
-import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
+import java.util.Map;
 
 @BotCommand("help")
 public class Help implements Command {
@@ -21,16 +21,40 @@ public class Help implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		EmbedBuilder builder=new EmbedBuilder().setColor(Color.white);
-		builder.setTitle("Nightdream Commands");
-		CommandHandler.getCommands().forEach((k,v)->{
-			String help=v.help();
-			if(help!=null) {
-				builder.addField(new Field(k, v.help(), true));
+		Map<String, Command> commands = CommandHandler.getCommands();
+		if(args.length==0) {
+			builder.setTitle("Nightdream Commands");
+			commands.forEach((k,v)->{
+				showHelp(builder, event, k, v);
+			});
+		}else {
+			builder.setTitle("Daydream Commands (Searching for " + String.join(", ", args) + ")");
+			boolean found=false;
+			for (String cmdName : args) {
+				Command cmd=commands.get(cmdName);
+				if(cmd!=null) {
+					boolean success=showHelp(builder, event, cmdName, cmd);
+					if(!found&&success) {
+						found=true;
+					}
+				}
+				if(!found) {
+					builder.setDescription("Nothing found");
+				}
 			}
-		});
-		JDAUtils.msg(event.getChannel(), builder.build());
+		}
+		event.getChannel().sendMessage(builder.build()).queue();
 	}
-
+	private boolean showHelp(EmbedBuilder builder, GuildMessageReceivedEvent event,String name, Command cmd) {
+		if(cmd.allowExecute(new String[0], event)) {
+			String help=cmd.help();
+			if(help!=null) {
+				builder.addField(new Field(name, cmd.help(), true));
+				return true;
+			}
+		}
+		return false;
+	}
 	@Override
 	public String help() {
 		return "¯\\_(ツ)_/¯";

@@ -48,7 +48,7 @@ public class Snow implements Command {
 	}
 	@Override
 	public String help() {
-		return null;
+		return "Makes it snow! (Snowflake uilities)";
 	}
 	private static String generate() {
 		long diff=System.currentTimeMillis()-EPOCH;

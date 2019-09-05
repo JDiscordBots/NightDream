@@ -75,7 +75,10 @@ public class Reload implements Command {
 
 	@Override
 	public String help() {
-		return null;
+		return "reconnects (`reload login`/`reload reconnect`),\n"
+				+ "reloads settings for the current guild(`reload guild`) "
+				+ "or everything(`reload props`)\n"
+				+ "or deletes the message cache";
 	}
 
 }
