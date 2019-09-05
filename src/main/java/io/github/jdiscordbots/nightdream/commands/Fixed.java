@@ -7,6 +7,8 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -19,7 +21,6 @@ import java.awt.*;
 @BotCommand("fixed")
 public class Fixed implements Command {
 
-	private static final Logger LOG=LoggerFactory.getLogger(Fixed.class);
 	private static final String DISABLED_INVALID_CHAN = "Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.";
 	
 	@Override
@@ -62,15 +63,15 @@ public class Fixed implements Command {
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		if (BotData.getFixedBugsChannel() == null) {
 			BotData.setFixedBugsChannel("");
-			LOG.warn(DISABLED_INVALID_CHAN);
+			NDLogger.logWithoutModule(LogType.WARN, DISABLED_INVALID_CHAN);
 			return false;
 		}
 		try {
 			if(event.getJDA().getTextChannelById(BotData.getFixedBugsChannel())==null) {
-				LOG.warn(DISABLED_INVALID_CHAN);
+				NDLogger.logWithModule(LogType.WARN, "Commands",  DISABLED_INVALID_CHAN);
 			}
 		} catch (NumberFormatException e) {
-			LOG.warn(DISABLED_INVALID_CHAN);
+			NDLogger.logWithoutModule(LogType.WARN, DISABLED_INVALID_CHAN);
 			return false;
 		}
 		return JDAUtils.checkOwner(event);

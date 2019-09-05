@@ -7,6 +7,8 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -23,8 +25,6 @@ import java.util.Scanner;
 
 @BotCommand("yn")
 public class YN implements Command {
-	
-	private static final Logger LOG=LoggerFactory.getLogger(YN.class);
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -42,7 +42,7 @@ public class YN implements Command {
 					.build()).queue();
 		} catch (IOException e) {
 			JDAUtils.errmsg(event.getChannel(), "something went wrong.");
-			LOG.warn("IO Error while executing a yes-no query",e);
+			NDLogger.logWithoutModule(LogType.ERROR, "IO Error while executing a yes-no query", e);
 		}
 	}
 

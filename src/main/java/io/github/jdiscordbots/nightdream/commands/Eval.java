@@ -7,6 +7,8 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.slf4j.Logger;
@@ -24,7 +26,6 @@ public class Eval implements Command {
 
 	private static final ScriptEngine se;
 	private static final String LATEST_EXCEPTION_KEY_NAME="err";
-	private static final Logger LOG=LoggerFactory.getLogger(Eval.class);
 	
 	static {
 		se = new ScriptEngineManager().getEngineByName("Nashorn");
@@ -32,7 +33,7 @@ public class Eval implements Command {
         try {
 			se.eval("System=System.static");
 		} catch (ScriptException e) {
-			LOG.warn("An Exception occurred while setting up System in eval", e);
+			NDLogger.logWithoutModule(LogType.WARN, "An Exception occurred while setting up System in eval", e);
 		}
 	}
 	@Override
@@ -77,7 +78,7 @@ public class Eval implements Command {
 			}
 			event.getChannel().sendMessage("`ERROR`\n```java\n" + exStr.substring(0, len) + "\n```").queue();
 		} catch (IOException ignored) {
-			LOG.error("Error within incorrect user input/eval execution error handling",e);
+			NDLogger.logWithoutModule(LogType.ERROR, "Error within incorrect user input/eval execution error handling", e);
 		}
 	}
 	@Override
