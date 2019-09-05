@@ -15,7 +15,9 @@ import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @BotCommand("help")
 public class Help implements Command {
@@ -31,19 +33,29 @@ public class Help implements Command {
 				showHelp(builder, event, k, v);
 			});
 		}else {
+			Set<Command> commandsShown=new HashSet<>();
 			builder.setTitle("Daydream Commands (Searching for " + String.join(", ", args) + ")");
 			boolean found=false;
 			for (String cmdName : args) {
 				Command cmd=commands.get(cmdName);
+				boolean success=false;
 				if(cmd!=null) {
-					boolean success=showHelp(builder, event, cmdName, cmd);
+					success=showHelp(builder, event, cmdName, cmd);
 					if(!found&&success) {
 						found=true;
 					}
 				}
-				if(!found) {
-					builder.setDescription("Nothing found");
+				if(!success) {
+					commands.forEach((k,v)->{
+						if(k.startsWith(cmdName)&&!commandsShown.contains(v)) {
+							showHelp(builder, event, k, v);
+							commandsShown.add(v);
+						}
+					});
 				}
+			}
+			if(!found) {
+				builder.setDescription("Nothing found");
 			}
 		}
 		event.getChannel().sendMessage(builder.build()).queue();
