@@ -68,7 +68,7 @@ public class NDLogger {
 		getGlobalLogger().log(level,message,throwable);
 	}
 	public static void logWithModule(String module,String message) {
-		getGlobalLogger().log(message);
+		getLogger(module).log(message);
 	}
 	public static void logWithModule(LogType level,String module,String message) {
 		getLogger(module).log(level,message);
