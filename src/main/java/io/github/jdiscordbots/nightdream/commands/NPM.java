@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.Scanner;
 
 @BotCommand("npm")
@@ -39,7 +40,13 @@ public class NPM implements Command{
 		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(url).openConnection().getInputStream()), StandardCharsets.UTF_8.name())){
 			JSONObject jsonObj=new JSONObject(scan.nextLine());
 			JSONObject versions=jsonObj.getJSONObject("versions");
-			JSONObject versionInfo=versions.getJSONObject(versions.keySet().stream().max((a,b)->a.compareTo(b)).get());
+			Optional<String> infoHolder=versions.keySet().stream().max((a,b)->a.compareTo(b));
+			if(infoHolder==null) {
+				JDAUtils.errmsg(event.getChannel(), "No version info provided");
+				return;
+			}
+			JSONObject versionInfo=versions.getJSONObject(infoHolder.get());
+			
 			String keywordStr="<nothing>";
 			try{
 				JSONArray keywords=jsonObj.getJSONArray("keywords");

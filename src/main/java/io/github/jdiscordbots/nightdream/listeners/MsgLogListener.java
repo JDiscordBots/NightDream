@@ -58,7 +58,9 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 				LOG.info("A message that has not been cached was deleted.");
 			}else {
 				messages.remove(event.getMessageId());
-				cachedMessageIDs.remove(event.getMessageId());
+				if(!cachedMessageIDs.remove(event.getMessageId())) {
+					LOG.info("A message that has been cached but was not markedd to be cached was deleted.");
+				}
 				EmbedBuilder builder=new EmbedBuilder();
 				builder.setColor(0x212121)
 				.setTitle("Deleted Message")
