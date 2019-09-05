@@ -7,6 +7,8 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -26,8 +28,6 @@ import java.util.Scanner;
 
 @BotCommand("photo")
 public class Photo implements Command {
-
-	private static final Logger LOG=LoggerFactory.getLogger(Photo.class);
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -37,7 +37,7 @@ public class Photo implements Command {
 		}
 		if("".equals(BotData.getPixaBayAPIKey())) {
 			JDAUtils.errmsg(event.getChannel(),"This command is disabled because there is no API Key set.");
-			LOG.warn("no Pixabay API Key provided");
+			NDLogger.logWithModule(LogType.WARN, "Commands", "no Pixabay API Key provided");
 			return;
 		}
 		event.getChannel().sendTyping();
@@ -60,7 +60,7 @@ public class Photo implements Command {
 			event.getChannel().sendMessage(builder.build()).queue();
 		} catch (IOException e) {
 			event.getChannel().sendMessage("<:IconX:553868311960748044> Something went badly wrong - the server did not respond! Try again **in a few minutes**.").queue();
-			LOG.error("cannot load photo",e);
+			NDLogger.logWithoutModule(LogType.ERROR, "cannot load photo", e);
 		}
 	}
 

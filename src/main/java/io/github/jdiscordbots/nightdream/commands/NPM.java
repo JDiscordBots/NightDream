@@ -7,6 +7,8 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
@@ -28,8 +30,6 @@ import java.util.Scanner;
 
 @BotCommand("npm")
 public class NPM implements Command{
-
-	private static final Logger LOG=LoggerFactory.getLogger(NPM.class);
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -73,7 +73,7 @@ public class NPM implements Command{
 			JDAUtils.errmsg(event.getChannel(), "Not found");
 		}catch (IOException e) {
 			JDAUtils.errmsg(event.getChannel(), "An error occured.");
-			LOG.warn("IO Error while executing an npm query",e);
+			NDLogger.logWithModule(LogType.WARN, "Commands", "IO Error while executing a npm query", e);
 		}
 	}
 	@Override
