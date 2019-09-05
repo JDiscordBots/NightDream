@@ -62,5 +62,4 @@ public class Help implements Command {
 	public String help() {
 		return "¯\\_(ツ)_/¯";
 	}
-
 }
