@@ -18,6 +18,7 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.omg.CORBA.BooleanHolder;
 
@@ -55,15 +56,15 @@ public class Help implements Command {
 				return true;
 			}
 		}
-		BooleanHolder success=new BooleanHolder();
+		AtomicBoolean success=new AtomicBoolean();
 		commands.forEach((k,v)->{
 			if(k.startsWith(cmdName)&&!commandsShown.contains(v)) {
 				showHelp(builder, event, k, v);
 				commandsShown.add(v);
-				success.value=true;
+				success.set(true);
 			}
 		});
-		return success.value;
+		return success.get();
 	}
 	private boolean showHelp(EmbedBuilder builder, GuildMessageReceivedEvent event,String name, Command cmd) {
 		if(builder.getFields().size()>=25) {
