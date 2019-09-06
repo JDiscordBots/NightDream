@@ -19,6 +19,7 @@ import java.awt.*;
 public class BugReport implements Command {
 
 	private static final String DISABLED_INVALID_CHAN="Bug report command is disabled. To enable it, please insert a valid channel id into NightDream.properties.";
+	private static final NDLogger LOG=NDLogger.getLogger("Commands");
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -44,20 +45,20 @@ public class BugReport implements Command {
 		if (BotData.getBugReportChannel() == null||"".equals(BotData.getBugReportChannel())) {
 			BotData.setBugReportChannel("");
 			if(args!=null) {
-				NDLogger.logWithModule(LogType.WARN, "Commands", DISABLED_INVALID_CHAN);
+				LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
 			}
 			return false;
 		}
 		try {
 			if(event.getJDA().getTextChannelById(BotData.getBugReportChannel())==null) {
 				if(args!=null) {
-					NDLogger.logWithModule(LogType.WARN, "Commands", DISABLED_INVALID_CHAN);
+					LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
 				}
 				return false;
 			}
 		} catch (NumberFormatException e) {
 			if(args!=null) {
-				NDLogger.logWithModule(LogType.WARN, "Commands", DISABLED_INVALID_CHAN);
+				LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
 			}
 			return false;
 		}

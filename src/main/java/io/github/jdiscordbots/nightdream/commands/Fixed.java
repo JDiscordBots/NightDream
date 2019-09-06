@@ -20,6 +20,8 @@ import java.awt.*;
 public class Fixed implements Command {
 
 	private static final String DISABLED_INVALID_CHAN = "Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.";
+	private static final NDLogger LOG=NDLogger.getLogger("Commands");
+	
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -62,20 +64,20 @@ public class Fixed implements Command {
 		if (BotData.getFixedBugsChannel() == null||"".equals(BotData.getBugReportChannel())) {
 			BotData.setFixedBugsChannel("");
 			if(args!=null) {
-				NDLogger.logWithModule(LogType.WARN, "Commands", DISABLED_INVALID_CHAN);
+				LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
 			}
 			return false;
 		}
 		try {
 			if(event.getJDA().getTextChannelById(BotData.getFixedBugsChannel())==null) {
 				if(args!=null) {
-					NDLogger.logWithModule(LogType.WARN, "Commands", DISABLED_INVALID_CHAN);
+					LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
 				}
 				return false;
 			}
 		} catch (NumberFormatException e) {
 			if(args!=null) {
-				NDLogger.logWithModule(LogType.WARN, "Commands", DISABLED_INVALID_CHAN);
+				LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
 			}
 			return false;
 		}

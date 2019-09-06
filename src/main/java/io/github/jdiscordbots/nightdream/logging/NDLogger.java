@@ -18,7 +18,7 @@ import com.diogonunes.jcdp.color.api.Ansi.FColor;
 public class NDLogger {
 	
 	private static final String PROP_PREFIX="io.github.jdiscordbots.nightdream.logging.";
-	private static Map<String, NDLogger> loggers=new HashMap<String, NDLogger>();
+	private static Map<String, NDLogger> loggers=new HashMap<>();
 	private static ColoredPrinter printer;
 	
 	private static final int DEFAULT_LEVEL; //TODO actually use it

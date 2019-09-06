@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.Guild;
 public class PropertyStorage implements Storage {
 	
 	private static final NDLogger LOG=NDLogger.getLogger("storage");
+	private static final String FILE_SUFFIX=".properties";
 	
 	private Properties defaultProps;
 	private Properties globalProps;
@@ -44,7 +45,7 @@ public class PropertyStorage implements Storage {
 		}else {
 			Properties defaults=new Properties();
 			defaults.setProperty(key, defaultValue);
-			unitProps = loadPropertiesWithoutGenerating(unit+".properties",defaults);
+			unitProps = loadPropertiesWithoutGenerating(unit+FILE_SUFFIX,defaults);
 		}
 		return unitProps.getProperty(key);
 	}
@@ -55,10 +56,10 @@ public class PropertyStorage implements Storage {
 		if(units.containsKey(unit)) {
 			props=units.get(unit);
 		}else {
-			props = loadPropertiesWithoutGenerating(unit+".properties",new Properties());
+			props = loadPropertiesWithoutGenerating(unit+FILE_SUFFIX,new Properties());
 		}
 		props.setProperty(key, value);
-		saveProperties(unit+".properties", props, "");
+		saveProperties(unit+FILE_SUFFIX, props, "");
 	}
 	@Override
 	public void remove(String unit, String key) {
@@ -66,10 +67,10 @@ public class PropertyStorage implements Storage {
 		if(units.containsKey(unit)) {
 			props=units.get(unit);
 		}else {
-			props = loadPropertiesWithoutGenerating(unit+".properties",new Properties());
+			props = loadPropertiesWithoutGenerating(unit+FILE_SUFFIX,new Properties());
 		}
 		if(props.remove(key)!=null) {
-			saveProperties(unit+".properties", props, "");
+			saveProperties(unit+FILE_SUFFIX, props, "");
 		}
 	}
 	@Override
@@ -121,7 +122,7 @@ public class PropertyStorage implements Storage {
 	 * @return the Properties
 	 */
 	private Properties loadGuildSpecificProperties(Guild g) {
-		return loadPropertiesWithoutGenerating("Guild"+g.getId()+".properties", getDefaultProperties());
+		return loadPropertiesWithoutGenerating("Guild"+g.getId()+FILE_SUFFIX, getDefaultProperties());
 	}
 	/**
 	 * saves all the Properties of a Guild
@@ -129,7 +130,7 @@ public class PropertyStorage implements Storage {
 	 * @param g the {@link Guild}
 	 */
 	private void saveGuildSpecificProperties(Properties props,Guild g) {
-		saveProperties("Guild"+g.getId()+".properties", props, "Guild specific Properties for Guild "+g.getName());
+		saveProperties("Guild"+g.getId()+FILE_SUFFIX, props, "Guild specific Properties for Guild "+g.getName());
 	}
 	/**
 	 * saves all the Properties of all {@link Guild}s<br>

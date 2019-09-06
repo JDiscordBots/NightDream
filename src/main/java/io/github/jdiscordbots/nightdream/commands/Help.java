@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.omg.CORBA.BooleanHolder;
+
 @BotCommand("help")
 public class Help implements Command {
 
@@ -29,36 +31,39 @@ public class Help implements Command {
 		Map<String, Command> commands = CommandHandler.getCommands();
 		if(args.length==0) {
 			builder.setTitle("Nightdream Commands");
-			commands.forEach((k,v)->{
-				showHelp(builder, event, k, v);
-			});
+			commands.forEach((k,v)->showHelp(builder, event, k, v));
 		}else {
 			Set<Command> commandsShown=new HashSet<>();
 			builder.setTitle("Nightdream Commands (Searching for " + String.join(", ", args) + ")");
 			boolean found=false;
 			for (String cmdName : args) {
-				Command cmd=commands.get(cmdName);
-				boolean success=false;
-				if(cmd!=null) {
-					success=showHelp(builder, event, cmdName, cmd);
-					if(!found&&success) {
-						found=true;
-					}
-				}
-				if(!success) {
-					commands.forEach((k,v)->{
-						if(k.startsWith(cmdName)&&!commandsShown.contains(v)) {
-							showHelp(builder, event, k, v);
-							commandsShown.add(v);
-						}
-					});
+				boolean success=showResults(builder, event, commands, commandsShown, cmdName);
+				if(!found) {
+					found=success;
 				}
 			}
-			if(!found&&commandsShown.isEmpty()) {
+			if(!found) {
 				builder.setDescription("Nothing found");
 			}
 		}
 		event.getChannel().sendMessage(builder.build()).queue();
+	}
+	private boolean showResults(EmbedBuilder builder, GuildMessageReceivedEvent event,Map<String, Command> commands,Set<Command> commandsShown,String cmdName) {
+		Command cmd=commands.get(cmdName);
+		if(cmd!=null) {
+			if(showHelp(builder, event, cmdName, cmd)) {
+				return true;
+			}
+		}
+		BooleanHolder success=new BooleanHolder();
+		commands.forEach((k,v)->{
+			if(k.startsWith(cmdName)&&!commandsShown.contains(v)) {
+				showHelp(builder, event, k, v);
+				commandsShown.add(v);
+				success.value=true;
+			}
+		});
+		return success.value;
 	}
 	private boolean showHelp(EmbedBuilder builder, GuildMessageReceivedEvent event,String name, Command cmd) {
 		if(builder.getFields().size()>=25) {

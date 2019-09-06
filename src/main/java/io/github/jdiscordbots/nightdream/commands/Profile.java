@@ -33,6 +33,8 @@ public class Profile implements Command {
 	private static final String NAME_CMD="name";
 	private static final String LINK_CMD="link";
 	
+	private static final String STORAGE_UNIT="profile";
+	
 	private static final Pattern LINK_REGEX=Pattern.compile("https?://([A-Za-z0-9+-].*)?([.].+)|/.*");
 	private static final Pattern DIFFERENT_LINKS_SPLITTER=Pattern.compile("\\|\\|");
 	private static final Pattern LINK_NAME_SPLITTER=Pattern.compile("\\|");
@@ -103,13 +105,13 @@ public class Profile implements Command {
 		return getProp(user,name,"");
 	}
 	private static String getProp(User user,String name,String defaultProp) {
-		return BotData.STORAGE.read("profile", user.getId()+"."+name,defaultProp);
+		return BotData.STORAGE.read(STORAGE_UNIT, user.getId()+"."+name,defaultProp);
 	}
 	private static void setProp(User user,String name,String value) {
-		BotData.STORAGE.write("profile", user.getId()+"."+name, value);
+		BotData.STORAGE.write(STORAGE_UNIT, user.getId()+"."+name, value);
 	}
 	private static void unsetProp(User user,String name) {
-		BotData.STORAGE.remove("profile", user.getId()+"."+name);
+		BotData.STORAGE.remove(STORAGE_UNIT, user.getId()+"."+name);
 	}
 	private static void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {
