@@ -10,6 +10,8 @@ package io.github.jdiscordbots.nightdream.core;
 import io.github.jdiscordbots.nightdream.commands.BotCommand;
 import io.github.jdiscordbots.nightdream.commands.Command;
 import io.github.jdiscordbots.nightdream.listeners.BotListener;
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
@@ -19,8 +21,6 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.internal.JDAImpl;
 import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.lang.annotation.Annotation;
@@ -33,7 +33,9 @@ public class NightDream {
 	private static final String ANNOTATED_WITH=" is annotated with @";
 	public static final String VERSION = "0.0.4";
 	
-	private static final Logger LOG=LoggerFactory.getLogger(NightDream.class);
+	private static final NDLogger LOG=NDLogger.getLogger("System");
+	private static final NDLogger CMD_CTL_LOG=NDLogger.getLogger("Command Handler");
+	private static final NDLogger DISCORD_CTL_LOG=NDLogger.getLogger("Discord");
 	
 	public static void main(String[] args) {
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
@@ -59,28 +61,24 @@ public class NightDream {
 		
 		
 		try {
-			LOG.info("Logging in...");
+			DISCORD_CTL_LOG.log(LogType.INFO, "Logging in...");
 			JDA jda = builder.build();
 			
 			//initialize commands and listeners
 			Reflections ref = new Reflections("io.github.jdiscordbots.nightdream");
-			LOG.info("Loading Commands and Listeners...");
+			CMD_CTL_LOG.log(LogType.INFO,"Loading Commands and Listeners...");
 			addCommandsAndListeners(ref, jda);
-			LOG.info("Loaded Commands and Listeners");
-			if(LOG.isDebugEnabled()) {
-				String cmdStr=CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", "));
-				LOG.debug("available Commands: {}",cmdStr);
-			}
-			
+			CMD_CTL_LOG.log(LogType.INFO,"Loaded Commands and Listeners");
+			CMD_CTL_LOG.log(LogType.DEBUG,"available Commands: "+CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", ")));
 			jda.awaitReady();
-			LOG.info("Logged in.");
+			DISCORD_CTL_LOG.log(LogType.INFO, "Logged in.");
 			((JDAImpl) jda).getGuildSetupController().clearCache();
 		} catch (final LoginException e) {
-			LOG.error("The entered token is not valid!");
+			DISCORD_CTL_LOG.log(LogType.ERROR, "The entered token is not valid!");
 		} catch (final IllegalArgumentException e) {
-			LOG.error("There is no token entered!");
+			DISCORD_CTL_LOG.log(LogType.ERROR, "There is no token entered!");
 		} catch (final InterruptedException e) {
-			LOG.error("The main thread got interrupted while logging in",e);
+			NDLogger.getGlobalLogger().log(LogType.ERROR,"The main thread got interrupted while logging in",e);
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -127,9 +125,6 @@ public class NightDream {
         }
     }
 	private static void addActionWarn(Class<?> cl,Class<? extends Annotation> annotClass,String err) {
-		if(LOG.isWarnEnabled()) {
-			String msg=cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but "+err;
-			LOG.warn(msg);
-		}
+		LOG.log(LogType.WARN,cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but "+err);
 	}
 }

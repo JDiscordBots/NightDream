@@ -8,11 +8,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.github.jdiscordbots.nightdream.commands.Command;
 import io.github.jdiscordbots.nightdream.core.CommandParser.CommandContainer;
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -25,7 +24,7 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 public class CommandHandler {
 	private static final Map<String, Command> commands = new HashMap<>();
 	
-	private static final Logger LOG=LoggerFactory.getLogger(CommandHandler.class);
+	private static final NDLogger LOG=NDLogger.getLogger("CommandSystem");
 	
 	private static final LevenshteinDistance distCalculator=LevenshteinDistance.getDefaultInstance();
 	
@@ -51,7 +50,7 @@ public class CommandHandler {
 				try {
 					commands.get(cmd.invoke.toLowerCase()).action(cmd.args, cmd.event);
 				} catch (RuntimeException e) {
-					LOG.warn("An exception while executing the command "+cmd.event.getMessage().getContentRaw(),e);
+					LOG.log(LogType.WARN,"An exception while executing the command "+cmd.event.getMessage().getContentRaw(),e);
 					save = false;
 				}
 			}

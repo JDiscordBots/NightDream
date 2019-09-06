@@ -7,22 +7,19 @@
 
 package io.github.jdiscordbots.nightdream.util;
 
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.TaggedImage;
 import net.explodingbush.ksoftapi.enums.ImageTag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class KSoftUtil {
 	
 	private static KSoftAPI api;
 	
-	private static final Logger LOG=LoggerFactory.getLogger(KSoftUtil.class);
-	
 	static {
 		String token=BotData.getKSoftToken();
 		if("".equals(token)) {
-			LOG.warn("no ksoft token defined");
+			NDLogger.logWithModule("KSoft", "no ksoft token defined");
 			api=null;
 		}else {
 			api=new KSoftAPI(token);

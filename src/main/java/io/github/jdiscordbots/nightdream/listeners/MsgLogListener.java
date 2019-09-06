@@ -7,6 +7,8 @@
 
 package io.github.jdiscordbots.nightdream.listeners;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -15,8 +17,6 @@ import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -37,7 +37,7 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 	
 	private Map<String, Message> messages=new HashMap<>();
 	private BlockingQueue<String> cachedMessageIDs=new LinkedBlockingQueue<>();
-	private static final Logger LOG=LoggerFactory.getLogger(MsgLogListener.class);
+	private static final NDLogger LOG=NDLogger.getLogger("Message Log");
 	private static final Pattern SIZE_SPLIT=Pattern.compile("\\	?size");
 	
 	public void clearCache() {
@@ -55,11 +55,11 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 		if(!"".equals(BotData.getMsgLogChannel(event.getGuild()))) {
 			Message msg=messages.get(event.getMessageId());
 			if(msg==null) {
-				LOG.info("A message that has not been cached was deleted.");
+				LOG.log(LogType.INFO,"A message that has not been cached was deleted.");
 			}else {
 				messages.remove(event.getMessageId());
 				if(!cachedMessageIDs.remove(event.getMessageId())) {
-					LOG.info("A message that has been cached but was not markedd to be cached was deleted.");
+					LOG.log(LogType.INFO,"A message that has been cached but was not markedd to be cached was deleted.");
 				}
 				EmbedBuilder builder=new EmbedBuilder();
 				builder.setColor(0x212121)

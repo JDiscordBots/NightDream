@@ -14,15 +14,14 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
+
 public class JDAUtils {
 	
-	private static final Logger LOG=LoggerFactory.getLogger(JDAUtils.class);
-
 	private JDAUtils() {
 		//prevent instantiation
 	}
@@ -69,8 +68,7 @@ public class JDAUtils {
 		try {
 			return channel.sendMessage(message).complete();
 		} catch (InsufficientPermissionException e) {
-			LOG.trace("Cannot send Message \"{}\" in channel {}[{}] because of a {}",
-					message.getDescription(),channel.getName(),channel.getGuild().getName(),e.getClass().getSimpleName());
+			NDLogger.logWithModule(LogType.DEBUG,"message Sender", "Cannot send Message \""+message.getDescription()+"\" in channel "+channel.getName()+"["+channel.getGuild().getName()+"]",e);
 			return null;
 		}
 	}
