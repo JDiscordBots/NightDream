@@ -23,7 +23,7 @@ public class Activity implements Command {
         for (String arg : args) {
             builder.append(arg).append(" ");
         }
-        BotData.setGlobalProperty("game", builder.toString());
+        BotData.setGame(builder.toString());
         builder.insert(0, BotData.getDefaultPrefix() + "help | " );
         String gameName = builder.toString();
         event.getJDA().getPresence().setActivity(playing(gameName));

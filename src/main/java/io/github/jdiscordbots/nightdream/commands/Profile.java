@@ -16,16 +16,12 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Properties;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @BotCommand("profile")
 public class Profile implements Command {
-	private static Properties props;
-	
 	private static final String COLOR_PROP_NAME="color";
 	private static final String DESC_PROP_NAME="description";
 	private static final String LINK_PROP_NAME="links";
@@ -41,16 +37,6 @@ public class Profile implements Command {
 	private static final Pattern DIFFERENT_LINKS_SPLITTER=Pattern.compile("\\|\\|");
 	private static final Pattern LINK_NAME_SPLITTER=Pattern.compile("\\|");
 	
-	static {
-		reload();
-	}
-	
-	public static void reload() {
-		props=BotData.loadProperties("Profiles.properties", new HashMap<>(), "Profile data");
-	}
-	private static void save() {
-		BotData.saveProperties("Profiles.properties", props, "Profile data");
-	}
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -117,15 +103,13 @@ public class Profile implements Command {
 		return getProp(user,name,"");
 	}
 	private static String getProp(User user,String name,String defaultProp) {
-		return props.getProperty(user.getId()+"."+name,defaultProp);
+		return BotData.STORAGE.read("profile", user.getId()+"."+name,defaultProp);
 	}
 	private static void setProp(User user,String name,String value) {
-		props.setProperty(user.getId()+"."+name, value);
-		save();
+		BotData.STORAGE.write("profile", user.getId()+"."+name, value);
 	}
 	private static void unsetProp(User user,String name) {
-		props.remove(user.getId()+"."+name);
-		save();
+		BotData.STORAGE.remove("profile", user.getId()+"."+name);
 	}
 	private static void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {

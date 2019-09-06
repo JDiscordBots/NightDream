@@ -37,7 +37,7 @@ public class NightDream {
 	
 	public static void main(String[] args) {
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
-			.setToken(BotData.getGlobalProperty("token"))
+			.setToken(BotData.getToken())
 			.setAutoReconnect(true) //should the Bot reconnect?
 			.setStatus(OnlineStatus.ONLINE) //the online Status
 			/*	possible statuses:
@@ -48,7 +48,7 @@ public class NightDream {
 				OnlineStatus.OFFLINE
 				OnlineStatus.UNKNOWN
 			*/
-			.setActivity(Activity.playing(BotData.getDefaultPrefix() + "help | " + BotData.getGlobalProperty("game"))) //the name of the game the Bot is "playing"
+			.setActivity(Activity.playing(BotData.getDefaultPrefix() + "help | " + BotData.getGame())) //the name of the game the Bot is "playing"
 			/*
 				Game.playing(String)//playing...
 				Game.listening(String)//listening...
