@@ -59,7 +59,7 @@ public class Fixed implements Command {
 
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-		if (BotData.getFixedBugsChannel() == null) {
+		if (BotData.getFixedBugsChannel() == null||"".equals(BotData.getBugReportChannel())) {
 			BotData.setFixedBugsChannel("");
 			NDLogger.logWithoutModule(LogType.WARN, DISABLED_INVALID_CHAN);
 			return false;
@@ -67,6 +67,7 @@ public class Fixed implements Command {
 		try {
 			if(event.getJDA().getTextChannelById(BotData.getFixedBugsChannel())==null) {
 				NDLogger.logWithModule(LogType.WARN, "Commands",  DISABLED_INVALID_CHAN);
+				return false;
 			}
 		} catch (NumberFormatException e) {
 			NDLogger.logWithoutModule(LogType.WARN, DISABLED_INVALID_CHAN);

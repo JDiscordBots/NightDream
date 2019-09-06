@@ -61,6 +61,10 @@ public class Help implements Command {
 		event.getChannel().sendMessage(builder.build()).queue();
 	}
 	private boolean showHelp(EmbedBuilder builder, GuildMessageReceivedEvent event,String name, Command cmd) {
+		if(builder.getFields().size()>=25) {
+			event.getChannel().sendMessage(builder.build()).queue();
+			builder.getFields().clear();
+		}
 		if(cmd.allowExecute(new String[0], event)) {
 			String help=cmd.help();
 			if(help!=null) {

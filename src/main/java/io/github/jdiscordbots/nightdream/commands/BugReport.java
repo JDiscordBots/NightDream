@@ -41,7 +41,7 @@ public class BugReport implements Command {
 
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-		if (BotData.getBugReportChannel() == null) {
+		if (BotData.getBugReportChannel() == null||"".equals(BotData.getBugReportChannel())) {
 			BotData.setBugReportChannel("");
 			NDLogger.logWithModule(LogType.WARN, "Commands", DISABLED_INVALID_CHAN);
 			return false;
@@ -49,6 +49,7 @@ public class BugReport implements Command {
 		try {
 			if(event.getJDA().getTextChannelById(BotData.getBugReportChannel())==null) {
 				NDLogger.logWithModule(LogType.WARN, "Commands", DISABLED_INVALID_CHAN);
+				return false;
 			}
 		} catch (NumberFormatException e) {
 			NDLogger.logWithModule(LogType.WARN, "Commands", DISABLED_INVALID_CHAN);
