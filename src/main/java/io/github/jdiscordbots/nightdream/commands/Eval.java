@@ -36,7 +36,7 @@ public class Eval implements Command {
 	}
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-		return JDAUtils.checkOwner(event);	
+		return JDAUtils.checkOwner(event,args!=null);	
 	}
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {

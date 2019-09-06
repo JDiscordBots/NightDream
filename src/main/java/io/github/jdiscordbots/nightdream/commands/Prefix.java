@@ -32,7 +32,7 @@ public class Prefix implements Command {
 
     @Override
     public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-        return event.getMember().hasPermission(Permission.ADMINISTRATOR) || event.getMember().hasPermission(Permission.MANAGE_SERVER) || event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || JDAUtils.checkOwner(event);
+        return event.getMember().hasPermission(Permission.ADMINISTRATOR) || event.getMember().hasPermission(Permission.MANAGE_SERVER) || event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || JDAUtils.checkOwner(event,args!=null);
     }
 
     @Override

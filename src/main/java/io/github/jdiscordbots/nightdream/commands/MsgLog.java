@@ -49,6 +49,6 @@ public class MsgLog implements Command {
 
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-		return event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || JDAUtils.checkOwner(event);
+		return event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || JDAUtils.checkOwner(event,args!=null);
 	}
 }

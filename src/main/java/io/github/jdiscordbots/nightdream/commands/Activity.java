@@ -38,6 +38,6 @@ public class Activity implements Command {
 
     @Override
     public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-        return JDAUtils.checkOwner(event);
+        return JDAUtils.checkOwner(event,args!=null);
     }
 }

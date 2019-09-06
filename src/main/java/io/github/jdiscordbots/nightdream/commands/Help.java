@@ -51,7 +51,7 @@ public class Help implements Command {
 							showHelp(builder, event, k, v);
 							commandsShown.add(v);
 						}
-				});
+					});
 				}
 			}
 			if(!found&&commandsShown.isEmpty()) {
@@ -65,7 +65,7 @@ public class Help implements Command {
 			event.getChannel().sendMessage(builder.build()).queue();
 			builder.getFields().clear();
 		}
-		if(cmd.allowExecute(new String[0], event)) {
+		if(cmd.allowExecute(null, event)) {
 			String help=cmd.help();
 			if(help!=null) {
 				builder.addField(new Field(name, cmd.help(), true));
