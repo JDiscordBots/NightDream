@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) JDiscordBots 2019
+ * File: PropertyStorage.java
+ * Project: NightDream
+ * Licenced under Boost Software License 1.0
+ */
+
 package io.github.jdiscordbots.nightdream.util;
 
 import java.io.BufferedInputStream;

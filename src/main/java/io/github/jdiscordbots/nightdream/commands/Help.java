@@ -51,7 +51,7 @@ public class Help implements Command {
 							showHelp(builder, event, k, v);
 							commandsShown.add(v);
 						}
-					});
+				});
 				}
 			}
 			if(!found&&commandsShown.isEmpty()) {

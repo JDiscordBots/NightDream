@@ -4,6 +4,7 @@
  * Project: NightDream
  * Licenced under Boost Software License 1.0
  */
+
 package io.github.jdiscordbots.nightdream.util;
 
 import net.dv8tion.jda.api.entities.Guild;
