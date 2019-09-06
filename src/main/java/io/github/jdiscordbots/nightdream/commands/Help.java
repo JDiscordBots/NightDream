@@ -54,7 +54,7 @@ public class Help implements Command {
 					});
 				}
 			}
-			if(!found) {
+			if(!found&&commandsShown.isEmpty()) {
 				builder.setDescription("Nothing found");
 			}
 		}
