@@ -20,8 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.omg.CORBA.BooleanHolder;
-
 @BotCommand("help")
 public class Help implements Command {
 
