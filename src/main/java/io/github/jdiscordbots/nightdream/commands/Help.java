@@ -49,10 +49,8 @@ public class Help implements Command {
 	}
 	private boolean showResults(EmbedBuilder builder, GuildMessageReceivedEvent event,Map<String, Command> commands,Set<Command> commandsShown,String cmdName) {
 		Command cmd=commands.get(cmdName);
-		if(cmd!=null) {
-			if(showHelp(builder, event, cmdName, cmd)) {
-				return true;
-			}
+		if(cmd!=null && showHelp(builder, event, cmdName, cmd)) {
+			return true;
 		}
 		AtomicBoolean success=new AtomicBoolean();
 		commands.forEach((k,v)->{
