@@ -79,4 +79,8 @@ public class NPM implements Command{
 		return "Allows you to view info about a npm package";
 	}
 	
+	@Override
+	public CommandType getType() {
+		return CommandType.UTIL;
+	}
 }

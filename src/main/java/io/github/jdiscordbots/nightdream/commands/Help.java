@@ -11,14 +11,13 @@ import io.github.jdiscordbots.nightdream.core.CommandHandler;
 import io.github.jdiscordbots.nightdream.core.NightDream;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.*;
-import java.util.HashSet;
+import java.awt.Color;
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 @BotCommand("help")
 public class Help implements Command {
@@ -30,54 +29,68 @@ public class Help implements Command {
 		Map<String, Command> commands = CommandHandler.getCommands();
 		if(args.length==0) {
 			builder.setTitle("Nightdream Commands");
-			commands.forEach((k,v)->showHelp(builder, event, k, v));
+			showAll(builder, event, commands,s->true);
 		}else {
-			Set<Command> commandsShown=new HashSet<>();
 			builder.setTitle("Nightdream Commands (Searching for " + String.join(", ", args) + ")");
-			boolean found=false;
-			for (String cmdName : args) {
-				boolean success=showResults(builder, event, commands, commandsShown, cmdName);
-				if(!found) {
-					found=success;
-				}
-			}
-			if(!found) {
-				builder.setDescription("Nothing found");
+			if (!(args.length == 1 && commands.containsKey(args[0])
+					&& detailedHelp(builder, event, args[0], commands.get(args[0])))) {
+				showAll(builder, event, commands, s->{
+					for (String arg : args) {
+						if(s.startsWith(arg)) {
+							return true;
+						}
+					}
+					return false;
+				});
 			}
 		}
 		event.getChannel().sendMessage(builder.build()).queue();
 	}
-	private boolean showResults(EmbedBuilder builder, GuildMessageReceivedEvent event,Map<String, Command> commands,Set<Command> commandsShown,String cmdName) {
-		Command cmd=commands.get(cmdName);
-		if(cmd!=null && showHelp(builder, event, cmdName, cmd)) {
-			return true;
-		}
-		AtomicBoolean success=new AtomicBoolean();
+	private static void showAll(EmbedBuilder builder, GuildMessageReceivedEvent event,Map<String, Command> commands,Predicate<String> filter) {
+		AtomicBoolean found=new AtomicBoolean(false);
+		final EnumMap<CommandType, StringBuilder> helpBuilders=new EnumMap<>(CommandType.class);
 		commands.forEach((k,v)->{
-			if(k.startsWith(cmdName)&&!commandsShown.contains(v)) {
-				showHelp(builder, event, k, v);
-				commandsShown.add(v);
-				success.set(true);
+			String help=v.help();
+			if(help!=null&&filter.test(k)&&v.allowExecute(null, event)) {
+				CommandType type=v.getType();
+				if(!helpBuilders.containsKey(type)) {
+					helpBuilders.put(type, new StringBuilder());
+				}
+				helpBuilders.get(type)
+				.append('`')
+				.append(k)
+				.append('`')
+				.append(" - ")
+				.append(v.help())
+				.append('\n');
+				found.set(true);
 			}
 		});
-		return success.get();
+		
+		if(!found.get()) {
+			builder.setDescription("Nothing found");
+		}else {
+			helpBuilders.forEach((k,v)->builder.addField(k.getDisplayName(), v.toString(), false));
+		}
 	}
-	private boolean showHelp(EmbedBuilder builder, GuildMessageReceivedEvent event,String name, Command cmd) {
-		if(builder.getFields().size()>=25) {
-			event.getChannel().sendMessage(builder.build()).queue();
-			builder.getFields().clear();
+	private static boolean detailedHelp(EmbedBuilder builder, GuildMessageReceivedEvent event,String name, Command cmd) {
+		String help=cmd.help();
+		if(help==null||!cmd.allowExecute(null, event)) {
+			return false;
 		}
-		if(cmd.allowExecute(null, event)) {
-			String help=cmd.help();
-			if(help!=null) {
-				builder.addField(new Field(name, cmd.help(), true));
-				return true;
-			}
-		}
-		return false;
+		builder.setTitle("Help with "+name);
+		builder.addField("Category",cmd.getType().getDisplayName(),true);
+		builder.addField("Permissions needed",cmd.permNeeded(),true);
+		builder.addField("Description",cmd.help(),true);
+		return true;
 	}
 	@Override
 	public String help() {
 		return "¯\\_(ツ)_/¯";
+	}
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.META;
 	}
 }

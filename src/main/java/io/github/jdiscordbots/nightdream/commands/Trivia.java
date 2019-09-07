@@ -56,4 +56,8 @@ public class Trivia implements Command{
 		return "Plays a game of trivia";
 	}
 
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
+	}
 }

@@ -38,4 +38,9 @@ public class Rate implements Command {
     public String help() {
         return "Rates a User";
     }
+    
+    @Override
+    public CommandType getType() {
+    	return CommandType.FUN;
+    }
 }

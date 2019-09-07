@@ -84,4 +84,13 @@ public class Eval implements Command {
 		return "Evaluates JS Code within Java (why JS????????)";
 	}
 
+	@Override
+    public String permNeeded() {
+    	return "Bot-Admin";
+    }
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.META;
+	}
 }

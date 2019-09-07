@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
  * @author Daniel Schmid
  */
 public interface Command {
+	
 	/**
 	 * returns if the Command is blocked or something
 	 * @param args the Command-Arguments
@@ -36,4 +37,23 @@ public interface Command {
 	 * @return help String
 	 */
 	public String help();
+	
+	/**
+	 * permissions needed in order to execute this command
+	 * @return permission summary
+	 */
+	public default String permNeeded() {
+		return "<none>";
+	}
+	
+	public CommandType getType();
+	
+	public enum CommandType{
+		UTIL,FUN,CONFIG,META,IMAGE;
+		public String getDisplayName() {
+			char[] name=name().toLowerCase().toCharArray();
+			name[0]=Character.toUpperCase(name[0]);
+			return new String(name);
+		}
+	}
 }

@@ -69,4 +69,9 @@ public class BugReport implements Command {
 	public String help() {
 		return "Files a bug report";
 	}
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.META;
+	}
 }

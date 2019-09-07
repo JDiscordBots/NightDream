@@ -59,4 +59,8 @@ public class Lyrics implements Command {
 		return "Seaches a song by its lyrics";
 	}
 
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
+	}
 }

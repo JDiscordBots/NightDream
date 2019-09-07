@@ -32,4 +32,9 @@ public class Avatar implements Command {
 	public String help() {
 		return "Shows your (or someone else's) Avatar";
 	}
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.UTIL;
+	}
 }

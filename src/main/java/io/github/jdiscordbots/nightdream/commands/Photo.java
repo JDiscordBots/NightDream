@@ -67,4 +67,8 @@ public class Photo implements Command {
 		return "Gets a photo from Pixabay";
 	}
 
+	@Override
+	public CommandType getType() {
+		return CommandType.IMAGE;
+	}
 }

@@ -31,4 +31,8 @@ public class Ping implements Command {
 		return "Pings!";
 	}
 
+	@Override
+	public CommandType getType() {
+		return CommandType.META;
+	}
 }

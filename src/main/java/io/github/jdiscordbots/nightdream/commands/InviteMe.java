@@ -28,4 +28,9 @@ public class InviteMe implements Command {
     public String help() {
         return "Invites the bot";
     }
+    
+    @Override
+    public CommandType getType() {
+    	return CommandType.META;
+    }
 }

@@ -20,12 +20,16 @@ public class Vote implements Command {
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		EmbedBuilder eb = new EmbedBuilder().setTitle(String.format("Vote for %s", event.getJDA().getSelfUser().getName()))
 				.setColor(Color.white).setDescription(String.format("[<3](https://discordbots.org/bot/%s/vote)", event.getJDA().getSelfUser().getId()));
-
 		JDAUtils.msg(event.getChannel(), eb.build());
 	}
 
 	@Override
 	public String help() {
 		return "Vote for me! <3";
+	}
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.META;
 	}
 }

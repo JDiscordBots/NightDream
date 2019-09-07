@@ -61,4 +61,9 @@ public class Snow implements Command {
 		}
 		return new String(data);
 	}
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
+	}
 }

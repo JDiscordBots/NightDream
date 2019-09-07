@@ -36,4 +36,9 @@ public abstract class KSoftImageCommand implements Command {
 		.setFooter("Served by an external API - report with " + BotData.getPrefix(event.getGuild()) + "bugreport [url]");
 		event.getChannel().sendMessage(builder.build()).queue();
 	}
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.IMAGE;
+	}
 }

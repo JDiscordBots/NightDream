@@ -191,4 +191,8 @@ public class Profile implements Command {
 		return "Shows & manages your profile, `profile help` for more";
 	}
 
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
+	}
 }

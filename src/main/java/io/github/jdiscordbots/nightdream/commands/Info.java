@@ -67,4 +67,9 @@ public class Info implements Command {
     public String help() {
         return "Displays bot information";
     }
+    
+    @Override
+    public CommandType getType() {
+    	return CommandType.META;
+    }
 }

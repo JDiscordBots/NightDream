@@ -80,5 +80,14 @@ public class Reload implements Command {
 				+ "or everything(`reload props`)\n"
 				+ "or deletes the message cache";
 	}
+	
+	@Override
+    public String permNeeded() {
+    	return "Bot-Admin";
+    }
 
+	@Override
+	public CommandType getType() {
+		return CommandType.CONFIG;
+	}
 }

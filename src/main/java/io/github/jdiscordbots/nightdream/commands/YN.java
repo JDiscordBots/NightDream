@@ -49,4 +49,8 @@ public class YN implements Command {
 		return "Answer a yes/no question";
 	}
 
+	@Override
+	public CommandType getType() {
+		return CommandType.IMAGE;
+	}
 }

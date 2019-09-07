@@ -58,4 +58,8 @@ public class MVN implements Command{
 		return "Allows you to view info about a maven artifact";
 	}
 	
+	@Override
+	public CommandType getType() {
+		return CommandType.UTIL;
+	}
 }

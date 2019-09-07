@@ -55,4 +55,8 @@ public class Quiz implements Command{
 		return "Plays a quiz-style game";
 	}
 
+	@Override
+	public CommandType getType() {
+		return CommandType.FUN;
+	}
 }

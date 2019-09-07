@@ -39,4 +39,9 @@ public class Prefix implements Command {
     public String help() {
         return "Sets the prefix";
     }
+    
+    @Override
+    public CommandType getType() {
+    	return CommandType.CONFIG;
+    }
 }

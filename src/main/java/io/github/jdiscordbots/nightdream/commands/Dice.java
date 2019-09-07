@@ -47,4 +47,9 @@ public class Dice implements Command {
     public String help() {
         return "Rolls a random number from one";
     }
+    
+    @Override
+    public CommandType getType() {
+    	return CommandType.UTIL;
+    }
 }

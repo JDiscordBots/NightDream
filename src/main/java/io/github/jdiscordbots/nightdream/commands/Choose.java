@@ -35,4 +35,8 @@ public class Choose implements Command {
     public String help() {
         return "Chooses an option from a list";
     }
+    @Override
+    public CommandType getType() {
+    	return CommandType.FUN;
+    }
 }

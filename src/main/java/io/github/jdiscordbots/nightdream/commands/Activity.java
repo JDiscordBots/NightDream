@@ -40,4 +40,14 @@ public class Activity implements Command {
     public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
         return JDAUtils.checkOwner(event,args!=null);
     }
+    
+    @Override
+    public String permNeeded() {
+    	return "Bot-Admin";
+    }
+    
+    @Override
+    public CommandType getType() {
+    	return CommandType.CONFIG;
+    }
 }

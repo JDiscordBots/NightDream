@@ -83,4 +83,8 @@ public class License implements Command{
 		return "Get info about a license";
 	}
 
+	@Override
+	public CommandType getType() {
+		return CommandType.UTIL;
+	}
 }

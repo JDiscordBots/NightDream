@@ -83,4 +83,14 @@ public class Fixed implements Command {
 		}
 		return JDAUtils.checkOwner(event,args!=null);
 	}
+	
+	@Override
+    public String permNeeded() {
+    	return "Bot-Admin";
+    }
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.META;
+	}
 }

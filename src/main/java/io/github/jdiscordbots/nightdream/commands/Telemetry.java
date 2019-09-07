@@ -61,4 +61,13 @@ public class Telemetry implements Command {
 		return "shows telemetry data";
 	}
 
+	@Override
+    public String permNeeded() {
+    	return "Bot-Admin";
+    }
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.UTIL;
+	}
 }

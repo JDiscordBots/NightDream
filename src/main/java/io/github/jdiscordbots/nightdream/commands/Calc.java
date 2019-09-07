@@ -16,7 +16,6 @@ import java.awt.*;
 @BotCommand("calc")
 public class Calc implements Command {
 
-
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/,%%,**,root] num2`", BotData.getDefaultPrefix());
@@ -74,5 +73,10 @@ public class Calc implements Command {
 	@Override
 	public String help() {
 		return "Does some calculation for you";
+	}
+	
+	@Override
+	public CommandType getType() {
+		return CommandType.UTIL;
 	}
 }
