@@ -52,7 +52,7 @@ public class Info implements Command {
                 + "\tJDA v4.0.0_42\n"
                 + "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n"
                 + "\t(c) dan1st and Gehasstes %s, Release %s.\n "
-                + "\tThis is a copy of Daydream (https://gitlab.com/botstudio/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda), Year.now().getValue(), NightDream.VERSION
+                + "\tThis is a copy of Daydream (https://git.geist.ga/infi/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda), Year.now().getValue(), NightDream.VERSION
     			);
         if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES)) {
         	TextToGraphics.sendTextAsImage(event.getChannel(), "info.jpg", send, event.getAuthor().getAsMention());
