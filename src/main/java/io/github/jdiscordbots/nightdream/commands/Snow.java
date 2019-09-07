@@ -7,7 +7,6 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
-import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -22,11 +21,6 @@ public class Snow implements Command {
 
 	private static int increment=0;
 	private static final long EPOCH=1_420_070_400_000L;//Discord epoch/1.1.2015 0:00
-	
-	@Override
-	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-		return JDAUtils.checkOwner(event,args!=null);	
-	}
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -48,7 +42,7 @@ public class Snow implements Command {
 	}
 	@Override
 	public String help() {
-		return "Makes it snow! (Snowflake uilities)";
+		return "Discord ID deconstructor/generator";
 	}
 	private static String generate() {
 		long diff=System.currentTimeMillis()-EPOCH;
