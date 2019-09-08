@@ -25,6 +25,7 @@ public class BotData {
 	private static final String MSGLOG_CHAN_PROP_NAME="MsgLogChannel";
 	private static final String KSOFT_TOKEN_PROP_NAME="KSoftToken";
 	private static final String PIXA_KEY_PROP_NAME="PixabayAPIKey";
+	private static final String DATABASE_URL_PROP_NAME = "DBUrl";
 	
 	public static final Map<String,String> GLOBAL_DEFAULTS;
 	public static final Map<String,String> GUILD_DEFAULTS;
@@ -44,6 +45,7 @@ public class BotData {
 		defaults.put(BUG_ID_PROP_NAME, "0");
 		defaults.put(KSOFT_TOKEN_PROP_NAME, "");
 		defaults.put(PIXA_KEY_PROP_NAME, "");
+		defaults.put(DATABASE_URL_PROP_NAME, "");
 		GLOBAL_DEFAULTS=Collections.unmodifiableMap(defaults);
 		
 		defaults.clear();
@@ -149,8 +151,8 @@ public class BotData {
 		return bkpStorage.getGlobalProperty("game");
 	}
 	/**
-	 * sets the Discord Bot token
-	 * @param adminIDs the token
+	 * sets the Discord Bot game
+	 * @param game the game
 	 */
 	public static void setGame(String game) {
 		bkpStorage.setGlobalProperty("game", game);
@@ -218,6 +220,20 @@ public class BotData {
 	 */
 	public static String getFixedBugsChannel() {
 		return bkpStorage.getGlobalProperty(BUG_FIXED_PROP_NAME);
+	}
+	/**
+	 * gets the database url for database storage
+	 * @return database url
+	 */
+	public static String getDatabaseUrl() {
+		return bkpStorage.getGlobalProperty(DATABASE_URL_PROP_NAME);
+	}
+	/**
+	 * sets the database url for database storage
+	 * @param databaseUrl database url
+	 */
+	public static void setDatabaseUrl(String databaseUrl) {
+		bkpStorage.setGlobalProperty(DATABASE_URL_PROP_NAME, databaseUrl);
 	}
 	/**
 	 * reloads all Properties
