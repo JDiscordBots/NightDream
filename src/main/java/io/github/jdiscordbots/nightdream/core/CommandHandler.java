@@ -58,23 +58,27 @@ public class CommandHandler {
 		} else {
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0x212121);
-			Set<String> candidates = commands.keySet(); // populate this with lots of values
-			Map<String, Integer> cache = new ConcurrentHashMap<>();
-			Optional<String> min = candidates.parallelStream()
-			    .map(String::trim)
-			    .filter(s -> !s.equalsIgnoreCase(cmd.invoke))
-			    .min((a, b) -> Integer.compare(
-			      cache.computeIfAbsent(a, k -> distCalculator.apply(cmd.invoke, k)),
-			      cache.computeIfAbsent(b, k -> distCalculator.apply(cmd.invoke, k))));
-			String fieldText;
-			if(min.isPresent()) {
-				fieldText="Did you mean `"+BotData.getPrefix(cmd.event.getGuild())+min.get()+"`?";
-			}else {
+			
+			String fieldText=findSimilarCommand(cmd.invoke);
+			if(fieldText==null) {
 				fieldText="Try `"+BotData.getPrefix(cmd.event.getGuild())+"help` for a List of Commands";
+			}else {
+				fieldText="Did you mean `"+BotData.getPrefix(cmd.event.getGuild())+fieldText+"`?";
 			}
 			builder.addField("<:IconProvide:553870022125027329> It seems that this command does not exist",
 					fieldText, false);
 			cmd.event.getChannel().sendMessage(builder.build()).queue();
 		}
+	}
+	public static String findSimilarCommand(String cmd) {
+		Set<String> candidates = commands.keySet();
+		Map<String, Integer> cache = new ConcurrentHashMap<>();
+		Optional<String> min = candidates.parallelStream()
+		    .map(String::trim)
+		    .filter(s -> !s.equalsIgnoreCase(cmd))
+		    .min((a, b) -> Integer.compare(
+		      cache.computeIfAbsent(a, k -> distCalculator.apply(cmd, k)),
+		      cache.computeIfAbsent(b, k -> distCalculator.apply(cmd, k))));
+		return min.isPresent()?min.get():null;
 	}
 }

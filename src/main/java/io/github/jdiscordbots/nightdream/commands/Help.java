@@ -33,20 +33,23 @@ public class Help implements Command {
 		}else {
 			builder.setTitle("Nightdream Commands (Searching for " + String.join(", ", args) + ")");
 			if (!(args.length == 1 && commands.containsKey(args[0])
-					&& detailedHelp(builder, event, args[0], commands.get(args[0])))) {
-				showAll(builder, event, commands, s->{
-					for (String arg : args) {
-						if(s.startsWith(arg)) {
-							return true;
+					&& detailedHelp(builder, event, args[0], commands.get(args[0])))
+					&& !showAll(builder, event, commands, s -> {
+						for (String arg : args) {
+							if (s.startsWith(arg)) {
+								return true;
+							}
 						}
-					}
-					return false;
-				});
+						return false;
+					})) {
+				builder.setTitle("Unknown Command")
+						.setDescription("But I have `" + CommandHandler.findSimilarCommand(args[0]) + "`.")
+						.setColor(0x212121);
 			}
 		}
 		event.getChannel().sendMessage(builder.build()).queue();
 	}
-	private static void showAll(EmbedBuilder builder, GuildMessageReceivedEvent event,Map<String, Command> commands,Predicate<String> filter) {
+	private static boolean showAll(EmbedBuilder builder, GuildMessageReceivedEvent event,Map<String, Command> commands,Predicate<String> filter) {
 		AtomicBoolean found=new AtomicBoolean(false);
 		final EnumMap<CommandType, StringBuilder> helpBuilders=new EnumMap<>(CommandType.class);
 		commands.forEach((k,v)->{
@@ -69,8 +72,10 @@ public class Help implements Command {
 		
 		if(!found.get()) {
 			builder.setDescription("Nothing found");
+			return false;
 		}else {
 			helpBuilders.forEach((k,v)->builder.addField(k.getDisplayName(), v.toString(), false));
+			return true;
 		}
 	}
 	private static boolean detailedHelp(EmbedBuilder builder, GuildMessageReceivedEvent event,String name, Command cmd) {
