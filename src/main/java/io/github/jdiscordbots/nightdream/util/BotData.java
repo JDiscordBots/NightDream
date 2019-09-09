@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) danthe1st and byNoobiYT 2019.
+ * File: BotData.java
+ * Project: NightDream
+ * Licenced under Boost Software License 1.0
+ */
+
 package io.github.jdiscordbots.nightdream.util;
 
 import java.io.File;
@@ -13,7 +20,6 @@ import net.dv8tion.jda.api.entities.Guild;
 
 /**
  * saving, loading, retrieving and setting data of the Bot
- * @author Daniel Schmid
  */
 public class BotData {
 	private static final String PREFIX_PROP_NAME = "prefix";

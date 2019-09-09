@@ -55,7 +55,7 @@ public class Info implements Command {
                 + "\tThis is a copy of Daydream (https://git.geist.ga/infi/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda), Year.now().getValue(), NightDream.VERSION
     			);
         if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES)) {
-        	TextToGraphics.sendTextAsImage(event.getChannel(), "info.jpg", send, event.getAuthor().getAsMention());
+        	TextToGraphics.sendTextAsImage(event.getChannel(), "info", send, event.getAuthor().getAsMention());
         }else if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI)) {
         	event.getChannel().sendMessage(send).queue();
         }else {

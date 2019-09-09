@@ -23,6 +23,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * utility class for sending images from a givn text as a Discord message
+ */
 public class TextToGraphics implements Runnable {
 	
 	private static final Font FONT_BODY;
@@ -61,13 +64,20 @@ public class TextToGraphics implements Runnable {
 	private TextToGraphics() {
 		//prevent instantiation
 	}
+	/**
+	 * converts a given text to an image and sends it
+	 * @param chan the {@link MessageChannel} where the image should be sent to
+	 * @param imgName the name of the image (without file extension)
+	 * @param imgText the text that should be converted to the image
+	 * @param metaText the text that should be sent with the image
+	 */
 	public static void sendTextAsImage(MessageChannel chan, String imgName, String imgText, String metaText) {
 		synchronized (LOCK) {
 			executor.waiting.add(()->{
 				try(ByteArrayOutputStream baos=new ByteArrayOutputStream()){
 					createImage(imgText,baos);
 					baos.flush();
-					chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName).queue();
+					chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName+".jpg").queue();
 				} catch (IOException e) {
 					LOG.log(LogType.WARN,"Error while generating image from text: \n"+imgText,e);
 				}

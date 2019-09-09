@@ -26,6 +26,9 @@ import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import net.dv8tion.jda.api.entities.Guild;
 
+/**
+ * implementation of {@link Storage} but with Property files
+ */
 public class PropertyStorage implements Storage {
 	
 	private static final NDLogger LOG=NDLogger.getLogger("storage");

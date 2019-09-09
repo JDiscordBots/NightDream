@@ -20,6 +20,9 @@ import java.awt.*;
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 
+/**
+ * Utilities for interacting with Discord
+ */
 public class JDAUtils {
 	
 	private JDAUtils() {
