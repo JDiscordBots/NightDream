@@ -15,7 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.AbstractMap;
 
 @BotCommand("quiz")
 public class Quiz implements Command{

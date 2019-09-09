@@ -11,7 +11,16 @@ import io.github.jdiscordbots.nightdream.core.CommandHandler;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.io.*;
+import java.io.Reader;
+import java.io.Writer;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
