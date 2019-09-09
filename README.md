@@ -7,6 +7,13 @@ This is not an exact clone, there are a few differences to the original.
 ### Download
 You can download NightDream [here](https://github.com/JDiscordBots/Nightdream/wiki/NightDream.jar)
 
+### Setup
+* Run *NightDream.jar* (double-click it or execute `java -jar NightDream.jar`)
+* A directory *NightDream* with a file *NightDream.properties* should be created automatically
+* paste your Discord Bot token right after *token=*
+* You can also change various configurations in this file.
+* You can now run the Bot again (double-click *NightDream.jar* or execute `java -jar NightDream.jar`)
+
 ### Requirements for hosting NightDream by yourself
 * Java 1.8.0_221
 
