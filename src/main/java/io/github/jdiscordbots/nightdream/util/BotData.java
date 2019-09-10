@@ -2,7 +2,7 @@
  * Copyright (c) danthe1st and byNoobiYT 2019.
  * File: BotData.java
  * Project: NightDream
- * Licenced under Boost Software License 1.0
+ * Licensed under Boost Software License 1.0
  */
 
 package io.github.jdiscordbots.nightdream.util;

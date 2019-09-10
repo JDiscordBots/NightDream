@@ -2,7 +2,7 @@
  * Copyright (c) JDiscordBots 2019
  * File: License.java
  * Project: NightDream
- * Licenced under Boost Software License 1.0
+ * Licensed under Boost Software License 1.0
  */
 
 package io.github.jdiscordbots.nightdream.commands;
@@ -59,7 +59,7 @@ public class License implements Command{
 			event.getChannel().sendMessage("No such license! Use the SPDX ID.").queue();
 		} catch (IOException e) {
 			event.getChannel().sendMessage("An Error occured - Please try again later").queue();
-			NDLogger.logWithModule(LogType.WARN, "Commands", String.format("Cannot load licence %s: %s", args[0], e.getClass().getName()));
+			NDLogger.logWithModule(LogType.WARN, "Commands", String.format("Cannot load License %s: %s", args[0], e.getClass().getName()));
 			
 		}
 	}
