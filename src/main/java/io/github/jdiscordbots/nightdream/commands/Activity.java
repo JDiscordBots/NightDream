@@ -2,7 +2,7 @@
  * Copyright (c) JDiscordBots 2019
  * File: Activity.java
  * Project: NightDream
- * Licenced under Boost Software License 1.0
+ * Licensed under Boost Software License 1.0
  */
 
 package io.github.jdiscordbots.nightdream.commands;
