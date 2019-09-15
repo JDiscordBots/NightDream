@@ -11,6 +11,7 @@ import io.github.jdiscordbots.nightdream.core.NightDream;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.TextToGraphics;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -49,7 +50,7 @@ public class Info implements Command {
     			"Bot Info\n"
     			+ "\tIn %s guilds, serving %s users and %s bots.\n"
                 + "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map(id -> jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n"
-                + "\tJDA v4.0.0_42\n"
+                + "\tJDA v" + JDAInfo.VERSION + "\n"
                 + "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n"
                 + "\t(c) dan1st and Gehasstes %s, Release %s.\n "
                 + "\tThis is a copy of Daydream (https://git.geist.ga/infi/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda), Year.now().getValue(), NightDream.VERSION
