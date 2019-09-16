@@ -65,7 +65,7 @@ public interface Storage {
 	 * @param guild the specific {@link Guild} for this key-value pair
 	 * @param key the key that belongs to the value to get
 	 * @return the value associated with the key
-	 * @see Storage#setForGuild(String, String, String)
+	 * @see Storage#setForGuild(Guild, String, String)
 	 * @see Storage#setGuildDefault(String, String)
 	 * @see Storage#getGuildDefault(String)
 	 */
@@ -75,7 +75,7 @@ public interface Storage {
 	 * @param guild the specific {@link Guild}, where this key-value pair belongs to
 	 * @param key the key of the value to set
 	 * @param value the value to set
-	 * @see Storage#getForGuild(String, String)
+	 * @see Storage#getForGuild(Guild, String)
 	 * @see Storage#setGuildDefault(String, String)
 	 * @see Storage#getGuildDefault(String)
 	 */
