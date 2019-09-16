@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-@BotCommand("pull")//TODO wiki
+@BotCommand("pull")
 public class Pull implements Command {
 
 	@Override
