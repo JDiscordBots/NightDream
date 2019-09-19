@@ -10,6 +10,7 @@ package io.github.jdiscordbots.nightdream.util;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,12 +37,13 @@ public class BotData {
 	public static final Map<String,String> GLOBAL_DEFAULTS;
 	public static final Map<String,String> GUILD_DEFAULTS;
 	
-	private static final PropertyStorage bkpStorage=new PropertyStorage();
-	public static final Storage STORAGE=bkpStorage;//TODO DB
+	private static final PropertyStorage bkpStorage = new PropertyStorage();
+	public static final Storage STORAGE;
 	
 	public static final File DATA_DIR = new File("NightDream");
 	
 	static {
+		Storage tempStorage;
 		Map<String,String> defaults=new HashMap<>();
 		defaults.put("token", "");
 		defaults.put("game","Nightdreaming...");
@@ -66,6 +68,19 @@ public class BotData {
 				NDLogger.logWithModule(LogType.ERROR,"io", "cannot create directory "+DATA_DIR.getAbsolutePath(), e);
 			}
 		}
+		if (bkpStorage.getGlobalProperty(DATABASE_URL_PROP_NAME) == null || bkpStorage.getGlobalProperty(DATABASE_URL_PROP_NAME).equals("")) {
+			tempStorage = bkpStorage;
+			NDLogger.logWithModule(LogType.DEBUG, "Storage", "Storage was set to properties (files)");
+		} else {
+			try {
+				tempStorage = new SQLStorage();
+				NDLogger.logWithModule(LogType.DEBUG, "Storage", "Storage was set to database");
+			} catch (SQLException ignored) {
+				tempStorage = bkpStorage;
+				NDLogger.logWithModule(LogType.DEBUG, "Storage", "Storage was set to properties (files)");
+			}
+		}
+		STORAGE = tempStorage;
 	}
 	
 	private BotData() {
