@@ -26,9 +26,9 @@ public class Pull implements Command {
 		event.getChannel().sendMessage("Please wait...").queue(msg->{
 			for(Member member : event.getMessage().getMentionedMembers()) {
 				if(member.getVoiceState().inVoiceChannel()) {
-					event.getGuild().moveVoiceMember(member, event.getMember().getVoiceState().getChannel()).queue(x->{
-						msg.editMessage(msg.getContentRaw()+"\n"+member.getUser().getAsTag()+" was moved successfully").queue();
-					});
+					event.getGuild().moveVoiceMember(member, event.getMember().getVoiceState().getChannel()).queue(x->
+						msg.editMessage(msg.getContentRaw()+"\n"+member.getUser().getAsTag()+" was moved successfully").queue()
+					);
 				}else {
 					msg.editMessage(msg.getContentRaw()+"\n"+member.getUser().getAsTag()+" is not in a voice channel - skipping!").queue();
 				}
