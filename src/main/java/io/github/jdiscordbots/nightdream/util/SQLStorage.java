@@ -20,14 +20,20 @@ public class SQLStorage implements Storage {
 	private Connection connection;
 	private static final NDLogger LOG = NDLogger.getLogger("Storage");
 	
-	private final PreparedStatement selectStmt;
-	private final PreparedStatement insertStmt;
-	private final PreparedStatement updateStmt;
-	private final PreparedStatement deleteStmt;
-	private final PreparedStatement createStmt;
+	private static final String selectFormat="SELECT `value` FROM %s WHERE `key`=?";
+	private static final String insertFormat="INSERT INTO %s VALUES (?, ?);";
+	private static final String updateFormat="UPDATE %s SET value = ? WHERE `key` = ?;";
+	private static final String deleteFormat="DELETE FROM %s WHERE `key` = ?;";
+	private static final String createFormat="CREATE TABLE IF NOT EXISTS %s (`key` varchar(46) primary key,`value` varchar(46));";
 
+	private final Statement stmt;
+	
 	public SQLStorage() throws SQLException {
-		connection = DriverManager.getConnection(BotData.getDatabaseUrl());
+		if(BotData.getDatabaseUser()==null||"".equals(BotData.getDatabaseUser())) {
+			connection = DriverManager.getConnection(BotData.getDatabaseUrl());
+		}else {
+			connection = DriverManager.getConnection(BotData.getDatabaseUrl(),BotData.getDatabaseUser(),BotData.getDatabasePassword());
+		}
 		LOG.log(LogType.DONE, "Successfully connected to database");
 
 		Runtime.getRuntime().addShutdownHook(new Thread(()->{
@@ -39,56 +45,54 @@ public class SQLStorage implements Storage {
 				}
 			}
 		}));
-		selectStmt=connection.prepareStatement("SELECT ? FROM ?;");
-		insertStmt=connection.prepareStatement("INSERT INTO ? (key, value) VALUES (?, ?);");
-		updateStmt=connection.prepareStatement("UPDATE ? SET value = ? WHERE key = ?;");
-		deleteStmt=connection.prepareStatement("DELETE FROM ? WHERE key = ?;");
-		createStmt=connection.prepareStatement("CREATE TABLE IF NOT EXISTS ? (a varchar(46) primary key,b varchar(46));");
+		stmt=connection.createStatement();
 	}
-
+	private PreparedStatement prepareStatement(String sqlWithoutTable,String tableName) throws SQLException {
+		return connection.prepareStatement(String.format(sqlWithoutTable, tableName));//TODO buffering
+	}
 	@Override
 	public String read(String unit, String key, String defaultValue) {
-		try{
+		try {
+			stmt.execute(String.format(createFormat,unit));
+		}catch(SQLException e) {
+			LOG.log(LogType.WARN, "Failed create table if it does not exist", e);
+		}
+		try(PreparedStatement selectStmt=prepareStatement(selectFormat,unit)){
 			selectStmt.setString(1, key);
-			selectStmt.setString(2, unit);
-
 			try (ResultSet set = selectStmt.executeQuery()) {
 				if (set.next()) {
 					return set.getString(1);
 				} else if (defaultValue != null){
-						insertStmt.setString(1, unit);
-						insertStmt.setString(2, key);
-						insertStmt.setString(3, defaultValue);
+					try(PreparedStatement insertStmt=prepareStatement(insertFormat,unit)){
+						insertStmt.setString(1, key);
+						insertStmt.setString(2, defaultValue);
 						insertStmt.execute();
 						return defaultValue;
+					}
 				} else {
-					return null;
+					return defaultValue;
 				}
 			}
 		} catch (SQLException e) {
 			LOG.log(LogType.WARN, "Failed to read sql database", e);
 		}
-		return null;
+		return defaultValue;
 	}
-
 	@Override
 	public void write(String unit, String key, String value) {
 		if (read(unit, key, null) == null) {
-			try{
-				createStmt.setString(1, unit);
-				createStmt.execute();
-				insertStmt.setString(1, unit);
-				insertStmt.setString(2, key);
-				insertStmt.setString(3, value);
+			try(PreparedStatement insertStmt=prepareStatement(insertFormat,unit)){
+				stmt.execute(String.format(createFormat,unit));
+				insertStmt.setString(1, key);
+				insertStmt.setString(2, value);
 				insertStmt.execute();
 			} catch (SQLException e) {
 				LOG.log(LogType.WARN, "Failed to write sql database", e);
 			}
 		} else {
-			try{
-				updateStmt.setString(1, unit);
-				updateStmt.setString(2, value);
-				updateStmt.setString(3, key);
+			try(PreparedStatement updateStmt=prepareStatement(updateFormat,unit)){
+				updateStmt.setString(1, value);
+				updateStmt.setString(2, key);
 				updateStmt.execute();
 			} catch (SQLException e) {
 				LOG.log(LogType.WARN, "Failed to write sql database", e);
@@ -99,9 +103,8 @@ public class SQLStorage implements Storage {
 	@Override
 	public void remove(String unit, String key) {
 		if (read(unit, key, null) == null) return;
-		try{
-			deleteStmt.setString(1, unit);
-			deleteStmt.setString(2, key);
+		try(PreparedStatement deleteStmt=prepareStatement(deleteFormat,unit)){
+			deleteStmt.setString(1, key);
 			deleteStmt.execute();
 		} catch (SQLException e) {
 			LOG.log(LogType.WARN, "Failed to delete sql data", e);
@@ -110,7 +113,7 @@ public class SQLStorage implements Storage {
 
 	@Override
 	public String getGuildDefault(String key) {
-		return read("guild_default", key, null);
+		return read("guild_default", key, BotData.GUILD_DEFAULTS.get(key));
 	}
 
 	@Override
@@ -120,7 +123,7 @@ public class SQLStorage implements Storage {
 
 	@Override
 	public String getForGuild(Guild guild, String key) {
-		return read("guild_" + guild.getId(), key, null);
+		return read("guild_" + guild.getId(), key, getGuildDefault(key));
 	}
 
 	@Override

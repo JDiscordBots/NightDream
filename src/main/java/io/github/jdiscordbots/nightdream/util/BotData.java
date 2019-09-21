@@ -33,6 +33,8 @@ public class BotData {
 	private static final String KSOFT_TOKEN_PROP_NAME="KSoftToken";
 	private static final String PIXA_KEY_PROP_NAME="PixabayAPIKey";
 	private static final String DATABASE_URL_PROP_NAME = "DBUrl";
+	private static final String DATABASE_USER_PROP_NAME = "DBUsr";
+	private static final String DATABASE_PASSWORD_PROP_NAME = "DBPw";
 	
 	public static final Map<String,String> GLOBAL_DEFAULTS;
 	public static final Map<String,String> GUILD_DEFAULTS;
@@ -54,6 +56,8 @@ public class BotData {
 		defaults.put(KSOFT_TOKEN_PROP_NAME, "");
 		defaults.put(PIXA_KEY_PROP_NAME, "");
 		defaults.put(DATABASE_URL_PROP_NAME, "");
+		defaults.put(DATABASE_USER_PROP_NAME, "");
+		defaults.put(DATABASE_PASSWORD_PROP_NAME, "");
 		GLOBAL_DEFAULTS=Collections.unmodifiableMap(defaults);
 		
 		defaults.clear();
@@ -77,7 +81,7 @@ public class BotData {
 				NDLogger.logWithModule(LogType.DEBUG, "Storage", "Storage was set to database");
 			} catch (SQLException ignored) {
 				tempStorage = bkpStorage;
-				NDLogger.logWithModule(LogType.DEBUG, "Storage", "Storage was set to properties (files)");
+				NDLogger.logWithModule(LogType.DEBUG, "Storage", "Storage was set to properties (files) because DB loading failed",ignored);
 			}
 		}
 		STORAGE = tempStorage;
@@ -255,6 +259,34 @@ public class BotData {
 	 */
 	public static void setDatabaseUrl(String databaseUrl) {
 		bkpStorage.setGlobalProperty(DATABASE_URL_PROP_NAME, databaseUrl);
+	}
+	/**
+	 * gets the database username for database storage
+	 * @return database username
+	 */
+	public static String getDatabaseUser() {
+		return bkpStorage.getGlobalProperty(DATABASE_USER_PROP_NAME);
+	}
+	/**
+	 * sets the database username for database storage
+	 * @param databaseUrl database username
+	 */
+	public static void setDatabaseUser(String databaseUser) {
+		bkpStorage.setGlobalProperty(DATABASE_URL_PROP_NAME, databaseUser);
+	}
+	/**
+	 * gets the database password for database storage
+	 * @return database password
+	 */
+	public static String getDatabasePassword() {
+		return bkpStorage.getGlobalProperty(DATABASE_PASSWORD_PROP_NAME);
+	}
+	/**
+	 * sets the database password for database storage
+	 * @param databaseUrl database password
+	 */
+	public static void setDatabasePassword(String databasePwd) {
+		bkpStorage.setGlobalProperty(DATABASE_PASSWORD_PROP_NAME, databasePwd);
 	}
 	/**
 	 * reloads all Properties
