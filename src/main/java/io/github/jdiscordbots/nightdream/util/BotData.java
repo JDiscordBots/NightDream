@@ -42,7 +42,7 @@ public class BotData {
 	private static final PropertyStorage bkpStorage = new PropertyStorage();
 	public static final Storage STORAGE;
 	
-	public static final File DATA_DIR = new File("NightDream");
+	public static final File DATA_DIR;
 	
 	static {
 		Storage tempStorage;
@@ -64,6 +64,8 @@ public class BotData {
 		defaults.put(PREFIX_PROP_NAME, "nd-");
 		defaults.put(MSGLOG_CHAN_PROP_NAME, "");
 		GUILD_DEFAULTS=Collections.unmodifiableMap(defaults);
+		
+		DATA_DIR = new File(System.getProperty("profile", "NightDream"));
 		
 		if(!DATA_DIR.exists()) {
 			try {
