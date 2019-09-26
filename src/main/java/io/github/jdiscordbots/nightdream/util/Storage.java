@@ -15,6 +15,17 @@ import net.dv8tion.jda.api.entities.Guild;
  * Each unit consists of multiple key-value entries.
  */
 public interface Storage {
+	/**
+	 * reads a String from a given unit, subunit and key<br>
+	 * Can be compared to <code>get(unit).get(key).get(subUnit)</code> but may create necessary elements
+	 * @param unit the unit where the data is stored in.
+	 * @param subUnit the sub-unit where the data is stored in.
+	 * @param key the key of the value that should be read
+	 * @param defaultValue the value that should be used (and eventually saved), if the key does not exist
+	 * @param defaultSubUnits the sub-units that would be created if there is no entry of them in the table(may not be implemented)
+	 * @return the read String
+	 */
+	public String read(String unit,String subUnit, String key, String defaultValue, String... defaultSubUnits);
 	
 	/**
 	 * reads a String from a given unit and key<br>
@@ -27,6 +38,18 @@ public interface Storage {
 	 * @see Storage#remove(String, String)
 	 */
 	String read(String unit,String key,String defaultValue);
+	
+	/**
+	 * writes a String to a key in a given unit and a sub-unit<br>
+	 * Can be compared to <code>get(unit).get(subUnit).put(key,value)</code> but creates the unit/sub-unit if it is non-existent
+	 * @param unit the unit where the data should be stored in. 
+	 * @param subUnit the sub-unit where the data is stored in.
+	 * @param key the key of the where the value should be stored in the unit
+	 * @param value the future value of the key in the unit
+	 * @param defaultSubUnits the sub-units that would be created if there is no entry of them in the table(may not be implemented)
+	 */
+	public void write(String unit,String subUnit,String key,String value,String... defaultSubUnits);
+	
 	/**
 	 * writes a String to a key in a given unit<br>
 	 * Can be compared to <code>get(unit).put(key,value)</code> but creates the unit if it is non-existent
@@ -37,6 +60,16 @@ public interface Storage {
 	 * @see Storage#remove(String, String)
 	 */
 	void write(String unit,String key,String value);
+	/**
+	 * removes a key(and its value) from a unit and a sub-unit<br>
+	 * Can be compared to <code>get(unit).get(subUnit).remove(key)</code>
+	 * @param unit the unit where the key (and its value) should be removed
+	 * @param subUnit the sub-unit where the key (and its value) should be removed
+	 * @param key the key of the key-value pair to remove
+	 * @see Storage#read(String, String, String)
+	 * @see Storage#write(String, String, String)
+	 */
+	void remove(String unit,String subUnit,String key);
 	/**
 	 * removes a key(and its value) from a unit<br>
 	 * Can be compared to <code>get(unit).remove(key)</code>

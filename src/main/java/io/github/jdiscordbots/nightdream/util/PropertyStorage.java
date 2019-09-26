@@ -41,6 +41,11 @@ public class PropertyStorage implements Storage {
 	private Map<String, Properties> units=new HashMap<>();
 	
 	@Override
+	public String read(String unit,String subUnit, String key, String defaultValue, String... defaultSubUnits) {
+		return read(unit,key+"."+subUnit,defaultValue);
+	}
+	
+	@Override
 	public String read(String unit, String key,String defaultValue) {
 		Properties unitProps;
 		if(units.containsKey(unit)) {
@@ -52,7 +57,11 @@ public class PropertyStorage implements Storage {
 		}
 		return unitProps.getProperty(key);
 	}
-
+	
+	@Override
+	public void write(String unit,String subUnit,String key,String value,String... defaultSubUnits) {
+		write(unit,key+"."+subUnit,value);
+	}
 	@Override
 	public void write(String unit, String key, String value) {
 		Properties props;
@@ -64,6 +73,12 @@ public class PropertyStorage implements Storage {
 		props.setProperty(key, value);
 		saveProperties(unit+FILE_SUFFIX, props, "");
 	}
+	
+	@Override
+	public void remove(String unit, String subUnit, String key) {
+		remove(unit,key+"."+subUnit);
+	}
+	
 	@Override
 	public void remove(String unit, String key) {
 		Properties props;

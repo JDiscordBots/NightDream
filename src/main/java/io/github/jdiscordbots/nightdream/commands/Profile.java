@@ -105,13 +105,13 @@ public class Profile implements Command {
 		return getProp(user,name,"");
 	}
 	private static String getProp(User user,String name,String defaultProp) {
-		return BotData.STORAGE.read(STORAGE_UNIT, user.getId()+"."+name,defaultProp);
+		return BotData.STORAGE.read(STORAGE_UNIT, name, user.getId(), defaultProp, COLOR_PROP_NAME,DESC_PROP_NAME,LINK_PROP_NAME,"name");
 	}
 	private static void setProp(User user,String name,String value) {
-		BotData.STORAGE.write(STORAGE_UNIT, user.getId()+"."+name, value);
+		BotData.STORAGE.write(STORAGE_UNIT, name, user.getId(), value, COLOR_PROP_NAME,DESC_PROP_NAME,LINK_PROP_NAME,"name");
 	}
 	private static void unsetProp(User user,String name) {
-		BotData.STORAGE.remove(STORAGE_UNIT, user.getId()+"."+name);
+		BotData.STORAGE.remove(STORAGE_UNIT, name, user.getId());
 	}
 	private static void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {
