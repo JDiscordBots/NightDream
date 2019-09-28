@@ -23,6 +23,9 @@ import net.dv8tion.jda.api.entities.Guild;
  * saving, loading, retrieving and setting data of the Bot
  */
 public class BotData {
+	
+	private static final NDLogger STORAGE_LOG = NDLogger.getLogger("Storage");
+	
 	private static final String PREFIX_PROP_NAME = "prefix";
 	
 	private static final String INSTANCE_OWNER_PROP_NAME="admin";
@@ -45,7 +48,7 @@ public class BotData {
 	public static final File DATA_DIR=new File(System.getProperty("profile", "NightDream"));
 	
 	static {
-		Storage tempStorage;
+		Storage tempStorage= bkpStorage;;
 		Map<String,String> defaults=new HashMap<>();
 		defaults.put("token", "");
 		defaults.put("game","Nightdreaming...");
@@ -71,17 +74,28 @@ public class BotData {
 				NDLogger.logWithModule(LogType.ERROR,"io", "cannot create directory "+DATA_DIR.getAbsolutePath(), e);
 			}
 		}
-		if (bkpStorage.getGlobalProperty(DATABASE_URL_PROP_NAME) == null || bkpStorage.getGlobalProperty(DATABASE_URL_PROP_NAME).equals("")) {
-			tempStorage = bkpStorage;
-			NDLogger.logWithModule(LogType.DEBUG, "Storage", "Storage was set to properties (files)");
-		} else {
+		String dbUrl=bkpStorage.getGlobalProperty(DATABASE_URL_PROP_NAME);
+		if (dbUrl == null || "".equals(dbUrl)) {
+			//do nothing
+		} else if(dbUrl.startsWith("redis")){
+			if(dbUrl.equals("redis")) {
+				tempStorage=new RedisStorage();
+			}else if(dbUrl.startsWith("redis://")) {
+				dbUrl=dbUrl.substring("redis://".length());
+				tempStorage=new RedisStorage(dbUrl);
+				STORAGE_LOG.log(LogType.DEBUG, "Storage was set to redis database");
+			}
+		}else {
 			try {
 				tempStorage = new SQLStorage();
-				NDLogger.logWithModule(LogType.DEBUG, "Storage", "Storage was set to database");
+				STORAGE_LOG.log(LogType.DEBUG, "Storage was set to database");
 			} catch (SQLException ignored) {
 				tempStorage = bkpStorage;
-				NDLogger.logWithModule(LogType.DEBUG, "Storage", "Storage was set to properties (files) because DB loading failed",ignored);
+				STORAGE_LOG.log(LogType.WARN, "DB loading failed",ignored);
 			}
+		}
+		if(tempStorage==bkpStorage) {
+			STORAGE_LOG.log(LogType.DEBUG, "Storage was set to properties (files)");
 		}
 		STORAGE = tempStorage;
 	}
