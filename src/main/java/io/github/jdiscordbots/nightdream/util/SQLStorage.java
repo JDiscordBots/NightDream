@@ -28,12 +28,17 @@ public class SQLStorage implements Storage {
 	
 	private Map<String, PreparedStatement> stmtBuffer=new HashMap<>();
 	
-	private static final String SELECT_FORMAT="SELECT `%s` FROM %s WHERE `key`=?";
-	private static final String INSERT_FORMAT="INSERT INTO %s (`key`,`%s`) VALUES (?, ?);";
-	private static final String UPDATE_FORMAT="UPDATE `%s` SET `%s` = ? WHERE `key` = ?;";
+	private static final String DB_WRITE_FAIL_MSG="Failed to write sql database";
+	private static final String DB_READ_FAIL_MSG="Failed to read sql database";
+	private static final String DEFAULT_KEY_NAME="key";
+	private static final String DEFAULT_VALUE_NAME="value";
+	
+	private static final String SELECT_FORMAT="SELECT `%s` FROM %s WHERE `"+DEFAULT_KEY_NAME+"`=?";
+	private static final String INSERT_FORMAT="INSERT INTO %s (`"+DEFAULT_KEY_NAME+"`,`%s`) VALUES (?, ?);";
+	private static final String UPDATE_FORMAT="UPDATE `%s` SET `%s` = ? WHERE `"+DEFAULT_KEY_NAME+"` = ?;";
 	private static final String DELETE_FORMAT="DELETE FROM `%s` WHERE `%s` = ?;";
-	private static final String CREATE_FORMAT="CREATE TABLE IF NOT EXISTS `%s` (`key` varchar(46) primary key,`value` varchar(46));";
-	private static final String CREATE_SUB_FORMAT="CREATE TABLE IF NOT EXISTS `%s` (`key` varchar(46) primary key,%s);";
+	private static final String CREATE_FORMAT="CREATE TABLE IF NOT EXISTS `%s` (`"+DEFAULT_KEY_NAME+"` varchar(46) primary key,`"+DEFAULT_VALUE_NAME+"` varchar(46));";
+	private static final String CREATE_SUB_FORMAT="CREATE TABLE IF NOT EXISTS `%s` (`"+DEFAULT_KEY_NAME+"` varchar(46) primary key,%s);";
 
 	private final Statement stmt;
 	private void close(AutoCloseable toClose) {
@@ -105,7 +110,7 @@ public class SQLStorage implements Storage {
 			ret = read(selectStmt, insertStmt,
 					String.format(CREATE_FORMAT, unit,Stream.of(defaultRows).map(s->"`"+s+"` varchar(46) default ''").collect(Collectors.joining(", "))));
 		} catch (SQLException e) {
-			LOG.log(LogType.WARN, "Failed to read sql database", e);
+			LOG.log(LogType.WARN, DB_READ_FAIL_MSG, e);
 		}
 		if(ret==null) {
 			ret=defaultValue;
@@ -116,20 +121,20 @@ public class SQLStorage implements Storage {
 	public String read(String unit, String key, String defaultValue) {
 		String ret=null;
 		try {
-			PreparedStatement selectStmt = prepareStatement(SELECT_FORMAT,"value",unit);
+			PreparedStatement selectStmt = prepareStatement(SELECT_FORMAT,DEFAULT_VALUE_NAME,unit);
 			selectStmt.setString(1, key);
 			PreparedStatement insertStmt;
 			if(defaultValue==null) {
 				insertStmt=null;
 			}else {
-				insertStmt = prepareStatement(INSERT_FORMAT,unit,"value");
+				insertStmt = prepareStatement(INSERT_FORMAT,unit,DEFAULT_VALUE_NAME);
 				insertStmt.setString(1, key);
 				insertStmt.setString(2, defaultValue);
 			}
 			ret = read(selectStmt, insertStmt,
 					String.format(CREATE_FORMAT, unit));
 		} catch (SQLException e) {
-			LOG.log(LogType.WARN, "Failed to read sql database", e);
+			LOG.log(LogType.WARN, DB_READ_FAIL_MSG, e);
 		}
 		if(ret==null) {
 			ret=defaultValue;
@@ -158,23 +163,23 @@ public class SQLStorage implements Storage {
 			updateStmt.setString(2, key);
 			write(selector,insertStmt,updateStmt,String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->"`"+s+"` varchar(46) default ''").collect(Collectors.joining(", "))));
 		}catch (SQLException e) {
-			LOG.log(LogType.WARN, "Failed to write sql database", e);
+			LOG.log(LogType.WARN, DB_WRITE_FAIL_MSG, e);
 		}
 	}
 	@Override
 	public void write(String unit, String key, String value) {
 		try {
-			PreparedStatement selector=prepareStatement(SELECT_FORMAT,"value",unit);
+			PreparedStatement selector=prepareStatement(SELECT_FORMAT,DEFAULT_VALUE_NAME,unit);
 			selector.setString(1, key);
 			PreparedStatement insertStmt=prepareStatement(INSERT_FORMAT,unit);
 			insertStmt.setString(1, key);
 			insertStmt.setString(2, value);
-			PreparedStatement updateStmt=prepareStatement(UPDATE_FORMAT,unit,"value");
+			PreparedStatement updateStmt=prepareStatement(UPDATE_FORMAT,unit,DEFAULT_VALUE_NAME);
 			updateStmt.setString(1, value);
 			updateStmt.setString(2, key);
 			write(selector,insertStmt,updateStmt,String.format(CREATE_FORMAT, unit));
 		}catch (SQLException e) {
-			LOG.log(LogType.WARN, "Failed to write sql database", e);
+			LOG.log(LogType.WARN, DB_WRITE_FAIL_MSG, e);
 		}
 	}
 
@@ -182,7 +187,7 @@ public class SQLStorage implements Storage {
 	public void remove(String unit, String key) {
 		if (read(unit, key, null) == null) return;
 		try{
-			PreparedStatement deleteStmt=prepareStatement(DELETE_FORMAT,unit,"key");
+			PreparedStatement deleteStmt=prepareStatement(DELETE_FORMAT,unit,DEFAULT_KEY_NAME);
 			deleteStmt.setString(1, key);
 			deleteStmt.execute();
 		} catch (SQLException e) {
@@ -198,7 +203,7 @@ public class SQLStorage implements Storage {
 			updateStmt.setString(2, key);
 			updateStmt.execute();
 		}catch (SQLException e) {
-			LOG.log(LogType.WARN, "Failed to write sql database", e);
+			LOG.log(LogType.WARN, DB_WRITE_FAIL_MSG, e);
 		}
 	}
 	
