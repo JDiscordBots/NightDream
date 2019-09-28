@@ -28,8 +28,8 @@ public class SQLStorage implements Storage {
 	
 	private Map<String, PreparedStatement> stmtBuffer=new HashMap<>();
 	
-	private static final String DB_WRITE_FAIL_MSG="Failed to write sql database";
-	private static final String DB_READ_FAIL_MSG="Failed to read sql database";
+	private static final String DB_WRITE_FAIL_MSG="Failed to write to sql database";
+	private static final String DB_READ_FAIL_MSG="Failed to read from sql database";
 	private static final String DEFAULT_KEY_NAME="key";
 	private static final String DEFAULT_VALUE_NAME="value";
 	
