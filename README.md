@@ -19,7 +19,7 @@ You can download NightDream [here](https://github.com/JDiscordBots/Nightdream/wi
 
 ### Build your own NightDream instance
 * execute `mvn clean install package` in the project directory
-* the executeable JAR file is in the directory `target`
+* the executable JAR file is in the directory `target`
 
 ## Invite Nightdream to your Server
 [Invite](https://discordapp.com/oauth2/authorize?client_id=596643235523330070&permissions=8&scope=bot)

@@ -5,7 +5,7 @@
  * Licensed under Boost Software License 1.0
  */
 
-package io.github.jdiscordbots.nightdream.util;
+package io.github.jdiscordbots.nightdream.storage;
 
 import net.dv8tion.jda.api.entities.Guild;
 /**

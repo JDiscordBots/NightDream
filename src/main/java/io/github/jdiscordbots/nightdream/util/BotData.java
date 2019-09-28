@@ -17,6 +17,10 @@ import java.util.Map;
 
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import io.github.jdiscordbots.nightdream.storage.PropertyStorage;
+import io.github.jdiscordbots.nightdream.storage.RedisStorage;
+import io.github.jdiscordbots.nightdream.storage.SQLStorage;
+import io.github.jdiscordbots.nightdream.storage.Storage;
 import net.dv8tion.jda.api.entities.Guild;
 
 /**

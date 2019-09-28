@@ -5,7 +5,7 @@
  * Licensed under Boost Software License 1.0
  */
 
-package io.github.jdiscordbots.nightdream.util;
+package io.github.jdiscordbots.nightdream.storage;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -24,6 +24,7 @@ import java.util.Properties;
 
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Guild;
 
 /**

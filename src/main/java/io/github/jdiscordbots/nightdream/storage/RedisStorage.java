@@ -1,5 +1,13 @@
-package io.github.jdiscordbots.nightdream.util;
+/*
+ * Copyright (c) JDiscordBots 2019
+ * File: RedisStorage.java
+ * Project: NightDream
+ * Licensed under Boost Software License 1.0
+ */
 
+package io.github.jdiscordbots.nightdream.storage;
+
+import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Guild;
 import redis.clients.jedis.Jedis;
 
@@ -17,7 +25,7 @@ public class RedisStorage implements Storage{
 	}
 
 	private void init() {
-		String pass=BotData.getDatabasePassword();
+		String pass= BotData.getDatabasePassword();
 		if(pass!=null&&!"".equals(pass)) {
 			jedis.auth(pass);
 		}
