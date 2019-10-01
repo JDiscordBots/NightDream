@@ -11,10 +11,17 @@ import io.github.jdiscordbots.nightdream.logging.*;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Guild;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -58,11 +65,33 @@ public class SQLStorage implements Storage {
 		close(stmt);
 		close(connection);
 	}
+	private static URL getURL(String str) {
+		try {
+			return new File(BotData.DATA_DIR,str).toURI().toURL();
+		} catch (MalformedURLException e) {
+			return null;
+		}
+	}
 	public SQLStorage() throws SQLException {
-		if(BotData.getDatabaseUser()==null||"".equals(BotData.getDatabaseUser())) {
-			connection = DriverManager.getConnection(BotData.getDatabaseUrl());
-		}else {
-			connection = DriverManager.getConnection(BotData.getDatabaseUrl(),BotData.getDatabaseUser(),BotData.getDatabasePassword());
+		URL[] urls=Stream.of(BotData.DATA_DIR.list()).map(SQLStorage::getURL).toArray(URL[]::new);
+		URLClassLoader loader=new URLClassLoader(urls);
+		ServiceLoader<Driver> drivers = ServiceLoader.load(java.sql.Driver.class, loader);
+		Properties info=new Properties();
+		if(BotData.getDatabaseUser()!=null&&!"".equals(BotData.getDatabaseUser())) {
+			info.setProperty("user", BotData.getDatabaseUser());
+			info.setProperty("password", BotData.getDatabasePassword());
+		}
+		Iterator<Driver> iter=drivers.iterator();
+		while (connection==null&&iter.hasNext()) {
+			Driver driver=iter.next();
+			try {
+				connection=driver.connect(BotData.getDatabaseUrl(), info);
+			}catch(SQLException e) {
+				LOG.log(LogType.DEBUG,"cannot connect to DB with driver "+driver.getClass().getName()+" and URL "+BotData.getDatabaseUrl());
+			}
+		}
+		if(connection==null) {
+			connection=DriverManager.getConnection(BotData.getDatabaseUrl(), info);
 		}
 		LOG.log(LogType.DONE, "Successfully connected to database");
 		stmt=connection.createStatement();

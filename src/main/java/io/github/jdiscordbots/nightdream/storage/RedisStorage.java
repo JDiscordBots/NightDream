@@ -20,7 +20,12 @@ public class RedisStorage implements Storage{
 		init();
 	}
 	public RedisStorage(String url) {
-		jedis = new Jedis(url);
+		if(url.contains(":")) {
+			jedis=new Jedis(url.split(":")[0],Integer.parseInt(url.split(":")[1]));
+		}else {
+			jedis = new Jedis(url);
+		}
+		
 		init();
 	}
 

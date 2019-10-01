@@ -93,9 +93,9 @@ public class BotData {
 			try {
 				tempStorage = new SQLStorage();
 				STORAGE_LOG.log(LogType.DEBUG, "Storage was set to database");
-			} catch (SQLException ignored) {
+			} catch (SQLException e) {
 				tempStorage = bkpStorage;
-				STORAGE_LOG.log(LogType.WARN, "DB loading failed",ignored);
+				STORAGE_LOG.log(LogType.WARN, "DB loading failed",e);
 			}
 		}
 		if(tempStorage==bkpStorage) {
