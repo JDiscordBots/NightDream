@@ -2,6 +2,7 @@ package io.github.jdiscordbots.nightdream.commands;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -21,7 +22,7 @@ public class Dns implements Command {
 		if(args.length==0) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> Unknown Resolve Target").queue();
 		}else {
-			try(Scanner scan=new Scanner(new URL("https://dns.google.com/resolve?type=PTR&name="+String.join(" ", args)).openStream())){
+			try(Scanner scan=new Scanner(new URL("https://dns.google.com/resolve?type=PTR&name="+String.join(" ", args)).openStream(),StandardCharsets.UTF_8.name())){
 				JSONObject json=new JSONObject(scan.nextLine());
 				if(json.getInt("Status")==0) {
 					JSONObject qObj = json.getJSONArray("Question").getJSONObject(0);
