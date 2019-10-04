@@ -7,6 +7,7 @@
 
 package io.github.jdiscordbots.nightdream.storage;
 
+import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Guild;
 /**
  * Interface for permanent (unit-key-value) storage.<br>
@@ -85,14 +86,18 @@ public interface Storage {
 	 * @return the (current) default value
 	 * @see Storage#setGuildDefault(String, String)
 	 */
-	String getGuildDefault(String key);
+	default String getGuildDefault(String key) {
+		return read("guild_default", key, BotData.GUILD_DEFAULTS.get(key));
+	}
 	/**
 	 * reads the default value for guilds from a given key
 	 * @param key the key
 	 * @param value the (future) default value
 	 * @see Storage#getGuildDefault(String)
 	 */
-	void setGuildDefault(String key,String value);
+	default void setGuildDefault(String key,String value) {
+		write("guild_default", key, value);
+	}
 	/**
 	 * gets a value from a key that is specific for a guild
 	 * @param guild the specific {@link Guild} for this key-value pair
@@ -102,7 +107,9 @@ public interface Storage {
 	 * @see Storage#setGuildDefault(String, String)
 	 * @see Storage#getGuildDefault(String)
 	 */
-	String getForGuild(Guild guild,String key);
+	default String getForGuild(Guild guild,String key) {
+		return read("guild_" + guild.getId(), key, getGuildDefault(key));
+	}
 	/**
 	 * sets a key-value that is specific for a guild
 	 * @param guild the specific {@link Guild}, where this key-value pair belongs to
@@ -112,7 +119,9 @@ public interface Storage {
 	 * @see Storage#setGuildDefault(String, String)
 	 * @see Storage#getGuildDefault(String)
 	 */
-	void setForGuild(Guild guild,String key,String value);
+	default void setForGuild(Guild guild,String key,String value) {
+		write("guild_" + guild.getId(), key, value);
+	}
 	/**
 	 * reloads all cached data
 	 */

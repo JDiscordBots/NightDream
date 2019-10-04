@@ -238,26 +238,6 @@ public class SQLStorage implements Storage {
 			LOG.log(LogType.WARN, DB_WRITE_FAIL_MSG, e);
 		}
 	}
-	
-	@Override
-	public String getGuildDefault(String key) {
-		return read("guild_default", key, BotData.GUILD_DEFAULTS.get(key));
-	}
-
-	@Override
-	public void setGuildDefault(String key, String value) {
-		write("guild_default", key, value);
-	}
-
-	@Override
-	public String getForGuild(Guild guild, String key) {
-		return read("guild_" + guild.getId(), key, getGuildDefault(key));
-	}
-
-	@Override
-	public void setForGuild(Guild guild, String key, String value) {
-		write("guild_" + guild.getId(), key, value);
-	}
 	@Override
 	public void reload() {
 		for (PreparedStatement pStmt : stmtBuffer.values()) {

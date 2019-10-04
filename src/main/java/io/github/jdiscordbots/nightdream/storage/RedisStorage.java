@@ -8,7 +8,6 @@
 package io.github.jdiscordbots.nightdream.storage;
 
 import io.github.jdiscordbots.nightdream.util.BotData;
-import net.dv8tion.jda.api.entities.Guild;
 import redis.clients.jedis.Jedis;
 
 public class RedisStorage implements Storage{
@@ -82,25 +81,4 @@ public class RedisStorage implements Storage{
 	public void remove(String unit, String key) {
 		remove(getKey(unit,key));
 	}
-
-	@Override
-	public String getGuildDefault(String key) {
-		return read("guild_default", key, BotData.GUILD_DEFAULTS.get(key));
-	}
-
-	@Override
-	public void setGuildDefault(String key, String value) {
-		write("guild_default", key, value);
-	}
-
-	@Override
-	public String getForGuild(Guild guild, String key) {
-		return read("guild_" + guild.getId(), key, getGuildDefault(key));
-	}
-
-	@Override
-	public void setForGuild(Guild guild, String key, String value) {
-		write("guild_" + guild.getId(), key, value);
-	}
-
 }
