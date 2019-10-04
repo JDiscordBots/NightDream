@@ -3,7 +3,6 @@ package io.github.jdiscordbots.nightdream.commands;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -37,7 +36,6 @@ public class Dns implements Command {
 						eb.addField("Time to live (TTL)", String.valueOf(auth.getInt("TTL")), false);
 						
 						String[] data=auth.getString("data").split(Pattern.quote(". "));
-						System.out.println(Arrays.toString(data));
 						eb.addField("Nameserver", data[0], false);
 						eb.addField("DNS Hostmaster", data[1], false);
 						eb.addField("Mystery Text", data[2], false);

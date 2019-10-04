@@ -52,7 +52,7 @@ public class BotData {
 	public static final File DATA_DIR=new File(System.getProperty("profile", "NightDream"));
 	
 	static {
-		Storage tempStorage= bkpStorage;;
+		Storage tempStorage= bkpStorage;
 		Map<String,String> defaults=new HashMap<>();
 		defaults.put("token", "");
 		defaults.put("game","Nightdreaming...");

@@ -76,12 +76,7 @@ public class SQLStorage implements Storage {
 	}
 	public SQLStorage() throws SQLException {
 		URL[] urls=Stream.of(BotData.DATA_DIR.list()).map(SQLStorage::getURL).toArray(URL[]::new);
-		URLClassLoader loader=AccessController.doPrivileged(new PrivilegedAction<URLClassLoader>() {
-			@Override
-			public URLClassLoader run() {
-				return new URLClassLoader(urls);
-			}
-		});
+		URLClassLoader loader=AccessController.doPrivileged((PrivilegedAction<URLClassLoader>)(() -> new URLClassLoader(urls)));
 		ServiceLoader<Driver> drivers = ServiceLoader.load(java.sql.Driver.class, loader);
 		Properties info=new Properties();
 		if(BotData.getDatabaseUser()!=null&&!"".equals(BotData.getDatabaseUser())) {
