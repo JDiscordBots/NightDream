@@ -15,7 +15,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
@@ -44,15 +43,12 @@ public class NPM implements Command{
 				return;
 			}
 			JSONObject versionInfo=versions.getJSONObject(infoHolder.get());
-			
-			String keywordStr="<nothing>";
-			try{
+			String keywordStr = "<nothing>";
+			if(jsonObj.has("keywords")) {
 				JSONArray keywords=jsonObj.getJSONArray("keywords");
 				if(keywords.length()!=0) {
 					keywordStr=keywords.join(", ");
 				}
-			}catch(JSONException e) {
-				//handled by default
 			}
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0xfb3b49)
