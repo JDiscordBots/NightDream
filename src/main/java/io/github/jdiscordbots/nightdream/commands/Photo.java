@@ -10,6 +10,7 @@ package io.github.jdiscordbots.nightdream.commands;
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
+import io.github.jdiscordbots.nightdream.util.GeneralUtils;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -17,12 +18,9 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
 @BotCommand("photo")
 public class Photo implements Command {
@@ -39,12 +37,18 @@ public class Photo implements Command {
 			return;
 		}
 		event.getChannel().sendTyping();
-		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(
-				"https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+URLEncoder.encode(String.join(" ", args),StandardCharsets.UTF_8.name())
-				).openConnection().getInputStream()), StandardCharsets.UTF_8.toString())){
+		JSONObject json=null;
+		try {
+			json = GeneralUtils.getJSONFromURL("https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+URLEncoder.encode(String.join(" ", args),StandardCharsets.UTF_8.name() ));
+		} catch (UnsupportedEncodingException ignore) {
+			//ignore
+		}
+		if(json==null) {
+			event.getChannel().sendMessage("<:IconX:553868311960748044> Something went badly wrong - the server did not respond! Try again **in a few minutes**.").queue();
+		}else {
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0x212121);
-			JSONArray hits=new JSONObject(scan.nextLine()).getJSONArray("hits");
+			JSONArray hits=json.getJSONArray("hits");
 			if(hits.length()==0) {
 				builder.setTitle("<:IconProvide:553870022125027329> Nothing found")
                 .setDescription("Try something different.");
@@ -56,9 +60,6 @@ public class Photo implements Command {
 			}
 			
 			event.getChannel().sendMessage(builder.build()).queue();
-		} catch (IOException e) {
-			event.getChannel().sendMessage("<:IconX:553868311960748044> Something went badly wrong - the server did not respond! Try again **in a few minutes**.").queue();
-			NDLogger.logWithoutModule(LogType.ERROR, "cannot load photo", e);
 		}
 	}
 

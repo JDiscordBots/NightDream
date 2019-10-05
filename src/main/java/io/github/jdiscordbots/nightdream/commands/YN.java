@@ -7,28 +7,22 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import io.github.jdiscordbots.nightdream.util.GeneralUtils;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-
 @BotCommand("yn")
 public class YN implements Command {
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		try(Scanner scan=new Scanner(new BufferedInputStream(new URL("https://yesno.wtf/api").openConnection().getInputStream()), StandardCharsets.UTF_8.toString())){
-			JSONObject json=new JSONObject(scan.nextLine());
-			
+		JSONObject json=GeneralUtils.getJSONFromURL("https://yesno.wtf/api");
+		if(json==null) {
+			JDAUtils.errmsg(event.getChannel(), "something went wrong.");
+		}else {
 			String answer=json.getString("answer")+"!";
 			answer=Character.toUpperCase(answer.charAt(0))+answer.substring(1);
 			String url=json.getString("image");
@@ -38,9 +32,6 @@ public class YN implements Command {
 					.setTitle(answer)
 					.setImage(url)
 					.build()).queue();
-		} catch (IOException e) {
-			JDAUtils.errmsg(event.getChannel(), "something went wrong.");
-			NDLogger.logWithoutModule(LogType.ERROR, "IO Error while executing a yes-no query", e);
 		}
 	}
 

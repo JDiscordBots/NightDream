@@ -1,13 +1,8 @@
 package io.github.jdiscordbots.nightdream.commands;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-
 import org.json.JSONObject;
 
+import io.github.jdiscordbots.nightdream.util.GeneralUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -20,8 +15,10 @@ public class Nuget implements Command {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
 		}
 		String url="https://azuresearch-usnc.nuget.org/query?q="+args[0]+"&take=1"+args[0];
-		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(url).openConnection().getInputStream()), StandardCharsets.UTF_8.name())){
-			JSONObject jsonObj=new JSONObject(scan.nextLine());
+		JSONObject jsonObj=GeneralUtils.getJSONFromURL(url);
+		if(jsonObj==null) {
+			event.getChannel().sendMessage("This didn't work...").queue();
+		}else {
 			if(jsonObj.getInt("totalHits")>0) {
 				JSONObject data=jsonObj.getJSONArray("data").getJSONObject(0);
 				EmbedBuilder builder=new EmbedBuilder();
@@ -45,8 +42,6 @@ public class Nuget implements Command {
 					.setDescription("Try something different.").build()
 				).queue();
 			}
-		}catch (IOException e) {
-			event.getChannel().sendMessage("This didn't work...").queue();
 		}
 	}
 

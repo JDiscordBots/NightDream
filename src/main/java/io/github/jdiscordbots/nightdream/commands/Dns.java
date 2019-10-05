@@ -1,14 +1,11 @@
 package io.github.jdiscordbots.nightdream.commands;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import io.github.jdiscordbots.nightdream.util.GeneralUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -21,8 +18,10 @@ public class Dns implements Command {
 		if(args.length==0) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> Unknown Resolve Target").queue();
 		}else {
-			try(Scanner scan=new Scanner(new URL("https://dns.google.com/resolve?type=PTR&name="+String.join(" ", args)).openStream(),StandardCharsets.UTF_8.name())){
-				JSONObject json=new JSONObject(scan.nextLine());
+			JSONObject json=GeneralUtils.getJSONFromURL("https://dns.google.com/resolve?type=PTR&name="+String.join(" ", args));
+			if(json==null) {
+				event.getChannel().sendMessage("Unknown Error").queue();
+			}else {
 				if(json.getInt("Status")==0) {
 					JSONObject qObj = json.getJSONArray("Question").getJSONObject(0);
 					String question = qObj.getString("name");
@@ -51,8 +50,6 @@ public class Dns implements Command {
 				}else {
 					event.getChannel().sendMessage("Your query is unresolvable.\nTry with a different one?").queue();
 				}
-			} catch (IOException e) {
-				event.getChannel().sendMessage("Unknown Error").queue();
 			}
 		}
 	}

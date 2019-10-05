@@ -7,8 +7,7 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import io.github.jdiscordbots.nightdream.util.GeneralUtils;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
@@ -17,13 +16,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import java.util.Scanner;
 
 @BotCommand("npm")
 public class NPM implements Command{
@@ -34,8 +27,10 @@ public class NPM implements Command{
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
 		}
 		String url="https://registry.yarnpkg.com/"+args[0];
-		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(url).openConnection().getInputStream()), StandardCharsets.UTF_8.name())){
-			JSONObject jsonObj=new JSONObject(scan.nextLine());
+		JSONObject jsonObj=GeneralUtils.getJSONFromURL(url);
+		if(jsonObj==null) {
+			event.getChannel().sendMessage("Are you sure the package exists?").queue();
+		}else {
 			JSONObject versions=jsonObj.getJSONObject("versions");
 			Optional<String> infoHolder=versions.keySet().stream().max((a,b)->a.compareTo(b));
 			if(!infoHolder.isPresent()) {
@@ -61,13 +56,7 @@ public class NPM implements Command{
 			if(args[0].startsWith("@")&&args[0].contains("/")) {
 				builder.addField(new Field("Scope", "`"+args[0].split("/")[0].substring(1)+"`", true));
 			}
-			
-			JDAUtils.msg(event.getChannel(), builder.build());
-		}catch(FileNotFoundException e) {
-			JDAUtils.errmsg(event.getChannel(), "Not found");
-		}catch (IOException e) {
-			JDAUtils.errmsg(event.getChannel(), "An error occured.");
-			NDLogger.logWithModule(LogType.WARN, "Commands", "IO Error while executing a npm query", e);
+			event.getChannel().sendMessage(builder.build()).queue();
 		}
 	}
 	@Override
