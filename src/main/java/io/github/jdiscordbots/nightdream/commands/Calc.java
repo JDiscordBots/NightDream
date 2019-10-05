@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.Color;
 
-@BotCommand("calc")
+@BotCommand({"calc","math"})
 public class Calc implements Command {
 
 	@Override
