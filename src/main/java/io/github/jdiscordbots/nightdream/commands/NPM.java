@@ -33,7 +33,7 @@ public class NPM implements Command{
 		if(args.length==0) {
 			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
 		}
-		String url="http://registry.yarnpkg.com/"+args[0];
+		String url="https://registry.yarnpkg.com/"+args[0];
 		try(Scanner scan=new Scanner(new BufferedInputStream(new URL(url).openConnection().getInputStream()), StandardCharsets.UTF_8.name())){
 			JSONObject jsonObj=new JSONObject(scan.nextLine());
 			JSONObject versions=jsonObj.getJSONObject("versions");
