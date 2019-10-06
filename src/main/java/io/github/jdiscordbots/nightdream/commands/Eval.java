@@ -72,8 +72,6 @@ public class Eval implements Command {
 	protected void onSuccess(Object result,GuildMessageReceivedEvent event) {
 		if (result != null) {
         	event.getChannel().sendMessage("```js\n"+result.toString()+"\n```").queue();
-		} else {
-			event.getChannel().sendMessage("`undefined` or `null`").queue();
 		}
 	}
 	protected void onError(Exception e,GuildMessageReceivedEvent event) {
