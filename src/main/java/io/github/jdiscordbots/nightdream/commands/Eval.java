@@ -12,9 +12,9 @@ import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import bsh.EvalError;
+import bsh.Interpreter;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -22,38 +22,49 @@ import java.io.StringWriter;
 @BotCommand("eval")
 public class Eval implements Command {
 
-	private static final ScriptEngine se;
 	private static final String LATEST_EXCEPTION_KEY_NAME="err";
+	private static final Interpreter shell=new Interpreter();
 	
-	static {
-		se = new ScriptEngineManager().getEngineByName("Nashorn");
-		se.put("System", System.class);
+	/*static {
         try {
-			se.eval("System=System.static");
-		} catch (ScriptException e) {
+        	shell.set("System", System.class);
+			shell.eval("System=System.static");
+		} catch (EvalError e) {
 			NDLogger.logWithoutModule(LogType.WARN, "An Exception occurred while setting up System in eval", e);
 		}
-	}
+	}*/
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		return JDAUtils.checkOwner(event,args!=null);	
 	}
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-        se.put("event", event);
-        se.put("jda", event.getJDA());
-        se.put("guild", event.getGuild());
-        se.put("channel", event.getChannel());
-        se.put("message", event.getMessage());
+        
+        try {
+        	shell.set("event", event);
+			shell.set("jda", event.getJDA());
+			shell.set("guild", event.getGuild());
+	        shell.set("channel", event.getChannel());
+	        shell.set("message", event.getMessage());
+		} catch (EvalError e) {
+			NDLogger.logWithoutModule(LogType.WARN, "eval exception while setting command values",e);
+		}
+        
+        
+        
 
         StringBuilder scriptBuilder = new StringBuilder();
         for (String string : args) {
 			scriptBuilder.append(string).append(" ");
 		}
 		try {
-			onSuccess(se.eval(scriptBuilder.toString()),event);
-		} catch (ScriptException|RuntimeException e) {
-			se.put(LATEST_EXCEPTION_KEY_NAME, e);
+			onSuccess(shell.eval(scriptBuilder.toString()),event);
+		} catch (EvalError|RuntimeException e) {
+			try {
+				shell.set(LATEST_EXCEPTION_KEY_NAME, e);
+			} catch (EvalError e1) {
+				NDLogger.logWithoutModule(LogType.WARN, "eval exception while setting error value",e);
+			}
 			onError(e,event);
 		}
 	}
