@@ -24,15 +24,7 @@ public class Eval implements Command {
 
 	private static final String LATEST_EXCEPTION_KEY_NAME="err";
 	private static final Interpreter shell=new Interpreter();
-	
-	/*static {
-        try {
-        	shell.set("System", System.class);
-			shell.eval("System=System.static");
-		} catch (EvalError e) {
-			NDLogger.logWithoutModule(LogType.WARN, "An Exception occurred while setting up System in eval", e);
-		}
-	}*/
+
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		return JDAUtils.checkOwner(event,args!=null);	
