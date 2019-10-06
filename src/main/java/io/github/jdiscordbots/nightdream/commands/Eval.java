@@ -41,10 +41,6 @@ public class Eval implements Command {
 		} catch (EvalError e) {
 			NDLogger.logWithoutModule(LogType.WARN, "eval exception while setting command values",e);
 		}
-        
-        
-        
-
         StringBuilder scriptBuilder = new StringBuilder();
         for (String string : args) {
 			scriptBuilder.append(string).append(" ");
@@ -67,6 +63,7 @@ public class Eval implements Command {
 		}
 	}
 	protected void onError(Exception e,GuildMessageReceivedEvent event) {
+		e.setStackTrace(new StackTraceElement[0]);
 		try(StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw)){
 			e.printStackTrace(pw);
