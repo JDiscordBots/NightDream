@@ -9,3 +9,4 @@ used Libraries:
 * [NightDream-Logging](https://github.com/JDiscordBots/NightDream-Logging) (Logging)
 * [Jedis](https://github.com/xetorthio/jedis) (Redis Storage)
 * [Bean Shell](http://www.beanshell.org/manual/contents.html) (eval/seval)
+* [JUnit](https://github.com/junit-team/junit5) (for automated tests)

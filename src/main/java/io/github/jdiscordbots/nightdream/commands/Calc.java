@@ -19,7 +19,7 @@ public class Calc implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/,%%,**,root] num2`", BotData.getPrefix(event.getGuild()));
-		if (args.length < 2) {
+		if (args.length <= 2) {
 			event.getChannel().sendMessage(wrongFormat).queue();
 			return;
 		}

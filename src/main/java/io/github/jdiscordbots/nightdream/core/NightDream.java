@@ -37,7 +37,7 @@ public class NightDream {
 	private static final NDLogger CMD_CTL_LOG=NDLogger.getLogger("Command Handler");
 	private static final NDLogger DISCORD_CTL_LOG=NDLogger.getLogger("Discord");
 	
-	public static void main(String[] args) {
+	public static JDA initialize() {
 		final JDABuilder builder = new JDABuilder(AccountType.BOT)
 			.setToken(BotData.getToken())
 			.setAutoReconnect(true) //should the Bot reconnect?
@@ -58,18 +58,19 @@ public class NightDream {
 				Game.watching(String)//watching...
 			*/
 			.setRequestTimeoutRetry(true);
-		
-		
+		JDA jda=null;
 		try {
 			DISCORD_CTL_LOG.log(LogType.INFO, "Logging in...");
-			JDA jda = builder.build();
 			
-			//initialize commands and listeners
+			jda = builder.build();
+
+			// initialize commands and listeners
 			Reflections ref = new Reflections("io.github.jdiscordbots.nightdream");
-			CMD_CTL_LOG.log(LogType.INFO,"Loading Commands and Listeners...");
+			CMD_CTL_LOG.log(LogType.INFO, "Loading Commands and Listeners...");
 			addCommandsAndListeners(ref, jda);
-			CMD_CTL_LOG.log(LogType.INFO,"Loaded Commands and Listeners");
-			CMD_CTL_LOG.log(LogType.DEBUG,"available Commands: "+CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", ")));
+			CMD_CTL_LOG.log(LogType.INFO, "Loaded Commands and Listeners");
+			CMD_CTL_LOG.log(LogType.DEBUG, "available Commands: "
+					+ CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", ")));
 			jda.awaitReady();
 			DISCORD_CTL_LOG.log(LogType.INFO, "Logged in.");
 			((JDAImpl) jda).getGuildSetupController().clearCache();
@@ -78,9 +79,13 @@ public class NightDream {
 		} catch (final IllegalArgumentException e) {
 			DISCORD_CTL_LOG.log(LogType.ERROR, "There is no token entered!");
 		} catch (final InterruptedException e) {
-			NDLogger.getGlobalLogger().log(LogType.ERROR,"The main thread got interrupted while logging in",e);
+			NDLogger.getGlobalLogger().log(LogType.ERROR, "The main thread got interrupted while logging in", e);
 			Thread.currentThread().interrupt();
 		}
+		return jda;
+	}
+	public static void main(String[] args) {
+		initialize();
 	}
 	
 	/**
