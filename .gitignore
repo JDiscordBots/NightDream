@@ -1,5 +1,6 @@
 /NightDream
 /test
+/src/test/resources/jda-tests.properties
 /startNightdream.bat
 *.db
 
