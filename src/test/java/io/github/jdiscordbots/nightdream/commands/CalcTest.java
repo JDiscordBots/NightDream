@@ -1,7 +1,9 @@
 package io.github.jdiscordbots.nightdream.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.function.Predicate;
 
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.github.jdiscordbots.jdatesting.TestUtils.*;
 
+import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -103,5 +106,14 @@ public class CalcTest{
 	public void testDecimals() {
 		assertCalculation("4.5 + 1.5", "4.5 plus 1.5", "6.0");
 		assertCalculation("4.5 + 1.0", "4.5 plus 1.0", "5.5");
+	}
+	
+	@Test
+	public void testHelp() {
+		assertEquals("Does some calculation for you", new Calc().help());
+	}
+	@Test
+	public void testCommandType() {
+		assertSame(CommandType.UTIL,new Calc().getType());
 	}
 }
