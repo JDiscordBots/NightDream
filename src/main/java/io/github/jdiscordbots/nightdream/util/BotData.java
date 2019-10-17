@@ -207,6 +207,13 @@ public class BotData {
 		return bkpStorage.getGlobalProperty("token");
 	}
 	/**
+	 * sets the Discord Bot token
+	 * @return the token
+	 */
+	public static void setToken(String token) {
+		bkpStorage.setGlobalProperty("token",token);
+	}
+	/**
 	 * gets the API token from KSoft
 	 * @return the KSoft API token
 	 */

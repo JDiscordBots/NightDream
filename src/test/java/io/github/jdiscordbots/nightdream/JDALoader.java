@@ -5,18 +5,16 @@ import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.JDA;
 
 public class JDALoader {
-	private static void copyEnv(String... keys) {
-		for (String key : keys) {
-			String value=System.getenv("ND_"+key);
-			if(value!=null) {
-				System.setProperty(key, value);
-			}
-		}
-	}
 	public static JDA load() {
-		copyEnv("token","admin");
-		BotData.setGame("Unit-Testing");
 		System.setProperty("profile", "test");
+		String env=System.getenv("ND_token");
+		if(env!=null) {
+			BotData.setToken(env);
+		}
+		if((env=System.getenv("ND_admin"))!=null) {
+			BotData.setAdminIDs(env.split(" "));
+		}
+		BotData.setGame("Unit-Testing");
 		return NightDream.initialize();
 	}
 
