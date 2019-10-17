@@ -28,7 +28,12 @@ jobs:
     - name: "automated (feature) tests"
       jdk:
         - openjdk8
-      script: mvn test
+      script: 
+      - propFile="src/test/resources/jda-tests.properties"
+      - echo "jda-factory-class=io.github.jdiscordbots.nightdream.JDALoader" > $propFile
+      - echo "jda-factory-method=load" > $propFile
+      - echo "testing-channel=$testChan" > $propFile
+      - mvn test
     - stage: "Upload to Wiki"
       jdk:
       - openjdk8
