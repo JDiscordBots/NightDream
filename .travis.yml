@@ -31,8 +31,8 @@ jobs:
       script: 
       - propFile="src/test/resources/jda-tests.properties"
       - echo "jda-factory-class=io.github.jdiscordbots.nightdream.JDALoader" > $propFile
-      - echo "jda-factory-method=load" > $propFile
-      - echo "testing-channel=$testChan" > $propFile
+      - echo "jda-factory-method=load" >> $propFile
+      - echo "testing-channel=$testChan" >> $propFile
       - mvn test
     - stage: "Upload to Wiki"
       jdk:
