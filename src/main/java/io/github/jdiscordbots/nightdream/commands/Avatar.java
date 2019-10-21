@@ -25,7 +25,7 @@ public class Avatar implements Command {
 			user = event.getMessage().getMentionedMembers().get(0).getUser();
 		}
 		if(user.getAvatarUrl()==null) {
-			event.getChannel().sendMessage("you don't hava an avatar...").queue();
+			event.getChannel().sendMessage("You don't have an avatar...").queue();
 		}else {
 			EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setImage(user.getAvatarUrl() + "?size=2048");
 			event.getChannel().sendMessage(eb.build()).queue();
