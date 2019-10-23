@@ -1,6 +1,12 @@
 package io.github.jdiscordbots.nightdream;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import io.github.jdiscordbots.nightdream.core.NightDream;
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.JDA;
 
@@ -15,7 +21,14 @@ public class JDALoader {
 			BotData.setAdminIDs(env.split(" "));
 		}
 		BotData.setGame("Unit-Testing");
-		return NightDream.initialize();
+		JDA jda=NightDream.initialize();
+		String[] adminIDs = BotData.getAdminIDs();
+		List<String> ids=new ArrayList<>(Arrays.asList(adminIDs));
+		if(!ids.contains(jda.getSelfUser().getId())) {
+			ids.add(jda.getSelfUser().getId());
+			BotData.setAdminIDs(ids.stream().toArray(String[]::new));
+		}
+		return jda;
 	}
 
 }

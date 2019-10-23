@@ -20,11 +20,11 @@ public class Activity implements Command {
     public void action(String[] args, GuildMessageReceivedEvent event) {
 
         StringBuilder builder = new StringBuilder();
-        for (String arg : args) {
-            builder.append(arg).append(" ");
-        }
-        BotData.setGame(builder.toString());
-        builder.insert(0, BotData.getDefaultPrefix() + "help | " );
+        builder.append(BotData.getDefaultPrefix() + "help | " );
+        String input=String.join(" ", args);
+        builder.append(input);
+        BotData.setGame(input);
+        
         String gameName = builder.toString();
         event.getJDA().getPresence().setActivity(playing(gameName));
         
