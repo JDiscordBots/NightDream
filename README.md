@@ -24,7 +24,7 @@ You can download NightDream [here](https://github.com/JDiscordBots/Nightdream/wi
 ## Invite Nightdream to your Server
 [Invite](https://discordapp.com/oauth2/authorize?client_id=596643235523330070&permissions=8&scope=bot)
 
-## Nightdream on [DBL](https://discordbots.org)
-[Link](https://discordbots.org/bot/596643235523330070)
+## Nightdream on [DBL/top.gg](https://top.gg/)
+[Link](https://top.gg/bot/596643235523330070)
 
-[Vote for Nightdream](https://discordbots.org/bot/596643235523330070/vote)
+[Vote for Nightdream](https://top.gg/bot/596643235523330070/vote)
