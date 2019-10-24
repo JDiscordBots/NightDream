@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.github.jdiscordbots.nightdream.core.NightDream;
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.JDA;
 
