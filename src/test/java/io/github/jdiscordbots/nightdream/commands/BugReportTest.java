@@ -15,7 +15,6 @@ import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import io.github.jdiscordbots.nightdream.util.BotData;
 
 public class BugReportTest {
-	
 	@BeforeAll
 	public static void init() {
 		BotData.setBugReportChannel(getTestingChannel().getId());
