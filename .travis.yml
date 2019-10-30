@@ -34,7 +34,6 @@ jobs:
       - echo "jda-factory-method=load" >> $propFile
       - echo "testing-prefix=nd-" >> $propFile
       - echo "testing-channel=$testChan" >> $propFile
-      - echo "BugReportChannel=$testChan" >> $propFile
       - mvn test
     - stage: "Upload to Wiki"
       jdk:
