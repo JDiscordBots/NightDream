@@ -23,21 +23,21 @@ public class BugReport implements Command {
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
+		if(args.length==0) {
+			event.getChannel().sendMessage("Please provide a message for the bugreport.").queue();
+			return;
+		}
 		int latestBugId = BotData.getBugID();
 
 		int thisId = latestBugId + 1;
 
 		BotData.setBugID(thisId);
-		StringBuilder sb = new StringBuilder();
-		for (String string : args) {
-			sb.append(string).append(" ");
-		}
-		EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("New Bug").setDescription(sb.toString())
+		EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("New Bug").setDescription(String.join(" ", args))
 				.setFooter(event.getAuthor().getAsTag() + " | Bug ID " + thisId);
 
 		event.getJDA().getTextChannelById(BotData.getBugReportChannel()).sendMessage(eb.build()).queue();
 
-		event.getChannel().sendMessage("Send with ID " + thisId).queue();
+		event.getChannel().sendMessage("Sent with ID " + thisId).queue();
 	}
 
 	@Override

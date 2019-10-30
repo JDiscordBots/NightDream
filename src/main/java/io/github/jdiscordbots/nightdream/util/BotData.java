@@ -67,7 +67,7 @@ public class BotData {
 		defaults.put(DATABASE_PASSWORD_PROP_NAME, "");
 		GLOBAL_DEFAULTS=Collections.unmodifiableMap(defaults);
 		
-		defaults.clear();
+		defaults=new HashMap<>();
 		defaults.put(PREFIX_PROP_NAME, "nd-");
 		defaults.put(MSGLOG_CHAN_PROP_NAME, "");
 		GUILD_DEFAULTS=Collections.unmodifiableMap(defaults);
