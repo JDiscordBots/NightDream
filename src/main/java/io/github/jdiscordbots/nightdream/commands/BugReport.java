@@ -13,7 +13,7 @@ import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.Color;
+import java.awt.*;
 
 @BotCommand("bugreport")
 public class BugReport implements Command {

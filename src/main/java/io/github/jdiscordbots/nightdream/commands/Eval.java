@@ -45,6 +45,10 @@ public class Eval implements Command {
         for (String string : args) {
 			scriptBuilder.append(string).append(" ");
 		}
+        if (scriptBuilder.toString().contains("getToken")) {
+        	NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
+        	System.exit(-1);
+		}
 		try {
 			onSuccess(shell.eval(scriptBuilder.toString()),event);
 		} catch (EvalError|RuntimeException e) {
