@@ -8,9 +8,7 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.util.GeneralUtils;
-import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.Color;
@@ -24,23 +22,22 @@ public class Dice implements Command {
             event.getChannel().sendMessage("<:IconProvide:553870022125027329> Not enough arguments!").queue();
             return;
         }
-        double d = 0;
+        final long l;
         try {
-            d = Math.floor(Math.random() * Double.parseDouble(args[0]) + 1);
+            l = (long)(Math.floor(Math.random() * Long.parseLong(args[0]) + 1));
         } catch (NumberFormatException e) {
-            event.getChannel().sendMessage("<:IconProvide:553870022125027329> Not enough arguments!").queue();
+            event.getChannel().sendMessage("<:IconProvide:553870022125027329> argument needs to be an integer!").queue();
             return;
         }
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("Rolling the dice...")
                 .setDescription(String.format("From 1 to %s", args[0]));
 
-        Message msg = JDAUtils.msg(event.getChannel(), eb.build());
-
-        eb.clear();
-
-        eb.setColor(0x212121).setTitle("Done!").setDescription("It landed on a " + d);
-
-        msg.editMessage(eb.build()).completeAfter(Long.parseLong(String.valueOf(GeneralUtils.getRandInt(6))), TimeUnit.SECONDS);
+        event.getChannel().sendMessage(eb.build()).queue(msg->{
+        	eb.clear();
+            eb.setColor(0x212121).setTitle("Done!").setDescription("It landed on a " + l);
+            msg.editMessage(eb.build()).queueAfter(Long.parseLong(String.valueOf(GeneralUtils.getRandInt(6))), TimeUnit.SECONDS);
+        });
+        
     }
 
     @Override
