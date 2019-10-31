@@ -33,7 +33,7 @@ public abstract class KSoftImageCommand implements Command {
 		builder.setColor(0x212121)
 		.setImage(img.getUrl())
 		.setTitle(getTitle())
-		.setFooter("Served by an external API - report with " + BotData.getPrefix(event.getGuild()) + "bugreport [url]");
+		.setFooter("Served by the KSoft.Si API - report with " + BotData.getPrefix(event.getGuild()) + "bugreport [url]");
 		event.getChannel().sendMessage(builder.build()).queue();
 	}
 	

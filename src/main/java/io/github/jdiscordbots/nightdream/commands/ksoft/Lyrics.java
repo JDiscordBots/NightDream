@@ -43,7 +43,7 @@ public class Lyrics implements Command {
 		}
 		EmbedBuilder builder=new EmbedBuilder();
 		builder.setColor(Color.white)
-		.setFooter("Results from Genius")
+		.setFooter("Results from KSoft.Si API")
 		.setTitle("Result");
 		if(lyric.getAlbums().length==0) {
 			builder.addField(lyric.getArtistName(), "in no albums", false);
