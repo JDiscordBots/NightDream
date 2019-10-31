@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import bsh.EvalError;
 import bsh.Interpreter;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,6 +30,7 @@ public class Eval implements Command {
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		return JDAUtils.checkOwner(event,args!=null);	
 	}
+	@SuppressFBWarnings(value = "DM_EXIT",justification = "should shut down if token leak occures")
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
         
