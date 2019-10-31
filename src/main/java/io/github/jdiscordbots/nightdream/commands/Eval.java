@@ -14,7 +14,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import bsh.EvalError;
 import bsh.Interpreter;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,7 +29,6 @@ public class Eval implements Command {
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		return JDAUtils.checkOwner(event,args!=null);	
 	}
-	@SuppressFBWarnings(value = "DM_EXIT",justification = "should shut down if token leak occures")
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
         
@@ -47,12 +45,19 @@ public class Eval implements Command {
         for (String string : args) {
 			scriptBuilder.append(string).append(" ");
 		}
-        if (scriptBuilder.toString().contains("getToken")) {
+        String script=scriptBuilder.toString();
+        if (script.contains("getToken")) {
         	NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
-        	System.exit(-1);
+        	event.getJDA().shutdown();
 		}
 		try {
-			onSuccess(shell.eval(scriptBuilder.toString()),event);
+			Object result=shell.eval(script);
+			if(result.toString().contains(event.getJDA().getToken())) {
+				NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
+	        	event.getJDA().shutdownNow();
+			}else {
+				onSuccess(result,event);
+			}
 		} catch (EvalError|RuntimeException e) {
 			try {
 				shell.set(LATEST_EXCEPTION_KEY_NAME, e);
