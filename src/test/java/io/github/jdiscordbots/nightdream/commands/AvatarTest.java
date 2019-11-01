@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
@@ -18,14 +20,14 @@ import net.dv8tion.jda.api.entities.Member;
 public class AvatarTest {
 	@Test
 	public void testWithoutArgs() {
-		assertNull(getAlreadySentMessage(getTestingChannel(), msg->hasEmbed(msg, embed->embed.getImage().getUrl().equals(getJDA().getSelfUser().getAvatarUrl()))));
+		assertNull(getAlreadySentMessage(getTestingChannel(), msg->hasEmbed(msg, embed->Objects.equals(embed.getImage().getUrl(),getJDA().getSelfUser().getAvatarUrl()))));
 		sendCommand("avatar");
 		getMessage("You don't have an avatar...").delete().queue();
 	}
 	@Test
 	public void testWithoutServerOwner() {
 		Member owner = getTestingChannel().getGuild().getOwner();
-		assertNull(getAlreadySentMessage(getTestingChannel(), msg->hasEmbed(msg, embed->embed.getImage().getUrl().equals(owner.getUser().getAvatarUrl()))));
+		assertNull(getAlreadySentMessage(getTestingChannel(), msg->hasEmbed(msg, embed->Objects.equals(embed.getImage().getUrl(),getJDA().getSelfUser().getAvatarUrl()))));
 		sendCommand("avatar "+owner.getAsMention());
 		getMessage(msg->hasEmbed(msg, embed->embed.getImage().getUrl().equals(owner.getUser().getAvatarUrl()+"?size=2048"))).delete().queue();
 	}
