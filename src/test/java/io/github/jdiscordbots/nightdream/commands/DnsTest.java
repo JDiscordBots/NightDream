@@ -1,7 +1,6 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import static io.github.jdiscordbots.jdatesting.TestUtils.getMessage;
-import static io.github.jdiscordbots.jdatesting.TestUtils.getTestingChannel;
 import static io.github.jdiscordbots.jdatesting.TestUtils.hasEmbed;
 import static io.github.jdiscordbots.jdatesting.TestUtils.hasEmbedField;
 import static io.github.jdiscordbots.jdatesting.TestUtils.sendCommand;
