@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) JDiscordBots 2019
+ * File: Dns.java
+ * Project: NightDream
+ * Licensed under Boost Software License 1.0
+ */
 package io.github.jdiscordbots.nightdream.commands;
 
 import java.util.regex.Pattern;
@@ -45,7 +51,9 @@ public class Dns implements Command {
 						eb.addField("DNS Hostmaster", UNKNOWN_MSG, false);
 						eb.addField("Mystery Text", UNKNOWN_MSG, false);
 					}
-					eb.setFooter(json.getString("Comment"));
+					if(json.has("Comment")) {
+						eb.setFooter(json.getString("Comment"));
+					}
 					event.getChannel().sendMessage(eb.build()).queue();
 				}else {
 					event.getChannel().sendMessage("Your query is unresolvable.\nTry with a different one?").queue();
