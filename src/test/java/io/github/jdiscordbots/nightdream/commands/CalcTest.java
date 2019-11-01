@@ -72,7 +72,7 @@ public class CalcTest{
 	@Test
 	public void testDivide() {
 		assertCalculation("1 / 1", "1.0 divided by 1.0", "1.0");
-		assertCalculation("-1000 / -1", "-100.0 divided by -1.0", "1000.0");
+		assertCalculation("-1000 / -1", "-1000.0 divided by -1.0", "1000.0");
 		assertCalculation("-100 / -1", "-100.0 divided by -1.0", "100.0");
 		assertCalculation("1 / 0", "1.0 divided by 0.0", "Infinity");
 		assertCalculation("-Infinity / 0", "-Infinity divided by 0.0", "-Infinity");
