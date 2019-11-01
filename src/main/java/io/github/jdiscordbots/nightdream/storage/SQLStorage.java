@@ -144,7 +144,7 @@ public class SQLStorage implements Storage {
 		} catch (SQLException e) {
 			LOG.log(LogType.WARN, DB_READ_FAIL_MSG, e);
 		}
-		if(ret==null) {
+		if(ret==null||"".equals(ret)) {
 			ret=defaultValue;
 		}
 		return ret;
@@ -168,7 +168,7 @@ public class SQLStorage implements Storage {
 		} catch (SQLException e) {
 			LOG.log(LogType.WARN, DB_READ_FAIL_MSG, e);
 		}
-		if(ret==null) {
+		if(ret==null||"".equals(ret)) {
 			ret=defaultValue;
 		}
 		return ret;

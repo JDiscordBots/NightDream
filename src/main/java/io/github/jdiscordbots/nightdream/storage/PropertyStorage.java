@@ -56,7 +56,7 @@ public class PropertyStorage implements Storage {
 			defaults.setProperty(key, defaultValue);
 			unitProps = loadPropertiesWithoutGenerating(unit+FILE_SUFFIX,defaults);
 		}
-		return unitProps.getProperty(key);
+		return unitProps.getProperty(key,defaultValue);
 	}
 	
 	@Override

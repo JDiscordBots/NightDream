@@ -37,7 +37,7 @@ public class RedisStorage implements Storage{
 	
 	private String read(String key,String defaultValue) {
 		String value=jedis.get(key);
-		if(value==null) {
+		if(value==null||"".equals(value)) {
 			value=defaultValue;
 		}
 		return value;
