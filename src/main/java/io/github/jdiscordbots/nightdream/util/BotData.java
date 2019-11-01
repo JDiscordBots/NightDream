@@ -42,6 +42,7 @@ public class BotData {
 	private static final String DATABASE_URL_PROP_NAME = "DBUrl";
 	private static final String DATABASE_USER_PROP_NAME = "DBUsr";
 	private static final String DATABASE_PASSWORD_PROP_NAME = "DBPw";
+	private static final String JDA_TOKEN_PROP_NAME="token";
 	
 	public static final Map<String,String> GLOBAL_DEFAULTS;
 	public static final Map<String,String> GUILD_DEFAULTS;
@@ -54,7 +55,7 @@ public class BotData {
 	static {
 		Storage tempStorage= bkpStorage;
 		Map<String,String> defaults=new HashMap<>();
-		defaults.put("token", "");
+		defaults.put(JDA_TOKEN_PROP_NAME, "");
 		defaults.put("game","Nightdreaming...");
 		defaults.put(INSTANCE_OWNER_PROP_NAME, String.join(" ","358291050957111296","321227144791326730","299556333097844736"));
 		defaults.put(BUG_CHAN_PROP_NAME, "");
@@ -204,14 +205,14 @@ public class BotData {
 	 * @return the token
 	 */
 	public static String getToken() {
-		return bkpStorage.getGlobalProperty("token");
+		return bkpStorage.getGlobalProperty(JDA_TOKEN_PROP_NAME);
 	}
 	/**
 	 * sets the Discord Bot token
 	 * @return the token
 	 */
 	public static void setToken(String token) {
-		bkpStorage.setGlobalProperty("token",token);
+		bkpStorage.setGlobalProperty(JDA_TOKEN_PROP_NAME,token);
 	}
 	/**
 	 * gets the API token from KSoft

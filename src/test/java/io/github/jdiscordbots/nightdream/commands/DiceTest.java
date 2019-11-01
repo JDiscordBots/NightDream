@@ -26,15 +26,13 @@ public class DiceTest {
 	private void testStandardExecution(int end) {
 		sendCommand("dice "+end);
 		getMessage(msg->hasEmbed(msg, "Rolling the dice...","From 1 to "+end));
-		Awaitility.await().atMost(Durations.TEN_SECONDS).untilAsserted(()->{
-			getMessage(msg->hasEmbed(msg, embed->{
-				int i;
-				return embed.getTitle().equals("Done!")&&
-				embed.getDescription().startsWith("It landed on a ")&&
-				(i=Integer.parseInt(embed.getDescription().substring(15)))>=Math.min(1, end)&&
-				i<=Math.max(1, end);
-			}));
-		});
+		Awaitility.await().atMost(Durations.TEN_SECONDS).untilAsserted(()->getMessage(msg->hasEmbed(msg, embed->{
+			int i;
+			return embed.getTitle().equals("Done!")&&
+			embed.getDescription().startsWith("It landed on a ")&&
+			(i=Integer.parseInt(embed.getDescription().substring(15)))>=Math.min(1, end)&&
+			i<=Math.max(1, end);
+		})));
 	}
 	@Test
 	public void testNegativeArg() {
