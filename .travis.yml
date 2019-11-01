@@ -12,7 +12,7 @@ jobs:
       - openjdk12
       install: true
       script: mvn compile
-    - stage: "static code analysis"
+    - stage: "code analysis and tests"
       name: "Spotbugs - Java 8"
       jdk:
         - openjdk8
