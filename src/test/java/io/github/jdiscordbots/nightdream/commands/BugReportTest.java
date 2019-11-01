@@ -22,7 +22,7 @@ public class BugReportTest {
 	@Test
 	public void testEmptyBugReport() {
 		sendCommand("bugreport");
-		getMessage(getTestingChannel(), msg->"Please provide a message for the bugreport.".equals(msg.getContentRaw()));
+		getMessage("Please provide a message for the bugreport.");
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class BugReportTest {
 			"test bug".equals(embed.getDescription())&&
 			(getJDA().getSelfUser().getAsTag() + " | Bug ID " + id).equals(embed.getFooter().getText())
 		)).delete().queue();
-		getMessage(getTestingChannel(), msg->("Sent with ID "+id).equals(msg.getContentRaw())).delete().queue();
+		getMessage("Sent with ID "+id).delete().queue();
 	}
 	
 	@Test

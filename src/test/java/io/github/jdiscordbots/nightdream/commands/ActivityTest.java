@@ -18,14 +18,14 @@ public class ActivityTest {
 	public void testWithoutArgs() {
 		assertNull(getAlreadySentMessage(getTestingChannel(), msg->msg.getContentRaw().equals(getPrefix()+"help | ")));
 		sendCommand("activity");
-		getMessage(getTestingChannel(), msg->msg.getContentRaw().equals("Done: "+getPrefix()+"help |")).delete().queue();
+		getMessage("Done: "+getPrefix()+"help |").delete().queue();
 	}
 	
 	@Test
 	public void testWithArgs() {
 		assertNull(getAlreadySentMessage(getTestingChannel(), msg->msg.getContentRaw().equals(getPrefix()+"help | ")));
 		sendCommand("activity doing feature tests");
-		getMessage(getTestingChannel(), msg->msg.getContentRaw().equals("Done: "+getPrefix()+"help | doing feature tests")).delete().queue();
+		getMessage("Done: "+getPrefix()+"help | doing feature tests").delete().queue();
 	}
 	
 	@Test

@@ -19,17 +19,17 @@ public class DnsTest {
 	@Test
 	public void testWithoutArgs() {
 		sendCommand("dns");
-		getMessage(getTestingChannel(), msg->msg.getContentRaw().endsWith(" Unknown Resolve Target"));
+		getMessage(msg->msg.getContentRaw().endsWith(" Unknown Resolve Target"));
 	}
 	@Test
 	public void testInvalidQuery() {
 		sendCommand("dns HelloWorld");
-		getMessage(getTestingChannel(), msg->msg.getContentRaw().endsWith("Your query is unresolvable.\nTry with a different one?"));
+		getMessage(msg->msg.getContentRaw().endsWith("Your query is unresolvable.\nTry with a different one?"));
 	}
 	@Test
 	public void testCorrectQuery() {
 		sendCommand("dns discordapp.com");
-		Message msg=getMessage(getTestingChannel(), message->hasEmbed(message, embed->embed.getTitle().equals("discordapp.com (type 12) resolves to:")));
+		Message msg=getMessage(message->hasEmbed(message, embed->embed.getTitle().equals("discordapp.com (type 12) resolves to:")));
 		MessageEmbed embed=msg.getEmbeds().get(0);
 		assertTrue(hasEmbedField(embed, "Type","6"));
 		assertTrue(hasEmbedField(embed, field->"Time to live (TTL)".equals(field.getName())));

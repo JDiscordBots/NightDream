@@ -19,11 +19,11 @@ public class ChooseTest {
 		Predicate<Message> tester=msg->msg.getContentRaw().endsWith("Please give me some options!");
 		assertNull(getAlreadySentMessage(getTestingChannel(), tester));
 		sendCommand("choose");
-		Message msg=getMessage(getTestingChannel(), tester);
+		Message msg=getMessage(tester);
 		assertNotNull(msg);
 		msg.delete().complete();
 		sendCommand("choose a");
-		msg=getMessage(getTestingChannel(), tester);
+		msg=getMessage(tester);
 		assertNotNull(msg);
 		msg.delete().complete();
 	}
@@ -32,7 +32,7 @@ public class ChooseTest {
 		Predicate<Message> tester=msg->hasEmbed(msg, "I've chosen!", "a")||hasEmbed(msg, "I've chosen!", "b");
 		assertNull(getAlreadySentMessage(getTestingChannel(), tester));
 		sendCommand("choose a b");
-		Message msg=getMessage(getTestingChannel(), tester);
+		Message msg=getMessage(tester);
 		assertNotNull(msg);
 		msg.delete().complete();
 	}

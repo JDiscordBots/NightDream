@@ -19,7 +19,7 @@ public class CalcTest{
 	private String formatEnd=String.format("Format: `%scalc num1 [+,-,*,/,%%,**,root] num2`", 
 			BotData.getPrefix(getTestingChannel().getGuild()));
 	private Message getWrongFormatMsg() {
-		return getMessage(getTestingChannel(), msg->msg.getContentRaw().endsWith(formatEnd));
+		return getMessage(msg->msg.getContentRaw().endsWith(formatEnd));
 	}
 	private void assertWrongFormat(String command) {
 		sendCommand(command);
@@ -35,7 +35,7 @@ public class CalcTest{
 	}
 	private void assertCalculation(String calculation,String title,String result) {
 		sendCommand("math "+calculation);
-		Message message =getMessage(getTestingChannel(), msg->hasEmbed(msg, title,result));
+		Message message =getMessage(msg->hasEmbed(msg, title,result));
 		assertNotNull(message);
 		message.delete().complete();
 	}
