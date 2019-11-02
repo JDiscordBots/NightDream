@@ -52,7 +52,7 @@ public class Eval implements Command {
 		}else {
 			try {
 				Object result=shell.eval(script);
-				if(result.toString().contains(event.getJDA().getToken())) {
+				if(result != null&&result.toString().contains(event.getJDA().getToken())) {
 					NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
 		        	event.getJDA().shutdownNow();
 				}else {
@@ -71,7 +71,7 @@ public class Eval implements Command {
 	
 	protected void onSuccess(Object result,GuildMessageReceivedEvent event) {
 		if (result != null) {
-        	event.getChannel().sendMessage("```js\n"+result.toString()+"\n```").queue();
+        	event.getChannel().sendMessage("```java\n"+result.toString()+"\n```").queue();
 		}
 	}
 	protected void onError(Exception e,GuildMessageReceivedEvent event) {
