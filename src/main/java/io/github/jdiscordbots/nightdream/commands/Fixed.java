@@ -75,7 +75,7 @@ public class Fixed implements Command {
 				}
 				return false;
 			}
-		} catch (NumberFormatException e) {
+		} catch (IllegalArgumentException e) {
 			if(args!=null) {
 				LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
 			}
