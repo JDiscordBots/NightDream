@@ -4,9 +4,13 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -57,7 +61,11 @@ public class Shell implements Command {
                 	eb.setFooter("Finished with exit code "+exitCode);
                 	eb.setColor(exitCode==0?Color.GREEN:Color.RED);
                 }
-                eb.appendDescription(out.toString());
+                try {
+					eb.appendDescription(out.toString(Charset.defaultCharset().name()));
+				} catch (UnsupportedEncodingException e) {
+					NDLogger.logWithModule(LogType.ERROR, "shell", "encoding "+Charset.defaultCharset().name()+" not found");
+				}
 				event.getChannel().sendMessage(eb.build()).queue();
 			});
 		} catch (IOException e) {
