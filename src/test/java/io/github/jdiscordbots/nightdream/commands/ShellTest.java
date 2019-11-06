@@ -43,7 +43,7 @@ public class ShellTest {
 	public void testSimpleExpression() {
 		String cmd=System.getProperty("os.name").toLowerCase().contains("win")?"cmd /C echo test":"echo test";
 		sendCommand("shell "+cmd);
-		getMessage(msg->hasEmbed(msg, null,"**Command**: ```bash\n"+cmd+"```\n\n"+"**Output**(`stdout`): ```bash\ntest```")).delete().complete();
+		getMessage(msg->hasEmbed(msg, null,"**Command**: ```bash\n"+cmd+"```\n\n"+"**Output**(`stdout`): ```bash\ntest\n```")).delete().complete();
 	}
 	@Test
 	public void testInvalidCommand() {

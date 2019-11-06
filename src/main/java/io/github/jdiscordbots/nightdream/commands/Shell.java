@@ -3,17 +3,14 @@ package io.github.jdiscordbots.nightdream.commands;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -59,6 +56,23 @@ public class Shell implements Command {
 			}
 		}, 10*1000L);
 	}
+	private String readFromInputStream(InputStream is) {
+		StringBuilder sb=new StringBuilder();
+		try(BufferedReader reader=new BufferedReader(new InputStreamReader(is,Charset.defaultCharset()))){
+			String line;
+			while((line=reader.readLine())!=null) {
+				sb.append(line).append('\n');
+			}
+		}catch (IOException ignore) {
+			//handled by return if
+        }
+		String ret=sb.toString();
+		if("".equals(ret)) {
+			return null;
+		}else {
+			return ret;
+		}
+	}
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length<1) {
@@ -72,26 +86,21 @@ public class Shell implements Command {
 			Process p=builder.start();
 			startAutoKill(p,event.getChannel());
 			threadPool.execute(()->{
-                try(BufferedReader stdout=new BufferedReader(new InputStreamReader(p.getInputStream(),Charset.defaultCharset()));
-            		BufferedReader stderr=new BufferedReader(new InputStreamReader(p.getErrorStream(),Charset.defaultCharset()))){
+                try{
                 	int exitCode=p.waitFor();
 	            	eb.setFooter("Finished with exit code "+exitCode+" under "+System.getProperty("os.name"));
 	            	eb.setColor(exitCode==0?Color.GREEN:Color.RED);
-	                String out=stdout.lines().collect(Collectors.joining("\n"));
-	                String err=stderr.lines().collect(Collectors.joining("\n"));
-	                if(!"".equals(out)) {
+	                String out=readFromInputStream(p.getInputStream());
+	                String err=readFromInputStream(p.getErrorStream());
+	                if(out!=null) {
 	                	eb.appendDescription("**Output**(`stdout`): "+FIELD_START+out+FIELD_END);
 	                }
-	                if(!"".equals(err)) {
+	                if(err!=null) {
 	                	eb.appendDescription("**Errors**(`stderr`): "+FIELD_START+err+FIELD_END);
 	                }
 	            }catch(InterruptedException e) {
 					Thread.currentThread().interrupt();
-				}catch (UnsupportedEncodingException e) {
-					NDLogger.logWithModule(LogType.ERROR, "shell", "encoding "+Charset.defaultCharset().name()+" not found");
-				}catch (IOException ex) {
-	            	eb.setTitle("Some weird error occured while reading input\n\n");
-	            }
+				}
 				event.getChannel().sendMessage(eb.build()).queue();
 			});
 		} catch (IOException e) {
