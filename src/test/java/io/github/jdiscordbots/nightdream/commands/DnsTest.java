@@ -34,7 +34,7 @@ public class DnsTest {
 		assertTrue(hasEmbedField(embed, field->"Time to live (TTL)".equals(field.getName())));
 		assertTrue(hasEmbedField(embed, "Nameserver","gabe.ns.cloudflare.com"));
 		assertTrue(hasEmbedField(embed, "DNS Hostmaster","dns.cloudflare.com"));
-		assertTrue(hasEmbedField(embed, "Mystery Text","2032423443 10000 2400 604800 3600"));
+		assertTrue(hasEmbedField(embed, field->"Mystery Text".equals(field.getName())));
 		//not testing footer because it may not exist
 	}
 	@Test
