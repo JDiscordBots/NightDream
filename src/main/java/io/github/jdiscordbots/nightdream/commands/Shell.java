@@ -1,13 +1,14 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import java.awt.Color;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
@@ -28,7 +29,6 @@ public class Shell implements Command {
 	public String permNeeded() {
 		return "Bot-Admin";
 	}
-	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length<1) {
@@ -36,40 +36,35 @@ public class Shell implements Command {
 			return;
 		}
 		EmbedBuilder eb=new EmbedBuilder();
-		eb.setTitle(String.join(" ", args));
+		eb.setDescription("**Command**: ```bash\n"+String.join(" ", args)+"```\n\n");
 		ProcessBuilder builder=new ProcessBuilder(args);
-		builder.redirectErrorStream(true);
 		try {
 			Process p=builder.start();
-			InputStream in=p.getInputStream();
-			ByteArrayOutputStream out=new ByteArrayOutputStream();
 			threadPool.execute(()->{
-				try {
-	                int d;
-	                while ((d = in.read()) != -1) {
-	                    out.write(d);
+                try(BufferedReader stdout=new BufferedReader(new InputStreamReader(p.getInputStream(),Charset.defaultCharset()));
+            		BufferedReader stderr=new BufferedReader(new InputStreamReader(p.getErrorStream(),Charset.defaultCharset()))){
+                	int exitCode=p.waitFor();
+	            	eb.setFooter("Finished with exit code "+exitCode+" under "+System.getProperty("os.name"));
+	            	eb.setColor(exitCode==0?Color.GREEN:Color.RED);
+	                String out=stdout.lines().collect(Collectors.joining("\n"));
+	                String err=stderr.lines().collect(Collectors.joining("\n"));
+	                if(!"".equals(out)) {
+	                	eb.appendDescription("**Output**(`stdout`): ```bash\n"+out+"```\n\n");
 	                }
-	                
-	            } catch (IOException ex) {
+	                if(!"".equals(err)) {
+	                	eb.appendDescription("**Errors**(`stderr`): ```bash\n"+err+"```\n\n");
+	                }
+	            }catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}catch (UnsupportedEncodingException e) {
+					NDLogger.logWithModule(LogType.ERROR, "shell", "encoding "+Charset.defaultCharset().name()+" not found");
+				}catch (IOException ex) {
 	            	eb.setTitle("Some weird error occured while reading input\n\n");
 	            }
-				if(p.isAlive()) {
-                	eb.setFooter("Not yet finished");
-                	eb.setColor(Color.YELLOW);
-                }else {
-                	int exitCode=p.exitValue();
-                	eb.setFooter("Finished with exit code "+exitCode);
-                	eb.setColor(exitCode==0?Color.GREEN:Color.RED);
-                }
-                try {
-					eb.appendDescription(out.toString(Charset.defaultCharset().name()));
-				} catch (UnsupportedEncodingException e) {
-					NDLogger.logWithModule(LogType.ERROR, "shell", "encoding "+Charset.defaultCharset().name()+" not found");
-				}
 				event.getChannel().sendMessage(eb.build()).queue();
 			});
 		} catch (IOException e) {
-			eb.setDescription("Cannot start Process");
+			eb.appendDescription("Cannot start Process under "+System.getProperty("os.name"));
 			eb.setColor(Color.RED.darker());
 			event.getChannel().sendMessage(eb.build()).queue();
 		}

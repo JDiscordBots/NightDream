@@ -43,17 +43,11 @@ public class ShellTest {
 	public void testSimpleExpression() {
 		String cmd=System.getProperty("os.name").toLowerCase().contains("win")?"cmd /C echo test":"echo test";
 		sendCommand("shell "+cmd);
-		getMessage(msg->hasEmbed(msg, embed->
-			embed.getTitle().equals(cmd)&&
-			embed.getDescription().equals("test")
-		)).delete().complete();
+		getMessage(msg->hasEmbed(msg, null,"**Command**: ```bash\n"+cmd+"```\n\n"+"**Output**(`stdout`): ```bash\ntest```")).delete().complete();
 	}
 	@Test
 	public void testInvalidCommand() {
 		sendCommand("shell invalidcommand");
-		getMessage(msg->hasEmbed(msg, embed->
-		embed.getTitle().equals("invalidcommand")&&
-		embed.getDescription().equals("Cannot start Process")
-	)).delete().complete();
+		getMessage(msg->hasEmbed(msg, null,"**Command**: ```bash\ninvalidcommand```\n\nCannot start Process under "+System.getProperty("os.name"))).delete().complete();
 	}
 }
