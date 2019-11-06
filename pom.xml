@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>io.github.jdiscordbots</groupId>
 			<artifactId>jda-testing-system</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>0.0.5-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Spotbugs -->
