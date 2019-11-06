@@ -112,7 +112,7 @@ public class Shell implements Command {
 
 	@Override
 	public String help() {
-		return "execute a shell command";
+		return "execute a shell command ("+System.getProperty("os.name")+")";
 	}
 
 	@Override
