@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 public class Shell implements Command {
 
 	private ExecutorService threadPool=Executors.newCachedThreadPool();
+	private Timer timer=new Timer(true);
 	
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
@@ -40,6 +43,23 @@ public class Shell implements Command {
 		ProcessBuilder builder=new ProcessBuilder(args);
 		try {
 			Process p=builder.start();
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					if(p.isAlive()) {
+						event.getChannel().sendMessage("Excuse the wait, the command is still executing! The process will be killed in 10 more seconds.").queue();
+						timer.schedule(new TimerTask() {
+							@Override
+							public void run() {
+								if(p.isAlive()) {
+									p.destroy();
+									event.getChannel().sendMessage("Process was killed after being unresponsive for 20 seconds.").queue();
+								}
+							}
+						}, 10*1000);
+					}
+				}
+			}, 10*1000);
 			threadPool.execute(()->{
                 try(BufferedReader stdout=new BufferedReader(new InputStreamReader(p.getInputStream(),Charset.defaultCharset()));
             		BufferedReader stderr=new BufferedReader(new InputStreamReader(p.getErrorStream(),Charset.defaultCharset()))){
