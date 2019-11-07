@@ -11,6 +11,8 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -80,10 +82,10 @@ public class Shell implements Command {
 			return;
 		}
 		EmbedBuilder eb=new EmbedBuilder();
-		eb.setDescription("**Command**: ```bash\n"+String.join(" ", args)+FIELD_END);
-		ProcessBuilder builder=new ProcessBuilder(args);
+		String cmd=String.join(" ", args);
+		eb.setDescription("**Command**: ```bash\n"+(cmd.length()>500?cmd.substring(0, 500):cmd)+FIELD_END);
 		try {
-			Process p=builder.start();
+			Process p=Runtime.getRuntime().exec(cmd);
 			startAutoKill(p,event.getChannel());
 			threadPool.execute(()->{
                 try{
@@ -93,10 +95,10 @@ public class Shell implements Command {
 	                String out=readFromInputStream(p.getInputStream());
 	                String err=readFromInputStream(p.getErrorStream());
 	                if(out!=null) {
-	                	eb.appendDescription("**Output**(`stdout`): "+FIELD_START+out+FIELD_END);
+	                	eb.appendDescription("**Output**(`stdout`): "+FIELD_START+(out.length()>500?out.substring(0, 500):out)+FIELD_END);
 	                }
 	                if(err!=null) {
-	                	eb.appendDescription("**Errors**(`stderr`): "+FIELD_START+err+FIELD_END);
+	                	eb.appendDescription("**Errors**(`stderr`): "+FIELD_START+(err.length()>500?err.substring(0, 500):err)+FIELD_END);
 	                }
 	            }catch(InterruptedException e) {
 					Thread.currentThread().interrupt();

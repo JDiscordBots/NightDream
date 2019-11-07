@@ -17,7 +17,7 @@ import io.github.jdiscordbots.nightdream.util.BotData;
 public class ShellTest {
 	@Test 
 	public void testHelp() {
-		assertEquals("execute a shell command", new Shell().help());
+		assertEquals("execute a shell command ("+System.getProperty("os.name")+")", new Shell().help());
 	}
 	@Test
 	public void testPermissionString() {
