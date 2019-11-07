@@ -11,8 +11,6 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -23,6 +21,8 @@ public class Shell implements Command {
 
 	private static final String FIELD_START="```bash\n";
 	private static final String FIELD_END="```\n\n";
+	
+	private static final String OS_NAME=System.getProperty("os.name");
 	
 	private ExecutorService threadPool=Executors.newCachedThreadPool(r->{
         Thread t = Executors.defaultThreadFactory().newThread(r);
@@ -75,6 +75,11 @@ public class Shell implements Command {
 			return ret;
 		}
 	}
+	private void appendField(EmbedBuilder builder,String name,String info,String text) {
+		if(text!=null) {
+			builder.appendDescription("**"+name+"**"+(info==null?"":("(`"+info+"`)"))+": "+FIELD_START+(text.length()>500?text.substring(0, 500):text)+FIELD_END);
+		}
+	}
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length<1) {
@@ -83,30 +88,26 @@ public class Shell implements Command {
 		}
 		EmbedBuilder eb=new EmbedBuilder();
 		String cmd=String.join(" ", args);
-		eb.setDescription("**Command**: ```bash\n"+(cmd.length()>500?cmd.substring(0, 500):cmd)+FIELD_END);
+		appendField(eb,"Command",null,cmd);
 		try {
 			Process p=Runtime.getRuntime().exec(cmd);
 			startAutoKill(p,event.getChannel());
 			threadPool.execute(()->{
                 try{
                 	int exitCode=p.waitFor();
-	            	eb.setFooter("Finished with exit code "+exitCode+" under "+System.getProperty("os.name"));
+	            	eb.setFooter("Finished with exit code "+exitCode+" under "+OS_NAME);
 	            	eb.setColor(exitCode==0?Color.GREEN:Color.RED);
 	                String out=readFromInputStream(p.getInputStream());
 	                String err=readFromInputStream(p.getErrorStream());
-	                if(out!=null) {
-	                	eb.appendDescription("**Output**(`stdout`): "+FIELD_START+(out.length()>500?out.substring(0, 500):out)+FIELD_END);
-	                }
-	                if(err!=null) {
-	                	eb.appendDescription("**Errors**(`stderr`): "+FIELD_START+(err.length()>500?err.substring(0, 500):err)+FIELD_END);
-	                }
+	                appendField(eb,"Output","stdout",out);
+	                appendField(eb,"Errors","stderr",err);
 	            }catch(InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
 				event.getChannel().sendMessage(eb.build()).queue();
 			});
 		} catch (IOException e) {
-			eb.appendDescription("Cannot start Process under "+System.getProperty("os.name"));
+			eb.appendDescription("Cannot start Process under "+OS_NAME);
 			eb.setColor(Color.RED.darker());
 			event.getChannel().sendMessage(eb.build()).queue();
 		}
@@ -114,7 +115,7 @@ public class Shell implements Command {
 
 	@Override
 	public String help() {
-		return "execute a shell command ("+System.getProperty("os.name")+")";
+		return "execute a shell command ("+OS_NAME+")";
 	}
 
 	@Override

@@ -1,21 +1,17 @@
 package io.github.jdiscordbots.nightdream.commands;
 
-import static io.github.jdiscordbots.jdatesting.TestUtils.getJDA;
 import static io.github.jdiscordbots.jdatesting.TestUtils.getMessage;
 import static io.github.jdiscordbots.jdatesting.TestUtils.sendCommand;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.stream.Stream;
-
 import org.awaitility.core.ConditionTimeoutException;
 import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
-import io.github.jdiscordbots.nightdream.util.BotData;
 
-public class EvalTest {
+public class EvalTest extends AbstractAdminCommandTest{
 	@Test 
 	public void testHelp() {
 		assertEquals("Evaluates Code", new Eval().help());
@@ -27,14 +23,7 @@ public class EvalTest {
 	public void testCommandType() {
 		assertSame(CommandType.META, new Eval().getType());
 	}
-	@Test
-	public void testNonAdmin() {
-		String[] adminIDs=BotData.getAdminIDs();
-		BotData.setAdminIDs(Stream.of(adminIDs).filter(id->!id.equals(getJDA().getSelfUser().getId())).toArray(String[]::new));
-		sendCommand("eval");
-		getMessage(msg->msg.getContentRaw().endsWith(" This is an admin command.")).delete().complete();
-		BotData.setAdminIDs(adminIDs);
-	}
+	
 	@Test
 	public void testNoErrorOnEmptyEval() {
 		sendCommand("eval");
@@ -49,5 +38,13 @@ public class EvalTest {
 	public void testCorrectMessageObj() {
 		sendCommand("eval message");
 		getMessage("```java\n"+getMessage(msg->msg.getContentRaw().endsWith("eval message"))+"\n```").delete().complete();
+	}
+	@Override
+	protected String cmdName() {
+		return "eval";
+	}
+	@Override
+	protected Command cmd() {
+		return new Eval();
 	}
 }
