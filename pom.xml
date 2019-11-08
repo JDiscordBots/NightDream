@@ -6,7 +6,7 @@
 	<artifactId>NightDream</artifactId>
 	<version>0.0.4</version>
 	<name>NightDream</name>
-	<description>a Clone of the Discord Bot Daydream (https://git.geist.ga/infi/daydream) in Java</description>
+	<description>a Clone of the Discord Bot Daydream (https://gitlab.com/botstudio/daydream) in Java</description>
 	<repositories>
 		<repository>
 			<id>jcenter</id>
