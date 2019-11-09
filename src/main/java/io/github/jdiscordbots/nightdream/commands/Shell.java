@@ -15,8 +15,6 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -86,7 +84,7 @@ public class Shell implements Command {
 			builder.appendDescription("**"+name+"**"+(info==null?"":("(`"+info+"`)"))+": "+FIELD_START+(text.length()>500?text.substring(0, 500):text)+FIELD_END);
 		}
 	}
-	private static class ShellCommand{//TODO redirection
+	private static class ShellCommand{
 		private List<String> cmd;
 		private String originalCommand="";
 		private String outRedirection=null;
@@ -107,39 +105,58 @@ public class Shell implements Command {
 		
 	}
 	private ShellCommand parse(String[] args,int start,int end) {
-		/* TODO
-		 * a "b b" c
-		 * &&
-		 * & on redirection
-		 * <
-		 * multiple pipes
-		 */
 		ShellCommand cmd=new ShellCommand(String.join(" ",args));
 		List<String> cmdBuilder=new ArrayList<>(cmd.originalCommand.length());
 		cmd.cmd=cmdBuilder;
+		boolean inQuoute = false;
+		boolean finished=false;
 		for (int i = start; i < end; i++) {
 			String arg=args[i];
-			switch (arg) {
-			case "|":
-				cmd.pipeRedirection = parse(args, i + 1, end);
-				cmd.sendResponse=cmd.sendResponse&&cmd.pipeRedirection.sendResponse;
-				return cmd;
-			case ">":
-				cmd.outRedirection=args[i+1];
-				return cmd;
-			case "2>":
-				cmd.errRedirection=args[i+1];
-				return cmd;
-			default:
-				if(arg.endsWith("&")&&i==end-1) {
-					cmd.sendResponse=false;
+			if(!inQuoute) {
+				switch (arg) {
+				case "|":
+					cmd.pipeRedirection = parse(args, i + 1, end);
+					cmd.sendResponse=cmd.sendResponse&&cmd.pipeRedirection.sendResponse;
+					finished=true;
+					break;
+				case ">":
+					cmd.outRedirection=args[i+1];
+					finished=true;
+					break;
+				case "2>":
+					cmd.errRedirection=args[i+1];
+					finished=true;
+					break;
+				case "&":
+					if(i==end-1) {
+						cmd.sendResponse=false;
+					}
+					break;
+				default:
+					inQuoute=addArgumentSupportQuoting(cmdBuilder,inQuoute,arg,finished);
 				}
-				if(!"".equals(arg)) {
-					cmdBuilder.add(arg);
-				}
+			}else {
+				inQuoute=addArgumentSupportQuoting(cmdBuilder,inQuoute,arg,finished);
 			}
 		}
 		return cmd;
+	}
+	private boolean addArgumentSupportQuoting(List<String> cmdBuilder,boolean inQuoute,String arg,boolean finished) {
+		if(!finished) {
+			if (inQuoute) {
+				cmdBuilder.add(cmdBuilder.remove(cmdBuilder.size()-1).concat(" ").concat(arg.substring(0,arg.length()-1)));//NOSONAR
+				if (arg.endsWith("\"")) {
+					inQuoute = false;
+				}
+			} else {
+				if (arg.startsWith("\"")&&!arg.endsWith("\"")) {
+					inQuoute = true;
+					arg = arg.substring(1);
+				}
+				cmdBuilder.add(arg);
+			}
+		}
+		return inQuoute;
 	}
 	private Process startProcess(EmbedBuilder eb,TextChannel tc,ShellCommand cmd) throws IOException {
 		ProcessBuilder pBuilder=new ProcessBuilder(cmd.cmd);
