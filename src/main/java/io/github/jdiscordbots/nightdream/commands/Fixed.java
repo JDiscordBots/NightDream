@@ -25,6 +25,10 @@ public class Fixed implements Command {
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
+		if(args.length<1) {
+			event.getChannel().sendMessage("Please enter a correct number for the bug id!").queue();
+			return;
+		}
 		StringBuilder sb = new StringBuilder();
 		for (String string : args) {
 			sb.append(string).append(' ');
@@ -37,7 +41,8 @@ public class Fixed implements Command {
 		try {
 			bugID = Integer.parseInt(args[0]);
 		} catch (NumberFormatException e) {
-			JDAUtils.errmsg(event.getChannel(), "Please enter a correct number for the bug id!");
+			event.getChannel().sendMessage("Please enter a correct number for the bug id!").queue();
+			return;
 		}
 		if (BotData.getBugID() < bugID) {
 			event.getChannel().sendMessage("This bug id is not valid!").queue();
