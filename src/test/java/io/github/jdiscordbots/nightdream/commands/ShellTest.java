@@ -12,9 +12,11 @@ import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 
 public class ShellTest extends AbstractAdminCommandTest{
 	
+	private static final String OS_NAME=System.getProperty("os.name");
+	
 	@Test 
 	public void testHelp() {
-		assertEquals("execute a shell command ("+System.getProperty("os.name")+")", new Shell().help());
+		assertEquals("execute a shell command ("+OS_NAME+")", new Shell().help());
 	}
 	
 	public void testCommandType() {
@@ -27,14 +29,14 @@ public class ShellTest extends AbstractAdminCommandTest{
 	}
 	@Test
 	public void testSimpleExpression() {
-		String cmd=System.getProperty("os.name").toLowerCase().contains("win")?"cmd /C echo test":"echo test";
+		String cmd=OS_NAME.toLowerCase().contains("win")?"cmd /C echo test":"echo test";
 		sendCommand("shell "+cmd);
 		getMessage(msg->hasEmbed(msg, null,"**Command**: ```bash\n"+cmd+"```\n\n"+"**Output**(`stdout`): ```bash\ntest\n```")).delete().complete();
 	}
 	@Test
 	public void testInvalidCommand() {
 		sendCommand("shell invalidcommand");
-		getMessage(msg->hasEmbed(msg, null,"**Command**: ```bash\ninvalidcommand```\n\nCannot start Process under "+System.getProperty("os.name"))).delete().complete();
+		getMessage(msg->hasEmbed(msg, embed->embed.getDescription().startsWith("**Command**: ```bash\ninvalidcommand```\n\nCannot start Process under "+OS_NAME))).delete().complete();
 	}
 
 	@Override

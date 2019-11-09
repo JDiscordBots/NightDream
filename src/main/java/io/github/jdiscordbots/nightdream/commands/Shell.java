@@ -2,15 +2,21 @@ package io.github.jdiscordbots.nightdream.commands;
 
 import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -80,6 +86,100 @@ public class Shell implements Command {
 			builder.appendDescription("**"+name+"**"+(info==null?"":("(`"+info+"`)"))+": "+FIELD_START+(text.length()>500?text.substring(0, 500):text)+FIELD_END);
 		}
 	}
+	private static class ShellCommand{//TODO redirection
+		private List<String> cmd;
+		private String originalCommand="";
+		private String outRedirection=null;
+		private String errRedirection=null;
+		private boolean sendResponse=true;
+		private ShellCommand pipeRedirection=null;
+		public ShellCommand(String cmd) {
+			super();
+			this.originalCommand = cmd;
+			this.cmd=Arrays.asList(cmd.split(" "));
+		}
+		@Override
+		public String toString() {
+			return "ShellCommand [cmd=" + cmd + ", originalCommand=" + originalCommand + ", outRedirection="
+					+ outRedirection + ", errRedirection=" + errRedirection + ", sendResponse=" + sendResponse
+					+ ", pipeRedirection=" + pipeRedirection + "]";
+		}
+		
+	}
+	private ShellCommand parse(String[] args,int start,int end) {
+		/* TODO
+		 * a "b b" c
+		 * &&
+		 * & on redirection
+		 * <
+		 * multiple pipes
+		 */
+		ShellCommand cmd=new ShellCommand(String.join(" ",args));
+		List<String> cmdBuilder=new ArrayList<>(cmd.originalCommand.length());
+		cmd.cmd=cmdBuilder;
+		for (int i = start; i < end; i++) {
+			String arg=args[i];
+			switch (arg) {
+			case "|":
+				cmd.pipeRedirection = parse(args, i + 1, end);
+				cmd.sendResponse=cmd.sendResponse&&cmd.pipeRedirection.sendResponse;
+				return cmd;
+			case ">":
+				cmd.outRedirection=args[i+1];
+				return cmd;
+			case "2>":
+				cmd.errRedirection=args[i+1];
+				return cmd;
+			default:
+				if(arg.endsWith("&")&&i==end-1) {
+					cmd.sendResponse=false;
+				}
+				if(!"".equals(arg)) {
+					cmdBuilder.add(arg);
+				}
+			}
+		}
+		return cmd;
+	}
+	private Process startProcess(EmbedBuilder eb,TextChannel tc,ShellCommand cmd) throws IOException {
+		ProcessBuilder pBuilder=new ProcessBuilder(cmd.cmd);
+		
+		if(cmd.outRedirection!=null) {
+			pBuilder.redirectOutput(new File(cmd.outRedirection));
+		}
+		if(cmd.errRedirection!=null) {
+			pBuilder.redirectError(new File(cmd.errRedirection));
+		}
+		Process p;
+		Process lastProcess;
+		if(cmd.pipeRedirection!=null) {
+			ProcessBuilder pipeBuilder=new ProcessBuilder(cmd.pipeRedirection.cmd);
+			pBuilder.redirectOutput(pipeBuilder.redirectInput());
+			lastProcess=pipeBuilder.start();
+			p=pBuilder.start();
+		}else {
+			p=pBuilder.start();
+			lastProcess=p;
+		}
+		if(cmd.sendResponse) {
+			startAutoKill(p,tc);
+			threadPool.execute(()->{
+                try{
+                	int exitCode=p.waitFor();
+	            	eb.setFooter("Finished with exit code "+exitCode+" under "+OS_NAME);
+	            	eb.setColor(exitCode==0?Color.GREEN:Color.RED);
+	                String out=readFromInputStream(lastProcess.getInputStream());
+	                String err=readFromInputStream(lastProcess.getErrorStream());
+	                appendField(eb,"Output","stdout",out);
+	                appendField(eb,"Errors","stderr",err);
+	            }catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+				tc.sendMessage(eb.build()).queue();
+			});
+		}
+		return p;
+	}
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length<1) {
@@ -87,27 +187,15 @@ public class Shell implements Command {
 			return;
 		}
 		EmbedBuilder eb=new EmbedBuilder();
-		String cmd=String.join(" ", args);
-		appendField(eb,"Command",null,cmd);
+		ShellCommand cmd=parse(args,0,args.length);
+		appendField(eb,"Command",null,cmd.originalCommand);
 		try {
-			Process p=Runtime.getRuntime().exec(cmd);
-			startAutoKill(p,event.getChannel());
-			threadPool.execute(()->{
-                try{
-                	int exitCode=p.waitFor();
-	            	eb.setFooter("Finished with exit code "+exitCode+" under "+OS_NAME);
-	            	eb.setColor(exitCode==0?Color.GREEN:Color.RED);
-	                String out=readFromInputStream(p.getInputStream());
-	                String err=readFromInputStream(p.getErrorStream());
-	                appendField(eb,"Output","stdout",out);
-	                appendField(eb,"Errors","stderr",err);
-	            }catch(InterruptedException e) {
-					Thread.currentThread().interrupt();
-				}
-				event.getChannel().sendMessage(eb.build()).queue();
-			});
+			startProcess(eb,event.getChannel(),cmd);
 		} catch (IOException e) {
 			eb.appendDescription("Cannot start Process under "+OS_NAME);
+			if(e.getMessage()!=null) {
+				eb.appendDescription("\n```bash\n"+e.getMessage()+"\n```");
+			}
 			eb.setColor(Color.RED.darker());
 			event.getChannel().sendMessage(eb.build()).queue();
 		}
