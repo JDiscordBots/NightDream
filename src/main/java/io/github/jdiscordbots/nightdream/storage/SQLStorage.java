@@ -203,7 +203,7 @@ public class SQLStorage implements Storage {
 		try {
 			PreparedStatement selector=prepareStatement(SELECT_FORMAT,DEFAULT_VALUE_NAME,unit);
 			selector.setString(1, key);
-			PreparedStatement insertStmt=prepareStatement(INSERT_FORMAT,unit);
+			PreparedStatement insertStmt=prepareStatement(INSERT_FORMAT,unit,key);
 			insertStmt.setString(1, key);
 			insertStmt.setString(2, value);
 			PreparedStatement updateStmt=prepareStatement(UPDATE_FORMAT,unit,DEFAULT_VALUE_NAME);

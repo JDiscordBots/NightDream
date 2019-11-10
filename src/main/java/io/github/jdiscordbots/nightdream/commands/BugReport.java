@@ -62,6 +62,10 @@ public class BugReport implements Command {
 			}
 			return false;
 		}
+		if("banned".equals(BotData.STORAGE.read("bugs", event.getAuthor().getId(),""))) {
+			event.getChannel().sendMessage("<:IconInfo:553868326581829643> You were banned from reporting bugs. If you believe this should change, contact the instance owner (see `"+BotData.getPrefix(event.getGuild())+"info`)").queue();
+			return false;
+		}
 		return true;
 	}
 
