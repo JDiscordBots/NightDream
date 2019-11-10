@@ -57,7 +57,7 @@ public class BotData {
 		Map<String,String> defaults=new HashMap<>();
 		defaults.put(JDA_TOKEN_PROP_NAME, "");
 		defaults.put("game","Nightdreaming...");
-		defaults.put(INSTANCE_OWNER_PROP_NAME, String.join(" ","358291050957111296","299556333097844736", "321227144791326730"));
+		defaults.put(INSTANCE_OWNER_PROP_NAME, String.join(" ","358291050957111296", "321227144791326730"));
 		defaults.put(BUG_CHAN_PROP_NAME, "");
 		defaults.put(BUG_FIXED_PROP_NAME, "");
 		defaults.put(BUG_ID_PROP_NAME, "0");
