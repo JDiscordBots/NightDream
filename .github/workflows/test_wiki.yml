@@ -39,9 +39,9 @@ jobs:
         echo "testing-prefix=nd-" >> $propFile
         echo "testing-channel=$testChan" >> $propFile"
       env:
-        testing-channel: ${{ secrets.testing-channel }}
-        ND_token: ${{ secrets.bot-token }}
-        ND_admin: ${{ secrets.bot-admin }}
+        testing-channel: ${{ secrets.testingChannel }}
+        ND_token: ${{ secrets.botToken }}
+        ND_admin: ${{ secrets.botAdmin }}
         propFile:  src/test/resources/jda-tests.properties
     - name: "automated (feature) tests"
       run: "mvn -B test"
