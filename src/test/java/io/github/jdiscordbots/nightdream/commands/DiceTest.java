@@ -29,12 +29,13 @@ public class DiceTest {
 	}
 	private void testStandardExecution(int end) {
 		sendCommand("dice "+end);
-		getMessage(msg->hasEmbed(msg, "Rolling the dice...","From 1 to "+end));
+		getMessage(msg->{
+			NDLogger.logWithModule(LogType.DEBUG, "test: dice "+end, "title: "+msg.getEmbeds());
+			return hasEmbed(msg, "Rolling the dice...","From 1 to "+end))
+		};
 		Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->{
 			try{
 				getMessage(msg->hasEmbed(msg, embed->{
-					NDLogger.logWithModule(LogType.DEBUG, "test: dice", "title: "+embed.getTitle());
-					NDLogger.logWithModule(LogType.DEBUG, "test: dice", "desc: "+embed.getDescription());
 					int i;
 					return embed.getTitle().equals("Done!")&&
 					embed.getDescription().startsWith("It landed on a ")&&
