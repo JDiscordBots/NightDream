@@ -31,7 +31,7 @@ public class DiceTest {
 		sendCommand("dice "+end);
 		getMessage(msg->{
 			NDLogger.logWithModule(LogType.DEBUG, "test: dice "+end, "title: "+msg.getEmbeds());
-			return hasEmbed(msg, "Rolling the dice...","From 1 to "+end));
+			return hasEmbed(msg, "Rolling the dice...","From 1 to "+end);
 		};
 		Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->{
 			try{
