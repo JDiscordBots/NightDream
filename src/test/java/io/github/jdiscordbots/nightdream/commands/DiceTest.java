@@ -32,7 +32,7 @@ public class DiceTest {
 		getMessage(msg->{
 			NDLogger.logWithModule(LogType.DEBUG, "test: dice "+end, "title: "+msg.getEmbeds());
 			return hasEmbed(msg, "Rolling the dice...","From 1 to "+end);
-		};
+		});
 		Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->{
 			try{
 				getMessage(msg->hasEmbed(msg, embed->{
