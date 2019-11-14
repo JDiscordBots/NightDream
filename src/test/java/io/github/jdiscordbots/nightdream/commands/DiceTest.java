@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
+
 public class DiceTest {
 	@Test
 	public void testWithoutArgs() {
@@ -30,6 +33,8 @@ public class DiceTest {
 		Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->{
 			try{
 				getMessage(msg->hasEmbed(msg, embed->{
+					NDLogger.logWithModule(LogType.DEBUG, "test: dice", "title: "+embed.getTitle());
+					NDLogger.logWithModule(LogType.DEBUG, "test: dice", "desc: "+embed.getDescription());
 					int i;
 					return embed.getTitle().equals("Done!")&&
 					embed.getDescription().startsWith("It landed on a ")&&
