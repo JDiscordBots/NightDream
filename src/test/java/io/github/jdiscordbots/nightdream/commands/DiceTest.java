@@ -30,7 +30,7 @@ public class DiceTest {
 	private void testStandardExecution(int end) {
 		sendCommand("dice "+end);
 		getMessage(msg->{
-			NDLogger.logWithModule(LogType.DEBUG, "test: dice "+end, "title: "+msg.getEmbeds());
+			NDLogger.logWithModule(LogType.DEBUG, "test: dice "+end, "title: "+msg.getEmbeds().stream().map(embed->embed.getTitle()+"|"+embed.getDescription()).collect(java.util.stream.Collectors.joining(" ")));
 			return hasEmbed(msg, "Rolling the dice...","From 1 to "+end);
 		});
 		Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->{
