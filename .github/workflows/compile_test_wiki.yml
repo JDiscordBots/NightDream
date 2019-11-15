@@ -36,6 +36,8 @@ jobs:
         echo "jda-factory-method=load" >> $propFile
         echo "testing-prefix=nt." >> $propFile
         echo "testing-channel=$testChan" >> $propFile
+        mkdir test
+        echo "prefix=nt." >> test/Guild.properties
       env:
         testChan: ${{ secrets.testingChannel }}
         propFile:  src/test/resources/jda-tests.properties
