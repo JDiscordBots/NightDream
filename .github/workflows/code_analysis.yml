@@ -36,3 +36,5 @@ jobs:
              -Dsonar.organization=nightdream
              -Dsonar.host.url=https://sonarcloud.io/
              -Dsonar.projectKey=NightDream
+             -Dsonar.sources=src/
+             -Dsonar.java.binaries=target/classes
