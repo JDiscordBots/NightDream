@@ -40,3 +40,4 @@ jobs:
              -Dsonar.projectKey=NightDream
              -Dsonar.sources=src/
              -Dsonar.java.binaries=target/classes
+             -Dsonar.java.libraries=~/.m2/repository/**/*.jar
