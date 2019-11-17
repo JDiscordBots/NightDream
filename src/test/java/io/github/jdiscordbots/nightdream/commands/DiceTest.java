@@ -1,45 +1,51 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import static io.github.jdiscordbots.jdatesting.TestUtils.getMessage;
+import static io.github.jdiscordbots.jdatesting.TestUtils.getTimeout;
 import static io.github.jdiscordbots.jdatesting.TestUtils.hasEmbed;
 import static io.github.jdiscordbots.jdatesting.TestUtils.sendCommand;
+import static io.github.jdiscordbots.jdatesting.TestUtils.setTimeout;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-import org.awaitility.Awaitility;
+import java.time.Duration;
+
 import org.awaitility.Durations;
-import org.awaitility.core.ConditionTimeoutException;
 import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
+import net.dv8tion.jda.api.entities.Message;
 
 public class DiceTest {
 	@Test
 	public void testWithoutArgs() {
 		sendCommand("dice");
-		getMessage(msg->msg.getContentRaw().endsWith(" Not enough arguments!")).delete().queue();
+		Message resp=getMessage(msg->msg.getContentRaw().endsWith(" Not enough arguments!"));
+		assertNotNull(resp);
+		resp.delete().queue();
 	}
 	@Test
 	public void testWithNonNumericArg() {
 		sendCommand("dice Hello");
-		getMessage(msg->msg.getContentRaw().endsWith(" argument needs to be an integer!")).delete().queue();
+		Message resp=getMessage(msg->msg.getContentRaw().endsWith(" argument needs to be an integer!"));
+		assertNotNull(resp);
+		resp.delete().queue();
 	}
 	private void testStandardExecution(int end) {
 		sendCommand("dice "+end);
-		Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->{
-			try{
-				getMessage(msg->hasEmbed(msg, embed->{
-					int i;
-					return embed.getTitle().equals("Done!")&&
-					embed.getDescription().startsWith("It landed on a ")&&
-					(i=Integer.parseInt(embed.getDescription().substring(15)))>=Math.min(1, end)&&
-					i<=Math.max(1, end);
-				})).delete().queue();
-				return true;
-			}catch(ConditionTimeoutException e) {
-				return false;
-			}
-		});
+		Duration defaultTimeout=getTimeout();
+		setTimeout(Durations.TEN_SECONDS);
+		Message resp=getMessage(msg->hasEmbed(msg, embed->{
+			int i;
+			return embed.getTitle().equals("Done!")&&
+			embed.getDescription().startsWith("It landed on a ")&&
+			(i=Integer.parseInt(embed.getDescription().substring(15)))>=Math.min(1, end)&&
+			i<=Math.max(1, end);
+		}));
+		assertNotNull(resp);
+		resp.delete().queue();
+		setTimeout(defaultTimeout);
 	}
 	@Test
 	public void testNegativeArg() {

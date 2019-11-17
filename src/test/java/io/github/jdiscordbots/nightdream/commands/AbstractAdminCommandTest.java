@@ -4,6 +4,7 @@ import static io.github.jdiscordbots.jdatesting.TestUtils.getJDA;
 import static io.github.jdiscordbots.jdatesting.TestUtils.getMessage;
 import static io.github.jdiscordbots.jdatesting.TestUtils.sendCommand;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.stream.Stream;
 
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.jdatesting.TestUtils;
 import io.github.jdiscordbots.nightdream.util.BotData;
+import net.dv8tion.jda.api.entities.Message;
 
 public abstract class AbstractAdminCommandTest {
 	@BeforeAll
@@ -27,7 +29,9 @@ public abstract class AbstractAdminCommandTest {
 		String[] adminIDs=BotData.getAdminIDs();
 		BotData.setAdminIDs(Stream.of(adminIDs).filter(id->!id.equals(getJDA().getSelfUser().getId())).toArray(String[]::new));
 		sendCommand(cmdName());
-		getMessage(msg->msg.getContentRaw().endsWith(" This is an admin command.")).delete().complete();
+		Message resp=getMessage(msg->msg.getContentRaw().endsWith(" This is an admin command."));
+		assertNotNull(resp);
+		resp.delete().queue();
 		BotData.setAdminIDs(adminIDs);
 	}
 	protected abstract String cmdName();

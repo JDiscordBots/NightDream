@@ -6,26 +6,32 @@ import static io.github.jdiscordbots.jdatesting.TestUtils.getPrefix;
 import static io.github.jdiscordbots.jdatesting.TestUtils.getTestingChannel;
 import static io.github.jdiscordbots.jdatesting.TestUtils.sendCommand;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
+import net.dv8tion.jda.api.entities.Message;
 
 public class ActivityTest {
 	@Test
 	public void testWithoutArgs() {
 		assertNull(getAlreadySentMessage(getTestingChannel(), msg->msg.getContentRaw().equals(getPrefix()+"help | ")));
 		sendCommand("activity");
-		getMessage("Done: "+getPrefix()+"help |").delete().queue();
+		Message msg=getMessage("Done: "+getPrefix()+"help |");
+		assertNotNull(msg);
+		msg.delete().queue();
 	}
 	
 	@Test
 	public void testWithArgs() {
 		assertNull(getAlreadySentMessage(getTestingChannel(), msg->msg.getContentRaw().equals(getPrefix()+"help | ")));
 		sendCommand("activity doing feature tests");
-		getMessage("Done: "+getPrefix()+"help | doing feature tests").delete().queue();
+		Message msg=getMessage("Done: "+getPrefix()+"help | doing feature tests");
+		assertNotNull(msg);
+		msg.delete().queue();
 	}
 	
 	@Test
