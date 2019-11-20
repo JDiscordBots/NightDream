@@ -7,14 +7,6 @@
 
 package io.github.jdiscordbots.nightdream.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.storage.PropertyStorage;
@@ -22,6 +14,14 @@ import io.github.jdiscordbots.nightdream.storage.RedisStorage;
 import io.github.jdiscordbots.nightdream.storage.SQLStorage;
 import io.github.jdiscordbots.nightdream.storage.Storage;
 import net.dv8tion.jda.api.entities.Guild;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * saving, loading, retrieving and setting data of the Bot
@@ -294,7 +294,7 @@ public class BotData {
 	}
 	/**
 	 * sets the database username for database storage
-	 * @param databaseUrl database username
+	 * @param databaseUser database username
 	 */
 	public static void setDatabaseUser(String databaseUser) {
 		bkpStorage.setGlobalProperty(DATABASE_URL_PROP_NAME, databaseUser);
@@ -308,7 +308,7 @@ public class BotData {
 	}
 	/**
 	 * sets the database password for database storage
-	 * @param databaseUrl database password
+	 * @param databasePwd database password
 	 */
 	public static void setDatabasePassword(String databasePwd) {
 		bkpStorage.setGlobalProperty(DATABASE_PASSWORD_PROP_NAME, databasePwd);

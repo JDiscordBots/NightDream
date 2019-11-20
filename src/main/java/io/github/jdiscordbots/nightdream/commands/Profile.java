@@ -89,6 +89,9 @@ public class Profile implements Command {
 		builder.setColor(color);
 		builder.setTitle(getProp(user, "name", user.getAsTag()));
 		builder.setDescription(getProp(user, DESC_PROP_NAME, "A Ghost... yet"));
+		if (BotData.STORAGE.read("bugs", user.getId(), "").equals("banned")) {
+			builder.addField("Banned from bug reports", "This User cannot send bug reports", false);
+		}
 		String links=getProp(user,LINK_PROP_NAME);
 		if(!"".equals(links)) {
 			builder.addField("Links",
