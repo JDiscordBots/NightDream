@@ -39,10 +39,11 @@ public class CommandParser {
 		boolean inQuoute = false;
 		for (String s : splitBeheaded) {
 			if (inQuoute) {
-				split.add(split.remove(split.size()-1).concat(" ").concat(s.substring(0,s.length()-1)));
 				if (s.endsWith("\"")) {
 					inQuoute = false;
+					s=s.substring(0,s.length()-1);
 				}
+				split.add(split.remove(split.size()-1).concat(" ").concat(s));
 			} else {
 				if (s.startsWith("\"")&&!s.endsWith("\"")) {
 					inQuoute = true;
