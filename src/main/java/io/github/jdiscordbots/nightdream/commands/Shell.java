@@ -144,10 +144,12 @@ public class Shell implements Command {
 	private boolean addArgumentSupportQuoting(List<String> cmdBuilder,boolean inQuoute,String arg,boolean finished) {
 		if(!finished) {
 			if (inQuoute) {
-				cmdBuilder.add(cmdBuilder.remove(cmdBuilder.size()-1).concat(" ").concat(arg.substring(0,arg.length()-1)));//NOSONAR
+				
 				if (arg.endsWith("\"")) {
 					inQuoute = false;
+					arg=arg.substring(0,arg.length()-1);
 				}
+				cmdBuilder.add(cmdBuilder.remove(cmdBuilder.size()-1).concat(" ").concat(arg.substring(0,arg.length()-1)));//NOSONAR
 			} else {
 				if (arg.startsWith("\"")&&!arg.endsWith("\"")) {
 					inQuoute = true;
