@@ -58,7 +58,7 @@ public class BotData {
 		defaults.put(JDA_TOKEN_PROP_NAME, "");
 		defaults.put("game","Nightdreaming...");
 		defaults.put(INSTANCE_OWNER_PROP_NAME, String.join(" ","358291050957111296", "321227144791326730"));
-		defaults.put(BUG_CHAN_PROP_NAME, "");
+		//defaults.put(BUG_CHAN_PROP_NAME, "");
 		defaults.put(BUG_FIXED_PROP_NAME, "");
 		defaults.put(BUG_ID_PROP_NAME, "0");
 		defaults.put(KSOFT_TOKEN_PROP_NAME, "");
@@ -241,14 +241,16 @@ public class BotData {
 	 * @return the ISnowflake ID of the channel
 	 */
 	public static String getBugReportChannel() {
-		return bkpStorage.getGlobalProperty(BUG_CHAN_PROP_NAME);
+		return STORAGE.read("bugs", BUG_ID_PROP_NAME, "0");
+		//return bkpStorage.getGlobalProperty(BUG_CHAN_PROP_NAME);
 	}
 	/**
 	 * sets the bug current bug ID of the Bot
 	 * @param bugID the Bug id
 	 */
 	public static void setBugID(int bugID) {
-		bkpStorage.setGlobalProperty(BUG_ID_PROP_NAME, String.valueOf(bugID));
+		STORAGE.write("bugs", BUG_ID_PROP_NAME, String.valueOf(bugID));
+		//bkpStorage.setGlobalProperty(BUG_ID_PROP_NAME, String.valueOf(bugID));
 	}
 	/**
 	 * gets the bug current bug ID of the Bot
