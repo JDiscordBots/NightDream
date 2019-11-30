@@ -38,7 +38,8 @@ public class DiceTest {
 		setTimeout(Durations.TEN_SECONDS);
 		Message resp=getMessage(msg->hasEmbed(msg, embed->{
 			int i;
-			return embed.getTitle().equals("Done!")&&
+			return "Done!".equals(embed.getTitle())&&
+			embed.getDescription()!=null&&
 			embed.getDescription().startsWith("It landed on a ")&&
 			(i=Integer.parseInt(embed.getDescription().substring(15)))>=Math.min(1, end)&&
 			i<=Math.max(1, end);
