@@ -51,24 +51,26 @@ public class Eval implements Command {
         	NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
         	event.getJDA().shutdown();
 		}else {
-			try {
-				long time=System.nanoTime();
-				Object result=shell.eval(script);
-				time=System.nanoTime()-time;
-				if(result != null&&result.toString().contains(event.getJDA().getToken())) {
-					NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
-		        	event.getJDA().shutdownNow();
-				}else {
-					onSuccess(result,event,time);
-				}
-			} catch (EvalError|RuntimeException e) {
+			new Thread(()->{
 				try {
-					shell.set(LATEST_EXCEPTION_KEY_NAME, e);
-				} catch (EvalError e1) {
-					NDLogger.logWithoutModule(LogType.WARN, "eval exception while setting error value",e);
+					long time=System.nanoTime();
+					Object result=shell.eval(script);
+					time=System.nanoTime()-time;
+					if(result != null&&result.toString().contains(event.getJDA().getToken())) {
+						NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
+			        	event.getJDA().shutdownNow();
+					}else {
+						onSuccess(result,event,time);
+					}
+				} catch (EvalError|RuntimeException e) {
+					try {
+						shell.set(LATEST_EXCEPTION_KEY_NAME, e);
+					} catch (EvalError e1) {
+						NDLogger.logWithoutModule(LogType.WARN, "eval exception while setting error value",e);
+					}
+					onError(e,event);
 				}
-				onError(e,event);
-			}
+			}).start();
 		}
 	}
 	
