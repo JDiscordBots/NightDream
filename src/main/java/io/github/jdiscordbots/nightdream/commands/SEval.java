@@ -18,7 +18,7 @@ import java.util.TimerTask;
 public class SEval extends Eval {
 
 	@Override
-	protected void onSuccess(Object result, GuildMessageReceivedEvent event) {
+	protected void onSuccess(Object result, GuildMessageReceivedEvent event,long time) {
 		// do nothing
 	}
 	

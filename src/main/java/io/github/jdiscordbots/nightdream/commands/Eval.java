@@ -10,14 +10,15 @@ package io.github.jdiscordbots.nightdream.commands;
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-
 import bsh.EvalError;
 import bsh.Interpreter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 @BotCommand("eval")
 public class Eval implements Command {
@@ -51,12 +52,14 @@ public class Eval implements Command {
         	event.getJDA().shutdown();
 		}else {
 			try {
+				long time=System.nanoTime();
 				Object result=shell.eval(script);
+				time=System.nanoTime()-time;
 				if(result != null&&result.toString().contains(event.getJDA().getToken())) {
 					NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
 		        	event.getJDA().shutdownNow();
 				}else {
-					onSuccess(result,event);
+					onSuccess(result,event,time);
 				}
 			} catch (EvalError|RuntimeException e) {
 				try {
@@ -69,9 +72,21 @@ public class Eval implements Command {
 		}
 	}
 	
-	protected void onSuccess(Object result,GuildMessageReceivedEvent event) {
+	protected void onSuccess(Object result,GuildMessageReceivedEvent event,long time) {
+		EmbedBuilder eb=new EmbedBuilder();
+		eb.setFooter((result==null?"null":result.getClass().getCanonicalName())+" | "+time+"ns");
 		if (result != null) {
-        	event.getChannel().sendMessage("```java\n"+result.toString()+"\n```").queue();
+			String text="```java\n"+result.toString()+"\n```";
+			if(text.length()>=2000) {
+				eb.setDescription("As the output was over 2000 characters, it was exported into a text file.");
+				event.getChannel().sendMessage(eb.build()).addFile(result.toString().getBytes(StandardCharsets.UTF_8), "result.txt").queue();
+				eb=null;
+			}else {
+				eb.setDescription(text);
+			}
+		}
+		if(eb!=null) {
+			event.getChannel().sendMessage(eb.build()).queue();
 		}
 	}
 	protected void onError(Exception e,GuildMessageReceivedEvent event) {
