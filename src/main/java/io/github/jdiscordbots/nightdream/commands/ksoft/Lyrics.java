@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 @BotCommand("lyrics")
 public class Lyrics implements Command {
-
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		KSoftAPI api = KSoftUtil.getApi();
@@ -34,6 +33,7 @@ public class Lyrics implements Command {
 		
 		if(args.length==0) {
 			JDAUtils.errmsg(event.getChannel(), "not enough arguments");
+			return;
 		}
 		
 		event.getChannel().sendTyping().queue();
