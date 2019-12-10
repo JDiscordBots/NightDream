@@ -14,7 +14,7 @@ import io.github.jdiscordbots.nightdream.util.KSoftUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.entities.TaggedImage;
-import net.explodingbush.ksoftapi.enums.ImageTag;
+import net.explodingbush.ksoftapi.image.ImageTag;
 
 public abstract class KSoftImageCommand implements Command {
 

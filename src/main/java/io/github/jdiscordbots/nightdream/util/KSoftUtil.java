@@ -10,7 +10,7 @@ package io.github.jdiscordbots.nightdream.util;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.TaggedImage;
-import net.explodingbush.ksoftapi.enums.ImageTag;
+import net.explodingbush.ksoftapi.image.ImageTag;
 
 /**
  * Utilities for interacting with the KSoft API

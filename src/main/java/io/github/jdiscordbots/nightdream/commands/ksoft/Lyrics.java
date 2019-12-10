@@ -14,7 +14,8 @@ import io.github.jdiscordbots.nightdream.util.KSoftUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.explodingbush.ksoftapi.KSoftAPI;
-import net.explodingbush.ksoftapi.entities.Lyric;
+import net.explodingbush.ksoftapi.entities.lyrics.Album;
+import net.explodingbush.ksoftapi.entities.lyrics.Track;
 
 import java.awt.Color;
 
@@ -35,23 +36,24 @@ public class Lyrics implements Command {
 		
 		event.getChannel().sendTyping().queue();
 		String query=String.join(" ", args);
-		
-		Lyric lyric = api.getLyrics().search(query).execute().get(0);
-		if(lyric==null) {
+		Track track = api.getLyrics().search(query).execute().get(0);
+		if(track==null) {
 			JDAUtils.errmsg(event.getChannel(), "not found");
 			return;
 		}
 		EmbedBuilder builder=new EmbedBuilder();
+		String lyrics=track.getLyrics();
 		builder.setColor(Color.white)
 		.setFooter("Results from KSoft.Si API")
 		.setTitle("Result");
-		if(lyric.getAlbums().length==0) {
-			builder.addField(lyric.getArtistName(), "in no albums", false);
+		if(track.getAlbums().isEmpty()) {
+			builder.addField(track.getArtist().getName(), "in no albums", false);
 		}else {
-			builder.addField(lyric.getArtistName(),lyric.getAlbums()[0],false)
-			.addField(lyric.getFullTitle(), "released "+lyric.getAlbumReleaseYears()[0], false);
+			builder.addField(track.getArtist().getName(),track.getAlbums().get(0).getName(),false)
+			.addField(track.getFullName(), "released "+track.getAlbums().stream().mapToInt(Album::getReleaseYear).min(), false);
 		}
-		event.getChannel().sendMessage(builder.build()).queue();
+		builder.addField("Lyrics", lyrics.length()>=1000?lyrics.substring(0,999):lyrics, false);
+		event.getChannel().sendMessage(builder.build()).queue();	
 	}
 
 	@Override

@@ -8,7 +8,7 @@
 package io.github.jdiscordbots.nightdream.commands.ksoft;
 
 import io.github.jdiscordbots.nightdream.commands.BotCommand;
-import net.explodingbush.ksoftapi.enums.ImageTag;
+import net.explodingbush.ksoftapi.image.ImageTag;
 
 @BotCommand("cute")
 public class Cute extends KSoftImageCommand {
@@ -25,6 +25,6 @@ public class Cute extends KSoftImageCommand {
 
 	@Override
 	protected ImageTag getImageTag() {
-		return ImageTag.DOG;
+		return ImageTag.valueOf("dog");
 	}
 }

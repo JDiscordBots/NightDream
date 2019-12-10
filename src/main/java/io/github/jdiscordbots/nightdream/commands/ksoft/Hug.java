@@ -9,7 +9,7 @@ package io.github.jdiscordbots.nightdream.commands.ksoft;
 
 import io.github.jdiscordbots.nightdream.commands.BotCommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.explodingbush.ksoftapi.enums.ImageTag;
+import net.explodingbush.ksoftapi.image.ImageTag;
 
 @BotCommand("hug")
 public class Hug extends KSoftImageCommand {
@@ -40,7 +40,7 @@ public class Hug extends KSoftImageCommand {
 
 	@Override
 	protected ImageTag getImageTag() {
-		return ImageTag.HUG;
+		return ImageTag.valueOf("hug");
 	}
 
 }

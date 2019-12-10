@@ -8,7 +8,7 @@
 package io.github.jdiscordbots.nightdream.commands.ksoft;
 
 import io.github.jdiscordbots.nightdream.commands.BotCommand;
-import net.explodingbush.ksoftapi.enums.ImageTag;
+import net.explodingbush.ksoftapi.image.ImageTag;
 @BotCommand("neko")
 public class Neko extends KSoftImageCommand {
 
@@ -24,7 +24,7 @@ public class Neko extends KSoftImageCommand {
 
 	@Override
 	protected ImageTag getImageTag() {
-		return ImageTag.NEKO;
+		return ImageTag.valueOf("neko");
 	}
 
 }
