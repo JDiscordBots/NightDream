@@ -18,6 +18,8 @@ import net.explodingbush.ksoftapi.entities.lyrics.Album;
 import net.explodingbush.ksoftapi.entities.lyrics.Track;
 
 import java.awt.Color;
+import java.util.OptionalInt;
+import java.util.stream.Collectors;
 
 @BotCommand("lyrics")
 public class Lyrics implements Command {
@@ -41,18 +43,15 @@ public class Lyrics implements Command {
 			JDAUtils.errmsg(event.getChannel(), "not found");
 			return;
 		}
+		OptionalInt released=track.getAlbums().stream().mapToInt(Album::getReleaseYear).min();
 		EmbedBuilder builder=new EmbedBuilder();
 		String lyrics=track.getLyrics();
 		builder.setColor(Color.white)
 		.setFooter("Results from KSoft.Si API")
-		.setTitle("Result");
-		if(track.getAlbums().isEmpty()) {
-			builder.addField(track.getArtist().getName(), "in no albums", false);
-		}else {
-			builder.addField(track.getArtist().getName(),track.getAlbums().get(0).getName(),false)
-			.addField(track.getFullName(), "released "+track.getAlbums().stream().mapToInt(Album::getReleaseYear).min(), false);
-		}
-		builder.addField("Lyrics", lyrics.length()>=1000?lyrics.substring(0,999):lyrics, false);
+		.setTitle("Found something :mag:");
+		builder.addField("Artist: "+track.getArtist().getName(),"Album: "+track.getAlbums().stream().map(Album::getName).collect(Collectors.joining(" / ")),false);
+		builder.addField("Song: "+track.getName(), released.isPresent()?"released "+released.getAsInt():"", false);
+		builder.addField("Lyrics", lyrics.length()>=300?lyrics.substring(0,300)+"\n...":lyrics, false);
 		event.getChannel().sendMessage(builder.build()).queue();	
 	}
 
