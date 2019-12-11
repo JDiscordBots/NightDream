@@ -15,6 +15,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.Color;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @BotCommand("fixed")
 public class Fixed implements Command {
@@ -25,35 +27,29 @@ public class Fixed implements Command {
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		if(args.length<1) {
-			event.getChannel().sendMessage("Please enter a correct number for the bug id!").queue();
+		args=Stream.of(args).collect(Collectors.joining(" ")).split("\\|");
+		if(args.length<2) {
+			event.getChannel().sendMessage("Syntax: `fixed <id>|Original Bug[|<additional information>]`").queue();
 			return;
 		}
-		StringBuilder sb = new StringBuilder();
-		for (String string : args) {
-			sb.append(string).append(' ');
-		}
-		args = sb.toString().split("\\|");
-
 		int bugID = 0;
-		
 
 		try {
-			bugID = Integer.parseInt(args[0]);
+			bugID = Integer.parseInt(args[0].trim());
 		} catch (NumberFormatException e) {
 			event.getChannel().sendMessage("Please enter a correct number for the bug id!").queue();
 			return;
 		}
-		if (BotData.getBugID() < bugID) {
+		if (bugID<0||BotData.getBugID() < bugID) {
 			event.getChannel().sendMessage("This bug id is not valid!").queue();
 			return;
 		}
 		String bugDescription = args[1];
-		String comment = args[2];
+		
 		EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setFooter("Reported as fixed by " + event.getAuthor().getName()).setTitle("Fixed bug " + bugID)
 				.addField("Original bug", bugDescription, false);
-		if (comment != null) {
-			eb.addField("Additional comment", comment, false);
+		if (args.length>2) {
+			eb.addField("Additional comment", args[2], false);
 		}
 
 		event.getJDA().getTextChannelById(BotData.getFixedBugsChannel()).sendMessage(eb.build()).queue();

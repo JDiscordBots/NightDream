@@ -37,7 +37,8 @@ public class CommandParser {
 		final String invoke = splitBeheaded[0];
 		final ArrayList<String> split = new ArrayList<>();
 		boolean inQuoute = false;
-		for (String s : splitBeheaded) {
+		for (int i=1;i<splitBeheaded.length;i++) {
+			String s=splitBeheaded[i];
 			if (inQuoute) {
 				if (s.endsWith("\"")) {
 					inQuoute = false;
@@ -52,8 +53,8 @@ public class CommandParser {
 				split.add(s);
 			}
 		}
-		final String[] args = new String[split.size()-1];
-		split.subList(1, split.size()).toArray(args);
+		final String[] args = new String[split.size()];
+		split.toArray(args);
 		return new CommandContainer(invoke, args, event);
 	}
 	/**

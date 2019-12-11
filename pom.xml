@@ -78,6 +78,18 @@
 			<version>0.0.7-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-commons</artifactId>
+			<version>1.5.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<version>1.6.0-M1</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- Spotbugs -->
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>

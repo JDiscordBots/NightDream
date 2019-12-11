@@ -21,9 +21,6 @@ public class EvalTest extends AbstractAdminCommandTest{
 		assertEquals("Evaluates Code", new Eval().help());
 	}
 	@Test
-	public void testPermissionString() {
-		assertEquals("Bot-Admin", new Eval().permNeeded());
-	}
 	public void testCommandType() {
 		assertSame(CommandType.META, new Eval().getType());
 	}
