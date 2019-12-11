@@ -18,6 +18,7 @@ import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Message;
 
 public class FixedTest extends AbstractAdminCommandTest{
+
 	@BeforeAll
 	public static void init() {
 		BotData.setFixedBugsChannel(getTestingChannel().getId());
@@ -74,7 +75,6 @@ public class FixedTest extends AbstractAdminCommandTest{
 		assertNotNull(resp);
 		resp.delete().queue();
 	}
-	
 	@Test
 	public void testHelp() {
 		assertEquals("Reports a bug as fixed", new Fixed().help());
