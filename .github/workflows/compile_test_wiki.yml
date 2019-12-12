@@ -24,9 +24,6 @@ jobs:
   test:
     strategy:
       matrix:
-        token: 
-          - ${{ secrets.botToken }}
-          - ${{ secrets.botToken2 }}
     runs-on: ubuntu-latest
     needs: compile-8
     steps:
@@ -49,7 +46,7 @@ jobs:
     - name: "automated (feature) tests"
       run: "mvn -B -Dio.github.jdiscordbots.nightdream.logging.Level=DEBUG test"
       env:
-        ND_token: ${{ matrix.token }}
+        ND_token: ${{ secrets.botToken }}
         ND_admin: ${{ secrets.botAdmin }}
       
   upload:
