@@ -64,7 +64,7 @@ public class TextToGraphics implements Runnable {
 		} catch (IOException|FontFormatException e) {
 			LOG.log(LogType.WARN,"Error while loading fonts - Using Arial",e);
 		}
-		FONT_BODY=body.deriveFont(FONT_SIZE_BODY);
+		FONT_BODY= body.deriveFont(FONT_SIZE_BODY);
 		FONT_NOSPACE=heading.deriveFont(FONT_SIZE_NOSPACE).deriveFont(Font.BOLD);
 		graphicsThread=new Thread(executor);
 		graphicsThread.setDaemon(true);
