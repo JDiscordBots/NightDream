@@ -26,14 +26,14 @@ public class FixedTest extends AbstractAdminCommandTest{
 	}
 	@Test
 	public void testNoArgs() {
-		sendCommand("fixed");
+		sendCommand(cmdName());
 		Message resp=getMessage("Syntax: `fixed <id>|Original Bug[|<additional information>]`");
 		assertNotNull(resp);
 		resp.delete().queue();
 	}
 	@Test
 	public void testNoComment() {
-		sendCommand("fixed "+BotData.getBugID()+"|bug");
+		sendCommand(cmdName()+" "+BotData.getBugID()+"|bug");
 		Message resp=getMessage(msg->hasEmbed(msg, embed->
 			("Fixed bug "+BotData.getBugID()).equals(embed.getTitle())&&
 			hasEmbedField(embed, "Original bug","bug")&&
@@ -44,14 +44,14 @@ public class FixedTest extends AbstractAdminCommandTest{
 	}
 	@Test
 	public void testTooHighBugID() {
-		sendCommand("fixed "+BotData.getBugID()+1+"|some comment");
+		sendCommand(cmdName()+" "+BotData.getBugID()+1+"|some comment");
 		Message resp=getMessage("This bug id is not valid!");
 		assertNotNull(resp);
 		resp.delete().queue();
 	}
 	@Test
 	public void testWithComment() {
-		sendCommand("fixed "+BotData.getBugID()+"|a bug|a comment");
+		sendCommand(cmdName()+" "+BotData.getBugID()+"|a bug|a comment");
 		Message resp=getMessage(msg->hasEmbed(msg, embed->
 			("Fixed bug "+BotData.getBugID()).equals(embed.getTitle())&&
 			hasEmbedField(embed, "Original bug","a bug")&&

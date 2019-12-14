@@ -23,12 +23,16 @@ import net.dv8tion.jda.api.entities.MessageEmbed.Field;
 public class HelpTest {
 	private Guild g=getTestingChannel().getGuild();
 
+	private void testFooter(Message msg) {
+		assertTrue(hasEmbed(msg, embed->("Prefix in "+g.getName()+": "+BotData.getPrefix(g)+" | Release "+NightDream.VERSION).equals(embed.getFooter().getText())));
+	}
+	
 	@Test
 	public void testWithoutArguments() {
 		sendCommand("help");
 		Message resp=getMessage(msg->hasEmbed(msg, embed->"Nightdream Commands".equals(embed.getTitle())));
 		assertNotNull(resp);
-		assertTrue(hasEmbed(resp, embed->("Prefix in "+g.getName()+": "+BotData.getPrefix(g)+" | Release "+NightDream.VERSION).equals(embed.getFooter().getText())));
+		testFooter(resp);
 		assertTrue(hasEmbedField(resp, field->"Util".equals(field.getName())));
 		assertTrue(hasEmbedField(resp, field->"Fun".equals(field.getName())));
 		assertTrue(hasEmbedField(resp, field->"Config".equals(field.getName())));
@@ -47,7 +51,7 @@ public class HelpTest {
 		sendCommand("help help");
 		Message resp=getMessage(msg->hasEmbed(msg, embed->"Help with help".equals(embed.getTitle())));
 		assertNotNull(resp);
-		assertTrue(hasEmbed(resp, embed->("Prefix in "+g.getName()+": "+BotData.getPrefix(g)+" | Release "+NightDream.VERSION).equals(embed.getFooter().getText())));
+		testFooter(resp);
 		assertTrue(hasEmbedField(resp, "Category","Meta"));
 		assertTrue(hasEmbedField(resp, "Permissions needed","<none>"));
 		assertTrue(hasEmbedField(resp, "Description","¯\\_(ツ)_/¯"));
@@ -58,7 +62,7 @@ public class HelpTest {
 		sendCommand("help eval");
 		Message resp=getMessage(msg->hasEmbed(msg, embed->"Help with eval".equals(embed.getTitle())));
 		assertNotNull(resp);
-		assertTrue(hasEmbed(resp, embed->("Prefix in "+g.getName()+": "+BotData.getPrefix(g)+" | Release "+NightDream.VERSION).equals(embed.getFooter().getText())));
+		testFooter(resp);
 		assertTrue(hasEmbedField(resp, "Category","Meta"));
 		assertTrue(hasEmbedField(resp, "Permissions needed","Bot-Admin"));
 		assertTrue(hasEmbedField(resp, "Description","Evaluates Code"));
