@@ -20,9 +20,9 @@ public class CommandListener extends ListenerAdapter {
 	 */
 	@Override
 	public void onGuildMessageReceived(final GuildMessageReceivedEvent event) {
-		if(event.getMessage().getContentRaw().equals(event.getGuild().getMember(event.getJDA().getSelfUser()).getAsMention())&& !event.getAuthor().isBot()) {
+		if(event.getMessage().getContentRaw().equals(event.getGuild().getSelfMember().getAsMention())&& !event.getAuthor().isBot()) {
 			event.getChannel().sendMessage("My prefix here: `"+BotData.getPrefix(event.getGuild())+"`").queue();
-		}else if (event.getMessage().getContentRaw().startsWith(event.getGuild().getMember(event.getJDA().getSelfUser()).getAsMention()+" ") && !event.getMessage().getAuthor().isBot()) {
+		}else if (event.getMessage().getContentRaw().startsWith(event.getGuild().getSelfMember().getAsMention()+" ") && !event.getMessage().getAuthor().isBot()) {
 			if(event.getMessage().getContentRaw().toLowerCase().endsWith("> i messed up")) {
 				BotData.setPrefix(event.getGuild(), BotData.getDefaultPrefix());
 				event.getChannel().sendMessage("It's fine :smiley:\nI reset the prefix on this guild.").queue();
