@@ -76,6 +76,15 @@ public class HelpTest {
 		resp.delete().queue();
 	}
 	@Test
+	public void testPartialCommand() {
+		sendCommand("help h");
+		Message resp=getMessage(msg->hasEmbed(msg, "Nightdream Commands (Searching for h)",null));
+		assertNotNull(resp);
+		assertTrue(hasEmbedField(resp, "Meta", "`help` - ¯\\_(ツ)_/¯"));
+		assertTrue(hasEmbedField(resp, "Image", "`hug` - Hugs someone or yourself :)"));
+		resp.delete().queue();
+	}
+	@Test
 	public void testHelp() {
 		assertEquals("¯\\_(ツ)_/¯", new Help().help());
 	}

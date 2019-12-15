@@ -43,6 +43,13 @@ public class FixedTest extends AbstractAdminCommandTest{
 		resp.delete().queue();
 	}
 	@Test
+	public void testInvalidBugId() {
+		sendCommand(cmdName()+" xyz|comment");
+		Message resp=getMessage("Please enter a correct number for the bug id!");
+		assertNotNull(resp);
+		resp.delete().queue();
+	}
+	@Test
 	public void testTooHighBugID() {
 		sendCommand(cmdName()+" "+BotData.getBugID()+1+"|some comment");
 		Message resp=getMessage("This bug id is not valid!");

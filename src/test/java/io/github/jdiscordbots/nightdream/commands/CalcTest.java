@@ -45,6 +45,7 @@ public class CalcTest{
 		assertWrongFormat("math");
 		assertWrongFormat("math 1 +");
 		assertWrongFormat("math 1 x 2");
+		assertWrongFormat("math a + 2");
 	}
 	@Test
 	public void testAdd() {
@@ -101,6 +102,17 @@ public class CalcTest{
 		assertCalculation("0 root 0", "0.0 root of 0.0", "0.0");
 		assertCalculation("-Infinity root Infinity", "-Infinity root of Infinity", "1.0");
 		assertCalculation("NaN root 1", "NaN root of 1.0", "NaN");
+	}
+	@Test
+	public void testModulu() {
+		assertCalculation("1 % 1", "1.0 mod 1.0", "0.0");
+		assertCalculation("-6 % 4", "-6.0 mod 4.0", "-2.0");
+		assertCalculation("-100 % -1", "-100.0 mod -1.0", "-0.0");
+		assertCalculation("100 % 0", "100.0 mod 0.0", "NaN");
+		assertCalculation("-Infinity % 0", "-Infinity mod 0.0", "NaN");
+		assertCalculation("0 % 0", "0.0 mod 0.0", "NaN");
+		assertCalculation("-Infinity % Infinity", "-Infinity mod Infinity", "NaN");
+		assertCalculation("NaN % 1", "NaN mod 1.0", "NaN");
 	}
 	@Test
 	public void testDecimals() {

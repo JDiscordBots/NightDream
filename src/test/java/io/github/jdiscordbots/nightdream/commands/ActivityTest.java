@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import net.dv8tion.jda.api.entities.Message;
 
-public class ActivityTest {
+public class ActivityTest extends AbstractAdminCommandTest{
 	@Test
 	public void testWithoutArgs() {
 		assertNull(getAlreadySentMessage(getTestingChannel(), msg->msg.getContentRaw().equals(getPrefix()+"help | ")));
@@ -36,11 +36,21 @@ public class ActivityTest {
 	
 	@Test
 	public void testCommandType() {
-		assertSame(CommandType.CONFIG, new Activity().getType());
+		assertSame(CommandType.CONFIG, cmd().getType());
 	}
 	
 	@Test
 	public void testHelp() {
-		assertEquals("Changes the bot's activity", new Activity().help());
+		assertEquals("Changes the bot's activity", cmd().help());
+	}
+
+	@Override
+	protected String cmdName() {
+		return "activity";
+	}
+
+	@Override
+	protected Command cmd() {
+		return new Activity();
 	}
 }

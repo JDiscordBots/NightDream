@@ -96,13 +96,6 @@ public class Shell implements Command {
 			this.originalCommand = cmd;
 			this.cmd=Arrays.asList(cmd.split(" "));
 		}
-		@Override
-		public String toString() {
-			return "ShellCommand [cmd=" + cmd + ", originalCommand=" + originalCommand + ", outRedirection="
-					+ outRedirection + ", errRedirection=" + errRedirection + ", sendResponse=" + sendResponse
-					+ ", pipeRedirection=" + pipeRedirection + "]";
-		}
-		
 	}
 	private ShellCommand parse(String[] args,int start,int end) {
 		ShellCommand cmd=new ShellCommand(String.join(" ",args));
