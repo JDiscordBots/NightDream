@@ -42,7 +42,8 @@ public class EvalTest extends AbstractAdminCommandTest{
 	@Test
 	public void testCorrectMessageObj() {
 		sendCommand("eval message");
-		Message resp=getMessage(msg->hasEmbed(msg,null, "```java\n"+getMessage(message->message.getContentRaw().endsWith("eval message"))+"\n```"));
+		Message cmdMsg=getMessage(message->message.getContentRaw().endsWith("eval message"));
+		Message resp=getMessage(msg->hasEmbed(msg,null, "```java\n"+cmdMsg+"\n```"));
 		assertNotNull(resp);
 		assertTrue(hasEmbed(resp, embed->embed.getFooter().getText().startsWith(ReceivedMessage.class.getCanonicalName()+" | ")));
 		resp.delete().queue();
