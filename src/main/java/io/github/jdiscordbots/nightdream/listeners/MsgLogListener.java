@@ -42,6 +42,7 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 	
 	public void clearCache() {
 		messages.clear();
+		cachedMessageIDs.clear();
 	}
 	
 	public MsgLogListener() {
@@ -59,7 +60,7 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 			}else {
 				messages.remove(event.getMessageId());
 				if(!cachedMessageIDs.remove(event.getMessageId())) {
-					LOG.log(LogType.INFO,"A message that has been cached but was not markedd to be cached was deleted.");
+					LOG.log(LogType.WARN,"A message that has been cached but was not marked to be cached was deleted.");
 				}
 				EmbedBuilder builder=new EmbedBuilder();
 				builder.setColor(0x212121)
@@ -90,7 +91,8 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 				.append("(")
 				.append(attachment.getUrl())
 				.append(") (")
-				.append(attachment.getSize());
+				.append(attachment.getSize())
+				.append(")\n");
 			}
 			builder.addField("Attachments", attachmentsBuilder.toString(), false);
 		}

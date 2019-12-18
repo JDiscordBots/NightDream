@@ -34,10 +34,6 @@ public class MsgLog implements Command {
 			return;
 		}
 		TextChannel channel = event.getMessage().getMentionedChannels().get(0);
-		if(channel==null) {
-			event.getChannel().sendMessage(NEED_MENTIONED_CHANNEL).queue();
-			return;
-		}
 		BotData.setMsgLogChannel(channel.getId(), event.getGuild());
 		event.getChannel().sendMessage("Set! `" + BotData.getPrefix(event.getGuild()) + "msglog none` to disable.").queue();
 	}
@@ -49,7 +45,11 @@ public class MsgLog implements Command {
 
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-		return event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || JDAUtils.checkOwner(event,args!=null);
+		boolean allow = event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || JDAUtils.checkOwner(event,false);
+		if(!allow) {
+			event.getChannel().sendMessage("This command requires the "+Permission.MESSAGE_MANAGE.getName()+" permission.").queue();
+		}
+		return allow;
 	}
 	
 	@Override
