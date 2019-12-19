@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-import java.util.EnumSet;
-
 import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
