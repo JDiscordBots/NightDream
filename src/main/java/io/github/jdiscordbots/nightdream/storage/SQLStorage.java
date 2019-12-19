@@ -40,15 +40,15 @@ public class SQLStorage implements Storage {
 	
 	private static final String DB_WRITE_FAIL_MSG="Failed to write to sql database";
 	private static final String DB_READ_FAIL_MSG="Failed to read from sql database";
-	private static final String DEFAULT_KEY_NAME="key";
-	private static final String DEFAULT_VALUE_NAME="value";
+	private static final String DEFAULT_KEY_NAME="k";
+	private static final String DEFAULT_VALUE_NAME="v";
 	
-	private static final String SELECT_FORMAT="SELECT `%s` FROM %s WHERE `"+DEFAULT_KEY_NAME+"`=?";
-	private static final String INSERT_FORMAT="INSERT INTO %s (`"+DEFAULT_KEY_NAME+"`,`%s`) VALUES (?, ?);";
-	private static final String UPDATE_FORMAT="UPDATE `%s` SET `%s` = ? WHERE `"+DEFAULT_KEY_NAME+"` = ?;";
-	private static final String DELETE_FORMAT="DELETE FROM `%s` WHERE `%s` = ?;";
-	private static final String CREATE_FORMAT="CREATE TABLE IF NOT EXISTS `%s` (`"+DEFAULT_KEY_NAME+"` varchar(46) primary key,`"+DEFAULT_VALUE_NAME+"` varchar(46));";
-	private static final String CREATE_SUB_FORMAT="CREATE TABLE IF NOT EXISTS `%s` (`"+DEFAULT_KEY_NAME+"` varchar(46) primary key,%s);";
+	private static final String SELECT_FORMAT="SELECT %s FROM %s WHERE "+DEFAULT_KEY_NAME+"=?";
+	private static final String INSERT_FORMAT="INSERT INTO %s ("+DEFAULT_KEY_NAME+",%s) VALUES (?, ?);";
+	private static final String UPDATE_FORMAT="UPDATE %s SET %s = ? WHERE "+DEFAULT_KEY_NAME+" = ?;";
+	private static final String DELETE_FORMAT="DELETE FROM %s WHERE %s = ?;";
+	private static final String CREATE_FORMAT="CREATE TABLE  %s ("+DEFAULT_KEY_NAME+" varchar(46) primary key,"+DEFAULT_VALUE_NAME+" varchar(46));";
+	private static final String CREATE_SUB_FORMAT="CREATE TABLE %s ("+DEFAULT_KEY_NAME+" varchar(46) primary key,%s);";
 
 	private final Statement stmt;
 	private void close(AutoCloseable toClose) {
@@ -89,7 +89,7 @@ public class SQLStorage implements Storage {
 			try {
 				connection=driver.connect(BotData.getDatabaseUrl(), info);
 			}catch(SQLException e) {
-				LOG.log(LogType.DEBUG,"cannot connect to DB with driver "+driver.getClass().getName()+" and URL "+BotData.getDatabaseUrl());
+				LOG.log(LogType.DEBUG,"cannot connect to DB with driver "+driver.getClass().getName()+" and URL "+BotData.getDatabaseUrl(),e);
 			}
 		}
 		if(connection==null) {
@@ -113,7 +113,11 @@ public class SQLStorage implements Storage {
 	}
 	private String read(PreparedStatement selector,PreparedStatement inserter,String creator) throws SQLException {
 		if(creator!=null) {
-			stmt.execute(creator);
+			try {
+				stmt.execute(creator);
+			}catch(SQLException ignore) {
+				//ignore if e.g. already exists, if any other error, it will fail later
+			}
 		}
 		try (ResultSet set = selector.executeQuery()) {
 			if (set.next()) {
@@ -140,7 +144,7 @@ public class SQLStorage implements Storage {
 				insertStmt.setString(2, defaultValue);
 			}
 			ret = read(selectStmt, insertStmt,
-					String.format(CREATE_FORMAT, unit,Stream.of(defaultRows).map(s->"`"+s+"` varchar(46) default ''").collect(Collectors.joining(", "))));
+					String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->""+s+" varchar(46) default ''").collect(Collectors.joining(", "))));
 		} catch (SQLException e) {
 			LOG.log(LogType.WARN, DB_READ_FAIL_MSG, e);
 		}
@@ -193,7 +197,7 @@ public class SQLStorage implements Storage {
 			PreparedStatement updateStmt=prepareStatement(UPDATE_FORMAT,unit,subUnit);
 			updateStmt.setString(1, value);
 			updateStmt.setString(2, key);
-			write(selector,insertStmt,updateStmt,String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->"`"+s+"` varchar(46) default ''").collect(Collectors.joining(", "))));
+			write(selector,insertStmt,updateStmt,String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->""+s+" varchar(46) default ''").collect(Collectors.joining(", "))));
 		}catch (SQLException e) {
 			LOG.log(LogType.WARN, DB_WRITE_FAIL_MSG, e);
 		}
