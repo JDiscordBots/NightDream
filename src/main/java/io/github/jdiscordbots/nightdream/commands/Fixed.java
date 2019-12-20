@@ -62,7 +62,7 @@ public class Fixed implements Command {
 
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-		if(JDAUtils.checkOwner(event,args!=null)) {
+		if(!JDAUtils.checkOwner(event,args!=null)) {
 			return false;
 		}
 		if (BotData.getFixedBugsChannel() == null||"".equals(BotData.getBugReportChannel())) {
