@@ -65,13 +65,6 @@ public class Fixed implements Command {
 		if(!JDAUtils.checkOwner(event,args!=null)) {
 			return false;
 		}
-		if (BotData.getFixedBugsChannel() == null||"".equals(BotData.getBugReportChannel())) {
-			BotData.setFixedBugsChannel("");
-			if(args!=null) {
-				LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
-			}
-			return false;
-		}
 		try {
 			if(event.getJDA().getTextChannelById(BotData.getFixedBugsChannel())==null) {
 				if(args!=null) {
