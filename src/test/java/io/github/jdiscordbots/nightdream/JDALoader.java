@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.github.jdiscordbots.jdatesting.TestUtils;
 import io.github.jdiscordbots.nightdream.core.NightDream;
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.JDA;
 
@@ -28,6 +31,10 @@ public class JDALoader {
 		if(!ids.contains(jda.getSelfUser().getId())) {
 			ids.add(jda.getSelfUser().getId());
 			BotData.setAdminIDs(ids.stream().toArray(String[]::new));
+		}
+		NDLogger log=NDLogger.getLogger("test");
+		if(log.isLoggable(LogType.DEBUG)) {
+			TestUtils.setLogger(str->log.log(LogType.DEBUG, str));
 		}
 		return jda;
 	}
