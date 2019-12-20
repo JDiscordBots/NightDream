@@ -33,6 +33,7 @@ public class JDALoader {
 			BotData.setAdminIDs(ids.stream().toArray(String[]::new));
 		}
 		NDLogger log=NDLogger.getLogger("test");
+		log.log(LogType.DEBUG,"Admins: "+Arrays.toString(BotData.getAdminIDs()));
 		if(log.isLoggable(LogType.DEBUG)) {
 			TestUtils.setLogger(str->log.log(LogType.DEBUG, str));
 		}
