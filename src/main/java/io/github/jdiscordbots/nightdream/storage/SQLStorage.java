@@ -89,7 +89,7 @@ public class SQLStorage implements Storage {
 			try {
 				connection=driver.connect(BotData.getDatabaseUrl(), info);
 			}catch(SQLException e) {
-				LOG.log(LogType.DEBUG,"cannot connect to DB with driver "+driver.getClass().getName()+" and URL "+BotData.getDatabaseUrl(),e);
+				LOG.log(LogType.WARN,"cannot connect to DB with driver "+driver.getClass().getName()+" and URL "+BotData.getDatabaseUrl(),e);
 			}
 		}
 		if(connection==null) {

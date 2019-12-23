@@ -88,19 +88,19 @@ public class BotData {
 			}else if(dbUrl.startsWith("redis://")) {
 				dbUrl=dbUrl.substring("redis://".length());
 				tempStorage=new RedisStorage(dbUrl);
-				STORAGE_LOG.log(LogType.DEBUG, "Storage was set to redis database");
+				STORAGE_LOG.log(LogType.DONE, "Storage was set to redis database");
 			}
 		}else {
 			try {
 				tempStorage = new SQLStorage();
-				STORAGE_LOG.log(LogType.DEBUG, "Storage was set to database");
+				STORAGE_LOG.log(LogType.DONE, "Storage was set to database");
 			} catch (SQLException e) {
 				tempStorage = bkpStorage;
 				STORAGE_LOG.log(LogType.WARN, "DB loading failed",e);
 			}
 		}
 		if(tempStorage==bkpStorage) {
-			STORAGE_LOG.log(LogType.DEBUG, "Storage was set to properties (files)");
+			STORAGE_LOG.log(LogType.DONE, "Storage was set to properties (files)");
 		}
 		STORAGE = tempStorage;
 	}

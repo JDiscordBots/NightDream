@@ -44,7 +44,7 @@ jobs:
         testChan: ${{ secrets.testingChannel }}
         propFile:  src/test/resources/jda-tests.properties
     - name: "automated (feature) tests"
-      run: "mvn -B -Dio.github.jdiscordbots.nightdream.logging.Level=DEBUG test"
+      run: "mvn -B test"
       env:
         ND_token: ${{secrets.botToken}}
         ND_admin: ${{ secrets.botAdmin }}

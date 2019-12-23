@@ -69,7 +69,7 @@ public class NightDream {
 			CMD_CTL_LOG.log(LogType.INFO, "Loading Commands and Listeners...");
 			addCommandsAndListeners(ref, jda);
 			CMD_CTL_LOG.log(LogType.INFO, "Loaded Commands and Listeners");
-			CMD_CTL_LOG.log(LogType.DEBUG, "available Commands: "
+			CMD_CTL_LOG.log(LogType.INFO, "available Commands: "
 					+ CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", ")));
 			jda.awaitReady();
 			DISCORD_CTL_LOG.log(LogType.INFO, "Logged in.");
