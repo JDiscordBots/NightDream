@@ -1,25 +1,19 @@
 package io.github.jdiscordbots.nightdream.commands;
 
-import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.awt.*;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/* TODO: 23.12.2019 Check if token is in output (see eval commit) */
 @BotCommand("shell")
 public class Shell implements Command {
 
@@ -75,7 +69,7 @@ public class Shell implements Command {
 		String ret=sb.toString();
 		if("".equals(ret)) {
 			return null;
-		}else {
+		} else {
 			return ret;
 		}
 	}
