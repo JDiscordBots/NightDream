@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import io.github.jdiscordbots.nightdream.util.BotData;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 /**

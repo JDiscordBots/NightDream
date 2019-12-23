@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.0.0_73</version>
+			<version>4.1.0_81</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
-			<version>3.1.0</version>
+			<version>3.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.beanshell</groupId>
@@ -81,13 +81,13 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.5.2</version>
+			<version>5.6.0-M1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-commons</artifactId>
-			<version>1.5.2</version>
+			<version>1.6.0-M1</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
