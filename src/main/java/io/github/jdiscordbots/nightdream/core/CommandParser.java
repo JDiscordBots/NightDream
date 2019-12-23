@@ -33,7 +33,7 @@ public class CommandParser {
 	 */
 	public static CommandContainer parser(final GuildMessageReceivedEvent event, final String prefix) {
 		String raw = event.getMessage().getContentRaw();
-		if(event.getMember().hasPermission(event.getChannel(),Permission.MESSAGE_MENTION_EVERYONE)) {
+		if(!event.getMember().hasPermission(event.getChannel(),Permission.MESSAGE_MENTION_EVERYONE)) {
 			raw=raw.replace("@everyone", "@\u200Beveryone").replace("@here", "@\u200Bhere");
 		}
 		final String beheaded = raw.replaceFirst(Pattern.quote(prefix), "");
