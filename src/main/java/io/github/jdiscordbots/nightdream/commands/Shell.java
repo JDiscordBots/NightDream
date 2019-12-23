@@ -1,8 +1,11 @@
 package io.github.jdiscordbots.nightdream.commands;
 
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
@@ -13,7 +16,6 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/* TODO: 23.12.2019 Check if token is in output (see eval commit) */
 @BotCommand("shell")
 public class Shell implements Command {
 
@@ -147,7 +149,7 @@ public class Shell implements Command {
 		}
 		return inQuoute;
 	}
-	private Process startProcess(EmbedBuilder eb,TextChannel tc,ShellCommand cmd) throws IOException {
+	private Process startProcess(EmbedBuilder eb,TextChannel tc,ShellCommand cmd,User executor) throws IOException {
 		ProcessBuilder pBuilder=new ProcessBuilder(cmd.cmd);
 		
 		if(cmd.outRedirection!=null) {
@@ -174,10 +176,14 @@ public class Shell implements Command {
                 	int exitCode=p.waitFor();
 	            	eb.setFooter("Finished with exit code "+exitCode+" under "+OS_NAME);
 	            	eb.setColor(exitCode==0?Color.GREEN:Color.RED);
+	            	
 	                String out=readFromInputStream(lastProcess.getInputStream());
 	                String err=readFromInputStream(lastProcess.getErrorStream());
+	                testToken(out,executor);
+	                testToken(err,executor);
 	                appendField(eb,"Output","stdout",out);
 	                appendField(eb,"Errors","stderr",err);
+	                
 	            }catch(InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
@@ -186,17 +192,27 @@ public class Shell implements Command {
 		}
 		return p;
 	}
+	private void testToken(String toValidate,User user) {
+		if(toValidate != null&&toValidate.contains(user.getJDA().getToken())) {
+			NDLogger.logWithModule(LogType.FATAL, "Eval", user.getAsTag() + "(" + user.getId() + ") tried to get the bot token");
+			user.getJDA().shutdownNow();
+		}
+	}
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length<1) {
 			event.getChannel().sendMessage("Please specify a shell command.").queue();
 			return;
 		}
+		if(String.join("", args).toLowerCase().contains("token")) {
+			NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
+			event.getJDA().shutdownNow();
+		}
 		EmbedBuilder eb=new EmbedBuilder();
 		ShellCommand cmd=parse(args,0,args.length);
 		appendField(eb,"Command",null,cmd.originalCommand);
 		try {
-			startProcess(eb,event.getChannel(),cmd);
+			startProcess(eb,event.getChannel(),cmd,event.getAuthor());
 		} catch (IOException e) {
 			eb.appendDescription("Cannot start Process under "+OS_NAME);
 			if(e.getMessage()!=null) {
