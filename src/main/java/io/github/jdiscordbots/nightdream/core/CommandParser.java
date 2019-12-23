@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import io.github.jdiscordbots.nightdream.util.BotData;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 /**
@@ -32,7 +33,9 @@ public class CommandParser {
 	 */
 	public static CommandContainer parser(final GuildMessageReceivedEvent event, final String prefix) {
 		String raw = event.getMessage().getContentRaw();
-		raw=raw.replace("@", "@\u200B");
+		if(event.getMember().hasPermission(event.getChannel(),Permission.MESSAGE_MENTION_EVERYONE)) {
+			raw=raw.replace("@everyone", "@\u200Beveryone").replace("@here", "@\u200Bhere");
+		}
 		final String beheaded = raw.replaceFirst(Pattern.quote(prefix), "");
 		final String[] splitBeheaded = beheaded.split(" ");
 		final String invoke = splitBeheaded[0];
