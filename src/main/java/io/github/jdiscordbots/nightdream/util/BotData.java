@@ -42,6 +42,7 @@ public class BotData {
 	private static final String DATABASE_URL_PROP_NAME = "DBUrl";
 	private static final String DATABASE_USER_PROP_NAME = "DBUsr";
 	private static final String DATABASE_PASSWORD_PROP_NAME = "DBPw";
+	private static final String SUPPORT_SERVER_PROP_NAME = "supportInvite";
 	private static final String JDA_TOKEN_PROP_NAME="token";
 	
 	public static final Map<String,String> GLOBAL_DEFAULTS;
@@ -66,6 +67,7 @@ public class BotData {
 		defaults.put(DATABASE_URL_PROP_NAME, "");
 		defaults.put(DATABASE_USER_PROP_NAME, "");
 		defaults.put(DATABASE_PASSWORD_PROP_NAME, "");
+		defaults.put(SUPPORT_SERVER_PROP_NAME, "https://discord.gg/DKEqQVx");
 		GLOBAL_DEFAULTS=Collections.unmodifiableMap(defaults);
 		
 		defaults=new HashMap<>();
@@ -199,6 +201,20 @@ public class BotData {
 	 */
 	public static void setGame(String game) {
 		bkpStorage.setGlobalProperty("game", game);
+	}
+	/**
+	 * gets the invite link for the support server
+	 * @return the server invite link
+	 */
+	public static String getSupportServer() {
+		return bkpStorage.getGlobalProperty(SUPPORT_SERVER_PROP_NAME);
+	}
+	/**
+	 * sets the invite link for the support server
+	 * @param invite the server invite link
+	 */
+	public static void setSupportServer(String invite) {
+		bkpStorage.setGlobalProperty(SUPPORT_SERVER_PROP_NAME, invite);
 	}
 	/**
 	 * gets the Discord Bot token
