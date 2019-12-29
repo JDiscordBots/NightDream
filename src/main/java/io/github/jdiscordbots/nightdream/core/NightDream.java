@@ -52,16 +52,15 @@ public class NightDream {
 			*/
 			.setActivity(Activity.playing(BotData.getDefaultPrefix() + "help | " + BotData.getGame())) //the name of the game the Bot is "playing"
 			/*
-				Game.playing(String)//playing...
-				Game.listening(String)//listening...
-				Game.streaming(String, String)//streaming...(with url)
-				Game.watching(String)//watching...
+				Activity.playing(String)//playing...
+				Activity.listening(String)//listening...
+				Activity.streaming(String, String)//streaming...(with url)
+				Activity.watching(String)//watching...
 			*/
 			.setRequestTimeoutRetry(true);
 		JDA jda=null;
 		try {
 			DISCORD_CTL_LOG.log(LogType.INFO, "Logging in...");
-			
 			jda = builder.build();
 
 			// initialize commands and listeners
@@ -123,7 +122,7 @@ public class NightDream {
 			} catch (IllegalAccessException e) {
 				addActionWarn(cl,annotClass,"the no-args constructor is not visible");
 			} catch (NoSuchMethodException e) {
-				addActionWarn(cl,annotClass,"the there is no no-args constructor");
+				addActionWarn(cl,annotClass,"there is no no-args constructor");
 			} catch (InvocationTargetException e) {
 				addActionWarn(cl,annotClass,"there was an unknown Error: " + e.getClass().getName()+": "+e.getCause());
 			}
