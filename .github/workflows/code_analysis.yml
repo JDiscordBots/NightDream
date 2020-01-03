@@ -11,7 +11,7 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn spotbugs:check
-  Spotbugs-12:
+  Spotbugs-13:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
