@@ -37,7 +37,7 @@ public class Photo implements Command {
 			NDLogger.logWithModule(LogType.WARN, "Commands", "no Pixabay API Key provided");
 			return;
 		}
-		event.getChannel().sendTyping();
+		event.getChannel().sendTyping().queue();
 		JSONObject json=null;
 		try {
 			json = GeneralUtils.getJSONFromURL("https://pixabay.com/api/?image_type=photo&key="+BotData.getPixaBayAPIKey()+"&q="+URLEncoder.encode(String.join(" ", args),StandardCharsets.UTF_8.name() ));

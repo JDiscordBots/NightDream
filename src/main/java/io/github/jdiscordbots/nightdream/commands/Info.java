@@ -57,10 +57,8 @@ public class Info implements Command {
     			);
         if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES)) {
         	TextToGraphics.sendTextAsImage(event.getChannel(), "info", send, event.getAuthor().getAsMention());
-        }else if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EXT_EMOJI)) {
-        	event.getChannel().sendMessage(send).queue();
         }else {
-        	event.getChannel().sendMessage("**Unable to use external emojis, likely to break on other commands**\n\n"+send).queue();
+        	event.getChannel().sendMessage(send).queue();
         }
     }
 
