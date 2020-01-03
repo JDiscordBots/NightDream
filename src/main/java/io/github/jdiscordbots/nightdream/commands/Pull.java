@@ -1,5 +1,6 @@
 package io.github.jdiscordbots.nightdream.commands;
 
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -20,7 +21,7 @@ public class Pull implements Command {
 			return;
 		}
 		if(event.getMessage().getMentionedMembers().isEmpty()) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need users do to that.").queue();
+			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need users do to that.").queue();
 			return;
 		}
 		event.getChannel().sendMessage("Please wait...").queue(msg->{

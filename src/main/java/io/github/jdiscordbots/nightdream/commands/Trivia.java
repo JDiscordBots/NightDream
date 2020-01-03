@@ -9,6 +9,7 @@ package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.listeners.TriviaListener;
 import io.github.jdiscordbots.nightdream.util.GeneralUtils;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -25,7 +26,7 @@ public class Trivia implements Command{
 		String url="https://opentdb.com/api.php?amount=1";
 		JSONObject data=GeneralUtils.getJSONFromURL(url);
 		if(data==null) {
-			event.getChannel().sendMessage("<:IconX:553868311960748044> Errored while trying to connect to server.").queue();
+			event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" Errored while trying to connect to server.").queue();
 		}else {
 			JSONObject json=data.getJSONArray("results").getJSONObject(0);
 			String correct=json.getString("correct_answer");

@@ -8,6 +8,7 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.util.GeneralUtils;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
@@ -22,7 +23,7 @@ public class MVN implements Command{
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
+			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need a package name").queue();
 			return;
 		}
 		String url="https://search.maven.org/solrsearch/select?q="+args[0]+"&wt=json";
@@ -34,7 +35,7 @@ public class MVN implements Command{
 			if(docs.length()==0) {
 				EmbedBuilder builder=new EmbedBuilder();
 				builder.setColor(0xdc6328)
-				.addField("<:IconProvide:553870022125027329> Nothing found", "Try something different.", false);
+				.addField(IconChooser.getQuestionIcon(event.getChannel())+" Nothing found", "Try something different.", false);
 				event.getChannel().sendMessage(builder.build()).queue();
 				return;
 			}

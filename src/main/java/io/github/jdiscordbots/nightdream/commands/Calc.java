@@ -8,6 +8,7 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.util.BotData;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -18,7 +19,7 @@ public class Calc implements Command {
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		String wrongFormat = String.format("<:IconProvide:553870022125027329> Format: `%scalc num1 [+,-,*,/,%%,**,root] num2`", BotData.getPrefix(event.getGuild()));
+		String wrongFormat = String.format("%s Format: `%scalc num1 [+,-,*,/,%%,**,root] num2`",IconChooser.getQuestionIcon(event.getChannel()), BotData.getPrefix(event.getGuild()));
 		if (args.length <= 2) {
 			event.getChannel().sendMessage(wrongFormat).queue();
 			return;

@@ -8,6 +8,7 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.util.BotData;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -18,7 +19,7 @@ public class Prefix implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         if (args.length == 0) {
-            event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a prefix to begin with.").queue();
+            event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need a prefix to begin with.").queue();
             return;
         }
         if ("reset".equals(args[0])) {

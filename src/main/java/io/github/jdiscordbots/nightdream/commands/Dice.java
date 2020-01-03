@@ -8,6 +8,7 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.util.GeneralUtils;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -19,14 +20,14 @@ public class Dice implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         if (args.length == 0) {
-            event.getChannel().sendMessage("<:IconProvide:553870022125027329> Not enough arguments!").queue();
+            event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" Not enough arguments!").queue();
             return;
         }
         final long l;
         try {
             l = (long)(Math.floor(Math.random() * Long.parseLong(args[0]) + 1));
         } catch (NumberFormatException e) {
-            event.getChannel().sendMessage("<:IconProvide:553870022125027329> argument needs to be an integer!").queue();
+            event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" argument needs to be an integer!").queue();
             return;
         }
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("Rolling the dice...")

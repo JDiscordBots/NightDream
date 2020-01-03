@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import io.github.jdiscordbots.nightdream.util.GeneralUtils;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -50,7 +51,7 @@ public class Dns implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> Unknown Resolve Target").queue();
+			event.getChannel().sendMessage(IconChooser.getInfoIcon(event.getChannel())+" Unknown Resolve Target").queue();
 		}else {
 			JSONObject json=GeneralUtils.getJSONFromURL("https://dns.google.com/resolve?type=PTR&name="+String.join(" ", args));
 			if(json==null) {

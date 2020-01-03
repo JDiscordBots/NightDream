@@ -11,6 +11,7 @@ import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.GeneralUtils;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -28,7 +29,7 @@ public class Photo implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> Search Query, please.").queue();
+			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" Search Query, please.").queue();
 			return;
 		}
 		if("".equals(BotData.getPixaBayAPIKey())) {
@@ -44,13 +45,13 @@ public class Photo implements Command {
 			//ignore
 		}
 		if(json==null) {
-			event.getChannel().sendMessage("<:IconX:553868311960748044> Something went badly wrong - the server did not respond! Try again **in a few minutes**.").queue();
+			event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" Something went badly wrong - the server did not respond! Try again **in a few minutes**.").queue();
 		}else {
 			EmbedBuilder builder=new EmbedBuilder();
 			builder.setColor(0x212121);
 			JSONArray hits=json.getJSONArray("hits");
 			if(hits.length()==0) {
-				builder.setTitle("<:IconProvide:553870022125027329> Nothing found")
+				builder.setTitle(IconChooser.getQuestionIcon(event.getChannel())+" Nothing found")
                 .setDescription("Try something different.");
 			}else {
 				String imgUrl=hits.getJSONObject(0).getString("largeImageURL");

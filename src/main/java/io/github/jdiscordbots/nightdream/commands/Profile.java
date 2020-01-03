@@ -8,6 +8,7 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.util.BotData;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed.Field;
@@ -100,7 +101,7 @@ public class Profile implements Command {
 					.collect(Collectors.joining("\n")),false);
 		}
 		if(JDAUtils.isOwner(user)) {
-			builder.addField(new Field("<:IconInfo:553868326581829643> Bot Admin!", "This is a bot admin.", false));
+			builder.addField(new Field(IconChooser.getQuestionIcon(tc)+" Bot Admin!", "This is a bot admin.", false));
 		}
 		JDAUtils.msg(tc, builder.build());
 	}
@@ -118,7 +119,7 @@ public class Profile implements Command {
 	}
 	private static void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than "+offset+" argument"+(offset==1?"":"s")+".").queue();
+			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need more than "+offset+" argument"+(offset==1?"":"s")+".").queue();
 			return;
 		}
 		
@@ -128,7 +129,7 @@ public class Profile implements Command {
 	}
 	private static void color(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1||args[offset].length()!=7) {
-			event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").queue();
+			event.getChannel().sendMessage("Format "+IconChooser.getArrowIcon(event.getChannel())+" `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").queue();
 			return;
 		}
 		builder.setTitle("Set color!");
@@ -138,7 +139,7 @@ public class Profile implements Command {
 	}
 	private static void name(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {
-			event.getChannel().sendMessage("Format <:IconThis:553869005820002324> `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").queue();
+			event.getChannel().sendMessage("Format "+IconChooser.getArrowIcon(event.getChannel())+" `" + BotData.getPrefix(event.getGuild()) + "profile name [new name]`").queue();
 			return;
 		}
 		String name=String.join(" ", Arrays.copyOfRange(args, offset, args.length));
@@ -153,7 +154,7 @@ public class Profile implements Command {
 			return;
 		}
 		if(args.length<offset+2) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need more than "+offset+" argument"+(offset==0?"":"s")+".").queue();
+			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need more than "+offset+" argument"+(offset==0?"":"s")+".").queue();
 			return;
 		}
 		String name=args[offset];
@@ -164,7 +165,7 @@ public class Profile implements Command {
 		name=name.replace("[", "\\[").replace("]", "\\]").replace("(", "\\(").replace(")", "\\)");
 		
 		if(!LINK_REGEX.matcher(link).matches()) {
-			event.getChannel().sendMessage("<:IconX:553868311960748044> Sorry, this is not a link.").queue();
+			event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" Sorry, this is not a link.").queue();
 			return;
 		}
 		

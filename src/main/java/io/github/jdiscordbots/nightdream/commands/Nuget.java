@@ -3,6 +3,7 @@ package io.github.jdiscordbots.nightdream.commands;
 import org.json.JSONObject;
 
 import io.github.jdiscordbots.nightdream.util.GeneralUtils;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -12,7 +13,7 @@ public class Nuget implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getChannel().sendMessage("<:IconProvide:553870022125027329> I need a package name").queue();
+			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need a package name").queue();
 		}
 		String url="https://azuresearch-usnc.nuget.org/query?q="+args[0]+"&take=1"+args[0];
 		JSONObject jsonObj=GeneralUtils.getJSONFromURL(url);
@@ -38,7 +39,7 @@ public class Nuget implements Command {
 				event.getChannel().sendMessage(
 					new EmbedBuilder()
 					.setColor(0x004980)
-					.setTitle("<:IconProvide:553870022125027329> Nothing found")
+					.setTitle(IconChooser.getInfoIcon(event.getChannel())+" Nothing found")
 					.setDescription("Try something different.").build()
 				).queue();
 			}

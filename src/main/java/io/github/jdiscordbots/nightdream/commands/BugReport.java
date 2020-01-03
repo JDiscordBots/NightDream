@@ -10,6 +10,7 @@ package io.github.jdiscordbots.nightdream.commands;
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -63,7 +64,7 @@ public class BugReport implements Command {
 			return false;
 		}
 		if("banned".equals(BotData.STORAGE.read("bugs", event.getAuthor().getId(),""))) {
-			event.getChannel().sendMessage("<:IconInfo:553868326581829643> You were banned from reporting bugs. If you believe this should change, contact the instance owner (see `"+BotData.getPrefix(event.getGuild())+"info`)").queue();
+			event.getChannel().sendMessage(IconChooser.getInfoIcon(event.getChannel())+" You were banned from reporting bugs. If you believe this should change, contact the instance owner (see `"+BotData.getPrefix(event.getGuild())+"info`)").queue();
 			return false;
 		}
 		return true;

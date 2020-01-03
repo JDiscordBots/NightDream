@@ -108,7 +108,7 @@ public class JDAUtils {
 	public static boolean checkOwner(GuildMessageReceivedEvent event,boolean doErrMsg) {
 		boolean owner=isOwner(event.getAuthor());
 		if (!owner&&doErrMsg) {
-			event.getChannel().sendMessage("<:IconInfo:553868326581829643> This is an admin command.").queue();
+			event.getChannel().sendMessage(IconChooser.getInfoIcon(event.getChannel())+" This is an admin command.").queue();
 		}
 		return owner;
 	}

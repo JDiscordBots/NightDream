@@ -13,6 +13,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
+import io.github.jdiscordbots.nightdream.util.IconChooser;
+
 @BotCommand("ping")
 public class Ping implements Command {
 
@@ -20,7 +22,7 @@ public class Ping implements Command {
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		Message msg = event.getChannel().sendMessage(":stopwatch:").complete();
 		long ms= getMilliSeconds(msg.getTimeCreated()) - getMilliSeconds(event.getMessage().getTimeCreated());
-		msg.editMessage("<:IconThis:553869005820002324> Latency: " + ms + "ms. API Latency is " + event.getJDA().getRestPing().complete() + "ms").queue();
+		msg.editMessage(IconChooser.getArrowIcon(event.getChannel())+" Latency: " + ms + "ms. API Latency is " + event.getJDA().getRestPing().complete() + "ms").queue();
 	}
 	private static long getMilliSeconds(OffsetDateTime time) {
 		return time.atZoneSameInstant(ZoneId.of("Z")).toInstant().toEpochMilli();

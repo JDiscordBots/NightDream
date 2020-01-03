@@ -8,6 +8,7 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.util.BotData;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -16,12 +17,14 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 @BotCommand("msglog")
 public class MsgLog implements Command {
 	
-	private static final String NEED_MENTIONED_CHANNEL="<:IconProvide:553870022125027329> I need a mentioned channel";
-
+	private void sendNeedMentionedChannelMessage(TextChannel tc) {
+		tc.sendMessage(IconChooser.getInfoIcon(tc)+" I need a mentioned channel").queue();
+	}
+	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if (args.length == 0) {
-			event.getChannel().sendMessage(NEED_MENTIONED_CHANNEL).queue();
+			sendNeedMentionedChannelMessage(event.getChannel());
 			return;
 		}
 		if ("none".equals(args[0])) {
@@ -30,7 +33,7 @@ public class MsgLog implements Command {
 			return;
 		}
 		if (event.getMessage().getMentionedChannels().isEmpty()) {
-			event.getChannel().sendMessage(NEED_MENTIONED_CHANNEL).queue();
+			sendNeedMentionedChannelMessage(event.getChannel());
 			return;
 		}
 		TextChannel channel = event.getMessage().getMentionedChannels().get(0);

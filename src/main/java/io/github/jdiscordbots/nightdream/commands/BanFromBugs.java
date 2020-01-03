@@ -1,6 +1,7 @@
 package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.util.BotData;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -18,7 +19,7 @@ public class BanFromBugs implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length<2) {
-			event.getChannel().sendMessage("<:IconThis:553869005820002324> Format: `"+BotData.getPrefix(event.getGuild())+"banfrombugs [add,remove] userID`").queue();
+			event.getChannel().sendMessage(IconChooser.getArrowIcon(event.getChannel())+" Format: `"+BotData.getPrefix(event.getGuild())+"banfrombugs [add,remove] userID`").queue();
 			return;
 		}
 		String uID=args[1];
@@ -32,7 +33,7 @@ public class BanFromBugs implements Command {
 			event.getChannel().sendMessage("Done").queue();
 			break;
 		default:
-			event.getChannel().sendMessage("<:IconThis:553869005820002324> Format: `"+BotData.getPrefix(event.getGuild())+"-banfrombugs [add,remove] userID`").queue();
+			event.getChannel().sendMessage(IconChooser.getArrowIcon(event.getChannel())+" Format: `"+BotData.getPrefix(event.getGuild())+"-banfrombugs [add,remove] userID`").queue();
 		}
 	}
 

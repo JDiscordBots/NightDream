@@ -13,6 +13,7 @@ import io.github.jdiscordbots.nightdream.core.CommandParser.CommandContainer;
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
@@ -65,7 +66,7 @@ public class CommandHandler {
 			}else {
 				fieldText="Did you mean `"+BotData.getPrefix(cmd.event.getGuild())+fieldText+"`?";
 			}
-			builder.addField("<:IconProvide:553870022125027329> It seems that this command does not exist",
+			builder.addField(IconChooser.getQuestionIcon(cmd.event.getChannel())+" It seems that this command does not exist",
 					fieldText, false);
 			cmd.event.getChannel().sendMessage(builder.build()).queue();
 		}
