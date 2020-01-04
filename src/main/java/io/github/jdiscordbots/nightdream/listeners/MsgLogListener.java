@@ -65,7 +65,7 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 				EmbedBuilder builder=new EmbedBuilder();
 				builder.setColor(0x212121)
 				.setTitle("Deleted Message")
-				.setFooter(msg.getAuthor()+" in channel "+msg.getChannel().getName())
+				.setFooter(msg.getAuthor().getAsTag()+" in channel "+msg.getChannel().getName())
 				.setTimestamp(Instant.now());
 				String text="nothing";
 				if(msg.getType()==MessageType.DEFAULT){
