@@ -16,6 +16,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
+import io.github.jdiscordbots.nightdream.util.IconChooser;
+
 @BotCommand("snow")
 public class Snow implements Command {
 
@@ -25,27 +27,32 @@ public class Snow implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
-			event.getChannel().sendMessage("`"+generate()+"` made `"+Instant.now().atZone(ZoneId.systemDefault())
+			Instant time=Instant.now();
+			event.getChannel().sendMessage("`"+generate(time.toEpochMilli())+"` made `"+time.atZone(ZoneId.systemDefault())
 					.format(DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)"))
 					+"`").queue();
 		}else {
-			EmbedBuilder eb=new EmbedBuilder();
-			eb.setTitle(args[0]);
-			eb.setColor(Color.white);
-			String binStr=fillWithZerosBefore(64,Long.toBinaryString(Long.parseLong(args[0])));
-			eb.addField("Binary",binStr , false);
-			eb.addField("Date", Instant.ofEpochMilli(Long.valueOf(binStr.substring(0,42),2)+EPOCH).atZone(ZoneId.systemDefault()).toLocalDate().toString(), false);
-			eb.addField("Increment", Integer.valueOf(binStr.substring(52,64),2).toString(), false);
-			eb.addField("Worker, Process ID", args[0]+" has worker ID "+Integer.valueOf(binStr.substring(42,47),2)+" with process ID "+Integer.valueOf(binStr.substring(47,52),2), false);
-			event.getChannel().sendMessage(eb.build()).queue();
+			try {
+				EmbedBuilder eb=new EmbedBuilder();
+				eb.setTitle(args[0]);
+				eb.setColor(Color.white);
+				String binStr=fillWithZerosBefore(64,Long.toBinaryString(Long.parseLong(args[0])));
+				eb.addField("Binary",binStr , false);
+				eb.addField("Date", Instant.ofEpochMilli(Long.valueOf(binStr.substring(0,42),2)+EPOCH).atZone(ZoneId.systemDefault()).toLocalDate().toString(), false);
+				eb.addField("Increment", Integer.valueOf(binStr.substring(52,64),2).toString(), false);
+				eb.addField("Worker, Process ID", args[0]+" has worker ID "+Integer.valueOf(binStr.substring(42,47),2)+" with process ID "+Integer.valueOf(binStr.substring(47,52),2), false);
+				event.getChannel().sendMessage(eb.build()).queue();
+			}catch(NumberFormatException e) {
+				event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" Please provide a valid discord Snowflake.");
+			}
 		}
 	}
 	@Override
 	public String help() {
 		return "Discord ID deconstructor/generator";
 	}
-	private static String generate() {
-		long diff=System.currentTimeMillis()-EPOCH;
+	private static String generate(long millis) {
+		long diff=millis-EPOCH;
 		String timeBinStr=Long.toBinaryString(diff);
 		String timeStampStr=fillWithZerosBefore(42,timeBinStr);
 		String workerAndProcessIDs="0000100000";
