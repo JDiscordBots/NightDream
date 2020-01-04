@@ -45,7 +45,10 @@ public class SnowTest {
 	}
 	@Test
 	public void testInvalidSnowflake() {
-		
+		sendCommand("snow a");
+		Message resp=getMessage(msg->msg.getContentRaw().endsWith(" Please provide a valid discord Snowflake."));
+		assertNotNull(resp);
+		resp.delete().queue();
 	}
 	@Test
 	public void testSnowFlakeAnalysis() {
@@ -56,6 +59,7 @@ public class SnowTest {
 		assertTrue(hasEmbedField(resp, "Date","2016-04-30"));
 		assertTrue(hasEmbedField(resp, "Increment","7"));
 		assertTrue(hasEmbedField(resp, "Worker, Process ID","175928847299117063 has worker ID 1 with process ID 0"));
+		resp.delete().queue();
 	}
 	@Test
 	public void testHelp() {

@@ -43,7 +43,7 @@ public class Snow implements Command {
 				eb.addField("Worker, Process ID", args[0]+" has worker ID "+Integer.valueOf(binStr.substring(42,47),2)+" with process ID "+Integer.valueOf(binStr.substring(47,52),2), false);
 				event.getChannel().sendMessage(eb.build()).queue();
 			}catch(NumberFormatException e) {
-				event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" Please provide a valid discord Snowflake.");
+				event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" Please provide a valid discord Snowflake.").queue();
 			}
 		}
 	}
