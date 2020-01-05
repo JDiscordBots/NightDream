@@ -28,7 +28,7 @@ public final class TriviaListener extends ListenerAdapter {
 	private TriviaListener(JDA jda) {
 		this.jda=jda;
 	}
-	private static TriviaListener getListener(JDA jda) {
+	private static TriviaListener getListener(JDA jda) {//Attention: if sharding is implemented, this will need to be adjusted(multiple JDA objects)
 		synchronized(TriviaListener.class) {
 			if(listener==null) {
 				listener=new TriviaListener(jda);
@@ -38,7 +38,9 @@ public final class TriviaListener extends ListenerAdapter {
 		}
 		
 	}
-	
+	public static Set<Set<String>> getQuestions(final MessageChannel chan) {
+		return getListener(chan.getJDA()).questions.get(chan.getId());
+	}
 	public static void addQuestion(final MessageChannel chan,String... correct) {
 		for (int i = 0; i < correct.length; i++) {
 			correct[i]=correct[i].toLowerCase();
@@ -103,6 +105,7 @@ public final class TriviaListener extends ListenerAdapter {
 	}
 	private static void removeListener(JDA jda) {
 		jda.removeEventListener(TriviaListener.listener);
+		TriviaListener.listener.timer.cancel();
 		TriviaListener.listener=null;
 	}
 }

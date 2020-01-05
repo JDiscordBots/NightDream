@@ -43,8 +43,8 @@ public class Trivia implements Command{
 			.addField(json.getString("category"), json.getString("question"), false)
 			.addField("Choices:",String.join(", ", answers),false)
 			.setFooter("Type your answer in this channel!");
-			event.getChannel().sendMessage(builder.build()).queue();
 			TriviaListener.addQuestion(event.getChannel(), correct);
+			event.getChannel().sendMessage(builder.build()).queue();
 		}
 	}
 
