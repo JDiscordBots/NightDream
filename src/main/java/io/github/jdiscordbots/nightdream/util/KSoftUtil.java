@@ -7,6 +7,8 @@
 
 package io.github.jdiscordbots.nightdream.util;
 
+import java.util.function.Consumer;
+
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.TaggedImage;
@@ -49,5 +51,16 @@ public class KSoftUtil {
 		}
 		return api.getTaggedImage(tag).allowNsfw(false).execute();
 	}
-
+	/**
+	 * gets an image with a specified tag
+	 * @param tag the tag of the image
+	 * @return the image as {@link TaggedImage}
+	 */
+	public static void getImage(ImageTag tag,Consumer<? super TaggedImage> success,Consumer<? super Throwable> failure) {
+		if(api==null) {
+			failure.accept(new NullPointerException("token not provided"));
+			return;
+		}
+		api.getTaggedImage(tag).allowNsfw(false).executeAsync(success,failure);
+	}
 }
