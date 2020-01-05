@@ -69,6 +69,4 @@ public class SnowTest {
 	public void testCommandType() {
 		assertSame(CommandType.FUN,new Snow().getType());
 	}
-	
-	//TODO testHelp, testCmdType,
 }
