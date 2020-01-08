@@ -1,5 +1,6 @@
 package io.github.jdiscordbots.nightdream.commands;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import io.github.jdiscordbots.nightdream.util.GeneralUtils;
@@ -14,6 +15,7 @@ public class Nuget implements Command {
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
 			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need a package name").queue();
+			return;
 		}
 		String url="https://azuresearch-usnc.nuget.org/query?q="+args[0]+"&take=1"+args[0];
 		JSONObject jsonObj=GeneralUtils.getJSONFromURL(url);
@@ -30,10 +32,16 @@ public class Nuget implements Command {
 				builder.addField("Namespace", "`"+data.getString("id")+"`", true);
 				builder.addField("Current Version", data.getString("version"), true);
 				builder.addField("Authors", data.getJSONArray("authors").join(", "), true);
-				builder.addField("Tags", "`"+data.getJSONArray("tags").join(", ")+"`", true);
+				
+				JSONArray tags=data.getJSONArray("tags");
+				if(tags.length()>0) {
+					builder.addField("Tags", "`"+tags.join(", ")+"`", true);
+				}
 				builder.addField("Verified", String.valueOf(data.getBoolean("verified")), true);
 				builder.addField("Downloads", String.valueOf(data.getInt("totalDownloads")), true);
-				builder.setThumbnail(data.getString("iconUrl"));
+				if(data.has("iconUrl")) {
+					builder.setThumbnail(data.getString("iconUrl"));
+				}
 				event.getChannel().sendMessage(builder.build()).queue();
 			}else {
 				event.getChannel().sendMessage(
