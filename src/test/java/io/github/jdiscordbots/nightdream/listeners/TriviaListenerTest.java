@@ -17,8 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import net.dv8tion.jda.api.entities.Message;
 @Execution(ExecutionMode.CONCURRENT)
 public class TriviaListenerTest {
