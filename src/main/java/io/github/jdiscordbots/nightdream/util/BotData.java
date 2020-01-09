@@ -244,7 +244,13 @@ public class BotData {
 	public static String getPixaBayAPIKey() {
 		return bkpStorage.getGlobalProperty(PIXA_KEY_PROP_NAME);
 	}
-	
+	/**
+	 * sets the API key from Pixabay
+	 * @param key the Pixabay API key
+	 */
+	public static void setPixaBayAPIKey(String key) {
+		bkpStorage.setGlobalProperty(PIXA_KEY_PROP_NAME,key);
+	}
 	/**
 	 * sets the Bug Report channel of the Bot
 	 * @param channelID the ISnowflake ID of the channel

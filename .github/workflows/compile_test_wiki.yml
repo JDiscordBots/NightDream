@@ -40,9 +40,11 @@ jobs:
         echo "testing-channel=$testChan" >> $propFile
         mkdir test
         echo "prefix=nt." >> test/Guild.properties
+        echo "PixabayAPIKey=$pixabayAPIKey" >> test/NightDream.properties
       env:
         testChan: ${{ secrets.testingChannel }}
         propFile:  src/test/resources/jda-tests.properties
+        pixabayAPIKey: ${{ secrets.pixabayAPIKey }}
     - name: "automated (feature) tests"
       run: "mvn -B -T 1C test"
       env:
