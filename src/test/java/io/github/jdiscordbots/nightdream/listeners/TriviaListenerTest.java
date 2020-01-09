@@ -18,7 +18,7 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import net.dv8tion.jda.api.entities.Message;
-@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.SAME_THREAD)
 public class TriviaListenerTest {
 	private void add(String answer) {
 		TriviaListener.addQuestion(getTestingChannel(), answer);
@@ -31,10 +31,10 @@ public class TriviaListenerTest {
 		Message resp=getMessage(getTestingChannel().getGuild().getSelfMember().getEffectiveName()+" got it!");
 		assertNotNull(resp);
 		assertNull(TriviaListener.getQuestions(getTestingChannel()));
-		resp.delete().queue();
+		resp.delete().complete();//has to be deleted for other test
 	}
 	@Test
-	public void testAddQuestionWithoutAnswer() {//TODO run parallel to other tests
+	public void testAddQuestionWithoutAnswer() {
 		add("other answer");
 		assertNull(getAlreadySentMessage(getTestingChannel(), msg->(getTestingChannel().getGuild().getSelfMember().getEffectiveName()+" got it!").equals(msg.getContentRaw())));
 		assertNotNull(TriviaListener.getQuestions(getTestingChannel()));
