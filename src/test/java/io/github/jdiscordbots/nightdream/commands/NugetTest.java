@@ -26,8 +26,8 @@ public class NugetTest {
 	@Test
 	public void testInvalidPackage() {
 		sendCommand("nuget thisisinvalid");
-		Message resp=getMessage(msg->hasEmbed(msg, embed->embed.getTitle().endsWith(" Nothing found")&&
-				embed.getDescription().equals("Try something different.")));
+		Message resp=getMessage(msg->hasEmbed(msg, embed->embed.getTitle()!=null&&embed.getTitle().endsWith(" Nothing found")&&
+				"Try something different.".equals(embed.getDescription())));
 		assertNotNull(resp);
 		resp.delete().queue();
 	}

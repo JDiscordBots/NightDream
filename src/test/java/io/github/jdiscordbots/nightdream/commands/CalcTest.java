@@ -8,8 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static io.github.jdiscordbots.jdatesting.TestUtils.*;
 
@@ -17,7 +15,6 @@ import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Message;
 
-@Execution(ExecutionMode.CONCURRENT)
 public class CalcTest{
 	private String formatEnd=String.format("Format: `%scalc num1 [+,-,*,/,%%,**,root] num2`", 
 			BotData.getPrefix(getTestingChannel().getGuild()));
