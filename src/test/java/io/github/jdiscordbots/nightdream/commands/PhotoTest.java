@@ -11,18 +11,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIf;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Message;
 
 public class PhotoTest {
-	private static final String NO_KEY_DISABLE="\"\".equals(Java.type(\"io.github.jdiscordbots.nightdream.util.BotData\").getPixaBayAPIKey())";
-	
 	@BeforeAll
 	public static void setUp() {
 		getTestingChannel();//load jda-testing-system and BotData before BotData is loaded by the disable condition
+		System.setProperty("pixabayKey", BotData.getPixaBayAPIKey());
 	}
 	
 	@Test
@@ -45,7 +44,7 @@ public class PhotoTest {
 			BotData.setPixaBayAPIKey(apiKey);
 		}
 	}
-	@DisabledIf(NO_KEY_DISABLE)
+	@EnabledIfSystemProperty(named = "pixabayKey", matches=".+")
 	@Test
 	public void testNormalExecution() {
 		sendCommand("photo test");
@@ -55,7 +54,7 @@ public class PhotoTest {
 		assertTrue(hasEmbed(resp, embed->embed.getImage().getUrl().startsWith("https://pixabay.com/get/")));
 		resp.delete().queue();
 	}
-	@DisabledIf(NO_KEY_DISABLE)
+	@EnabledIfSystemProperty(named = "pixabayKey", matches=".+")
 	@Test
 	public void testInvalidImage() {
 		sendCommand("photo thisisaninvalidargument");
