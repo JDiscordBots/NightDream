@@ -21,20 +21,20 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public final class TriviaListener extends ListenerAdapter {
-	private static TriviaListener listener;
+	private static Map<JDA,TriviaListener> listeners=new HashMap<>();
 	private Map<String, Set<Set<String>>> questions=new HashMap<>();
 	private Timer timer=new Timer();
 	private JDA jda;
 	private TriviaListener(JDA jda) {
 		this.jda=jda;
 	}
-	private static TriviaListener getListener(JDA jda) {//Attention: if sharding is implemented, this will need to be adjusted(multiple JDA objects)
+	private static TriviaListener getListener(JDA jda) {
 		synchronized(TriviaListener.class) {
-			if(listener==null) {
-				listener=new TriviaListener(jda);
-				jda.addEventListener(listener);
+			if(!listeners.containsKey(jda)) {
+				listeners.put(jda,new TriviaListener(jda));
+				jda.addEventListener(listeners.get(jda));
 			}
-			return listener;
+			return listeners.get(jda);
 		}
 		
 	}
@@ -47,20 +47,20 @@ public final class TriviaListener extends ListenerAdapter {
 		}
 		final Set<String> correctAnswers=new HashSet<>(Arrays.asList(correct));
 		synchronized(TriviaListener.class) {
-			getListener(chan.getJDA());
 			Set<Set<String>> questions;
-			if(listener.questions.containsKey(chan.getId())) {
-				questions=listener.questions.get(chan.getId());
+			if(getListener(chan.getJDA()).questions.containsKey(chan.getId())) {
+				questions=getListener(chan.getJDA()).questions.get(chan.getId());
 				
 			}else {
 				questions=new HashSet<>();
-				listener.questions.put(chan.getId(), questions);
+				getListener(chan.getJDA()).questions.put(chan.getId(), questions);
 			}
 			questions.add(correctAnswers);
-			listener.timer.schedule(new TimerTask() {
+			getListener(chan.getJDA()).timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					synchronized(TriviaListener.class) {
+						TriviaListener listener=listeners.get(chan.getJDA());
 						if(listener!=null&&listener.questions.containsKey(chan.getId())&&listener.questions.get(chan.getId()).contains(correctAnswers)) {
 							chan.sendMessage("Nobody got the answer this time. Sad.").queue();
 							
@@ -104,8 +104,12 @@ public final class TriviaListener extends ListenerAdapter {
 		}
 	}
 	private static void removeListener(JDA jda) {
-		jda.removeEventListener(TriviaListener.listener);
-		TriviaListener.listener.timer.cancel();
-		TriviaListener.listener=null;
+		TriviaListener listener=listeners.get(jda);
+		if(listener!=null) {
+			jda.removeEventListener(listener);
+			listener.timer.cancel();
+			listeners.remove(jda);
+		}
+		
 	}
 }

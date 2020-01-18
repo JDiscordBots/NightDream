@@ -25,7 +25,7 @@ public class JDALoader {
 			BotData.setAdminIDs(env.split(" "));
 		}
 		BotData.setGame("automated Feature-Testing");
-		JDA jda=NightDream.initialize();
+		JDA jda=NightDream.initialize().getShardById(0);
 		String[] adminIDs = BotData.getAdminIDs();
 		List<String> ids=new ArrayList<>(Arrays.asList(adminIDs));
 		if(!ids.contains(jda.getSelfUser().getId())) {

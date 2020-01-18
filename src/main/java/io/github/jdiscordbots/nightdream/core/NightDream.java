@@ -13,12 +13,11 @@ import io.github.jdiscordbots.nightdream.listeners.BotListener;
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
-import net.dv8tion.jda.api.AccountType;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.internal.JDAImpl;
 import org.reflections.Reflections;
 
@@ -37,9 +36,8 @@ public class NightDream {
 	private static final NDLogger CMD_CTL_LOG=NDLogger.getLogger("Command Handler");
 	private static final NDLogger DISCORD_CTL_LOG=NDLogger.getLogger("Discord");
 	
-	public static JDA initialize() {
-		final JDABuilder builder = new JDABuilder(AccountType.BOT)
-			.setToken(BotData.getToken())
+	public static ShardManager initialize() {
+		final DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder(BotData.getToken())
 			.setAutoReconnect(true) //should the Bot reconnect?
 			.setStatus(OnlineStatus.ONLINE) //the online Status
 			/*	possible statuses:
@@ -58,30 +56,37 @@ public class NightDream {
 				Activity.watching(String)//watching...
 			*/
 			.setRequestTimeoutRetry(true);
-		JDA jda=null;
+		ShardManager bot=null;
 		try {
-			DISCORD_CTL_LOG.log(LogType.INFO, "Logging in...");
-			jda = builder.build();
+			
+			
 
 			// initialize commands and listeners
 			Reflections ref = new Reflections("io.github.jdiscordbots.nightdream");
 			CMD_CTL_LOG.log(LogType.INFO, "Loading Commands and Listeners...");
-			addCommandsAndListeners(ref, jda);
+			addCommandsAndListeners(ref, builder);
 			CMD_CTL_LOG.log(LogType.INFO, "Loaded Commands and Listeners");
 			CMD_CTL_LOG.log(LogType.INFO, "available Commands: "
 					+ CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", ")));
-			jda.awaitReady();
-			DISCORD_CTL_LOG.log(LogType.INFO, "Logged in.");
-			((JDAImpl) jda).getGuildSetupController().clearCache();
+			bot = builder.build();
+			DISCORD_CTL_LOG.log(LogType.INFO, "Logging in with "+bot.getShardsTotal()+" shards...");
+			bot.getShards().forEach(jda->{
+				try {
+					jda.awaitReady();
+					((JDAImpl) jda).getGuildSetupController().clearCache();
+				} catch (InterruptedException e) {
+					DISCORD_CTL_LOG.log(LogType.WARN,"The main thread was interruped while waiting for a shard to connect initially",e);
+					Thread.currentThread().interrupt();
+				}
+			});
+			DISCORD_CTL_LOG.log(LogType.INFO, "Logged in. "+bot.getShardsRunning()+"/"+bot.getShardsTotal()+" shards online.");
+			
 		} catch (final LoginException e) {
 			DISCORD_CTL_LOG.log(LogType.ERROR, "The entered token is not valid!");
 		} catch (final IllegalArgumentException e) {
 			DISCORD_CTL_LOG.log(LogType.ERROR, "There is no token entered!");
-		} catch (final InterruptedException e) {
-			NDLogger.getGlobalLogger().log(LogType.ERROR, "The main thread got interrupted while logging in", e);
-			Thread.currentThread().interrupt();
 		}
-		return jda;
+		return bot;
 	}
 	public static void main(String[] args) {
 		initialize();
@@ -90,9 +95,9 @@ public class NightDream {
 	/**
 	 * adds Commands and Listeners
 	 * @param ref The {@link Reflections} Object
-	 * @param jda The Builder of the JDA
+	 * @param builder The Builder of the JDA objects(shards)
 	 */
-	private static void addCommandsAndListeners(Reflections ref,JDA jda) {
+	private static void addCommandsAndListeners(Reflections ref,DefaultShardManagerBuilder builder) {
 		addAction(ref, BotCommand.class,(cmdAsAnnotation,annotatedAsObject)->{
     		BotCommand cmdAsBotCommand = (BotCommand)cmdAsAnnotation;
     		Command cmd = (Command)annotatedAsObject;
@@ -102,7 +107,7 @@ public class NightDream {
 		});
 		addAction(ref, BotListener.class,(cmdAsAnnotation,annotatedAsObject)->{
     		ListenerAdapter listener = (ListenerAdapter) annotatedAsObject;
-    		jda.addEventListener(listener);
+    		builder.addEventListeners(listener);
     	});
 	}
 	/**
