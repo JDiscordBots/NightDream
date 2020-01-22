@@ -29,7 +29,7 @@ public abstract class KSoftImageCommand implements Command {
 			JDAUtils.errmsg(event.getChannel(), "This command is disabled due there is no KSoft API token");
 			return;
 		}
-		event.getChannel().sendTyping().queue(x->{
+		event.getChannel().sendTyping().queue(x->
 			KSoftUtil.getImage(getImageTag(),img->{
 				EmbedBuilder builder=new EmbedBuilder();
 				builder.setColor(0x212121)
@@ -40,8 +40,8 @@ public abstract class KSoftImageCommand implements Command {
 			},err->{
 				event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" could not load image").queue();
 				NDLogger.logWithModule(LogType.ERROR, "image", "could not load image",err);
-			});
-		});
+			})
+		);
 	}
 	
 	@Override
