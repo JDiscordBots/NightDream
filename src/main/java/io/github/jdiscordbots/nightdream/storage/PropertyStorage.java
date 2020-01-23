@@ -52,11 +52,11 @@ public class PropertyStorage implements Storage {
 		if(units.containsKey(unit)) {
 			unitProps=units.get(unit);
 		}else {
-			Properties defaults=new Properties();
-			defaults.setProperty(key, defaultValue);
-			unitProps = loadPropertiesWithoutGenerating(unit+FILE_SUFFIX,defaults);
+			Map<String,String> defaults=new HashMap<>();
+			defaults.put(key, defaultValue);
+			unitProps = loadProperties(unit+FILE_SUFFIX,defaults,"default properties for "+unit);
 		}
-		return unitProps.getProperty(key,defaultValue);
+		return unitProps.getProperty(key);
 	}
 	
 	@Override

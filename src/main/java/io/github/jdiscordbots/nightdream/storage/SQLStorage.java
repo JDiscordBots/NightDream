@@ -150,6 +150,7 @@ public class SQLStorage implements Storage {
 		}
 		if(ret==null||"".equals(ret)) {
 			ret=defaultValue;
+			write(unit, subUnit, key, defaultValue, defaultRows);
 		}
 		return ret;
 	}
@@ -174,6 +175,7 @@ public class SQLStorage implements Storage {
 		}
 		if(ret==null||"".equals(ret)) {
 			ret=defaultValue;
+			write(unit, key, defaultValue);
 		}
 		return ret;
 	}
