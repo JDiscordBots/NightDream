@@ -40,6 +40,7 @@ public class PrefixTest {
 		assertNotNull(resp);
 		resp.delete().queue();
 		assertEquals("test+", BotData.getPrefix(getTestingChannel().getGuild()));
+		BotData.resetPrefix(getTestingChannel().getGuild());
 	}
 	@Test
 	public void testHelp() {
