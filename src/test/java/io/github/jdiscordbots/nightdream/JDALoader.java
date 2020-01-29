@@ -1,8 +1,12 @@
 package io.github.jdiscordbots.nightdream;
 
+import static io.github.jdiscordbots.jdatesting.TestUtils.setTimeout;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.awaitility.Durations;
 
 import io.github.jdiscordbots.jdatesting.TestUtils;
 import io.github.jdiscordbots.nightdream.core.NightDream;
@@ -37,6 +41,7 @@ public class JDALoader {
 		if(log.isLoggable(LogType.INFO)) {
 			TestUtils.setLogger(str->log.log(LogType.INFO, str));
 		}
+		setTimeout(Durations.TEN_SECONDS);
 		return jda;
 	}
 
