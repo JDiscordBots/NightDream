@@ -52,7 +52,7 @@ public class Fixed implements Command {
 			eb.addField("Additional comment", args[2], false);
 		}
 
-		event.getJDA().getTextChannelById(BotData.getFixedBugsChannel()).sendMessage(eb.build()).queue();
+		event.getJDA().getShardManager().getTextChannelById(BotData.getFixedBugsChannel()).sendMessage(eb.build()).queue();
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class Fixed implements Command {
 			return false;
 		}
 		try {
-			if(event.getJDA().getTextChannelById(BotData.getFixedBugsChannel())==null) {
+			if(event.getJDA().getShardManager().getTextChannelById(BotData.getFixedBugsChannel())==null) {
 				if(args!=null) {
 					LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
 				}

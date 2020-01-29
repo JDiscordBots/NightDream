@@ -36,7 +36,7 @@ public class BugReport implements Command {
 		EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("New Bug").setDescription(String.join(" ", args))
 				.setFooter(event.getAuthor().getAsTag() + " | Bug ID " + thisId);
 
-		event.getJDA().getTextChannelById(BotData.getBugReportChannel()).sendMessage(eb.build()).queue();
+		event.getJDA().getShardManager().getTextChannelById(BotData.getBugReportChannel()).sendMessage(eb.build()).queue();
 
 		event.getChannel().sendMessage("Sent with ID " + thisId).queue();
 	}
@@ -51,7 +51,7 @@ public class BugReport implements Command {
 			return false;
 		}
 		try {
-			if(event.getJDA().getTextChannelById(BotData.getBugReportChannel())==null) {
+			if(event.getJDA().getShardManager().getTextChannelById(BotData.getBugReportChannel())==null) {
 				if(args!=null) {
 					LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
 				}
