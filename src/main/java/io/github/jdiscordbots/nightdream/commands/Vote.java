@@ -19,7 +19,7 @@ public class Vote implements Command {
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		EmbedBuilder eb = new EmbedBuilder().setTitle(String.format("Vote for %s", event.getJDA().getSelfUser().getName()))
-				.setColor(Color.white).setDescription(String.format("[<3](https://discordbots.org/bot/%s/vote)", event.getJDA().getSelfUser().getId()));
+				.setColor(Color.white).setDescription(String.format("[<3](https://top.gg/bot/%s/vote)", event.getJDA().getSelfUser().getId()));
 		JDAUtils.msg(event.getChannel(), eb.build());
 	}
 
