@@ -49,11 +49,14 @@ public class Info implements Command {
     	String send=String.format(
     			"Bot Info\n"
     			+ "\tIn %s guilds, serving %s users and %s bots.\n"
-                + "\tThis instance is owned by " + Stream.of(BotData.getAdminIDs()).map(id -> jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")) + ".\n"
-                + "\tJDA v" + JDAInfo.VERSION + "\n"
+                + "\tThis instance is owned by %s.\n"
+                + "\tJDA v%s\n"
                 + "\tLogo Font: Avenir Next LT Pro / (c) Linotype\n"
                 + "\t(c) dan1st and Gehasstes %s, Release %s.\n "
-                + "\tThis is a copy of Daydream (https://gitlab.com/botstudio/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda), Year.now().getValue(), NightDream.VERSION
+                + "\tThis is a copy of Daydream (https://gitlab.com/botstudio/daydream/) by SP46", event.getJDA().getGuilds().size(), getUsers(jda), getBots(jda),
+                Stream.of(BotData.getAdminIDs()).map(id -> jda.retrieveUserById(id).complete().getAsTag()).collect(Collectors.joining(" and ")),
+                JDAInfo.VERSION,
+                Year.now().getValue(), NightDream.VERSION
     			);
         if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES)) {
         	TextToGraphics.sendTextAsImage(event.getChannel(), "info", send, event.getAuthor().getAsMention());
