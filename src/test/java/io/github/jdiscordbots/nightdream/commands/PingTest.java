@@ -17,11 +17,8 @@ public class PingTest {
 	@Test
 	public void testPing() {
 		sendCommand("ping");
-		Message resp=getMessage(":stopwatch:");
-		assertNotNull(resp);
 		Message edited=getMessage(msg->msg.getContentRaw().matches(".+ Latency: \\d+ms. API Latency is \\d+ms"));
 		assertNotNull(edited);
-		assertEquals(resp.getId(), edited.getId());
 		edited.delete().queue();
 	}
 	

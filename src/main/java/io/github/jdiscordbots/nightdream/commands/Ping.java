@@ -7,7 +7,6 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.OffsetDateTime;
@@ -20,9 +19,10 @@ public class Ping implements Command {
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		Message msg = event.getChannel().sendMessage(":stopwatch:").complete();
-		long ms= getMilliSeconds(msg.getTimeCreated()) - getMilliSeconds(event.getMessage().getTimeCreated());
-		msg.editMessage(IconChooser.getArrowIcon(event.getChannel())+" Latency: " + ms + "ms. API Latency is " + event.getJDA().getRestPing().complete() + "ms").queue();
+		event.getChannel().sendMessage(":stopwatch:").queue(msg->{
+			long ms= getMilliSeconds(msg.getTimeCreated()) - getMilliSeconds(event.getMessage().getTimeCreated());
+			msg.editMessage(IconChooser.getArrowIcon(event.getChannel())+" Latency: " + ms + "ms. API Latency is " + event.getJDA().getRestPing().complete() + "ms").queue();
+		});
 	}
 	private static long getMilliSeconds(OffsetDateTime time) {
 		return time.atZoneSameInstant(ZoneId.of("Z")).toInstant().toEpochMilli();
