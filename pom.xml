@@ -164,8 +164,8 @@
 	</build>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<sonar.projectKey>mvntest</sonar.projectKey>
-		<sonar.organization>danthe1st</sonar.organization>
+		<sonar.projectKey>NightDream</sonar.projectKey>
+		<sonar.organization>nightdream</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 </project>
