@@ -21,7 +21,7 @@ public class Ping implements Command {
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		event.getChannel().sendMessage(":stopwatch:").queue(msg->{
 			long ms= getMilliSeconds(msg.getTimeCreated()) - getMilliSeconds(event.getMessage().getTimeCreated());
-			msg.editMessage(IconChooser.getArrowIcon(event.getChannel())+" Latency: " + ms + "ms. API Latency is " + event.getJDA().getRestPing().complete() + "ms").queue();
+			event.getJDA().getRestPing().queue(ping->msg.editMessage(IconChooser.getArrowIcon(event.getChannel())+" Latency: " + ms + "ms. API Latency is " + ping + "ms").queue());
 		});
 	}
 	private static long getMilliSeconds(OffsetDateTime time) {
