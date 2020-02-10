@@ -17,7 +17,7 @@ public class VoteTest {
 	@Test
 	public void testVote() {
 		sendCommand("vote");
-		Message resp=getMessage(msg->hasEmbed(msg, "Vote for "+getJDA().getSelfUser().getName(),"[<3](https://discordbots.org/bot/"+getJDA().getSelfUser().getId()+"/vote)"));
+		Message resp=getMessage(msg->hasEmbed(msg, "Vote for "+getJDA().getSelfUser().getName(),"[<3](https://top.gg/bot/"+getJDA().getSelfUser().getId()+"/vote)"));
 		assertNotNull(resp);
 		resp.delete().queue();
 	}
