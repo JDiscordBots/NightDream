@@ -78,7 +78,7 @@ public class Reload implements Command {
 		return "reconnects (`reload login`/`reload reconnect`),\n"
 				+ "reloads settings for the current guild(`reload guild`) "
 				+ "or everything(`reload props`)\n"
-				+ "or deletes the message cache";
+				+ "or deletes the message cache(`reload msgcache`)";
 	}
 	
 	@Override
