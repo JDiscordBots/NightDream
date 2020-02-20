@@ -69,7 +69,7 @@ public class NightDream {
 			CMD_CTL_LOG.log(LogType.INFO, "available Commands: "
 					+ CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", ")));
 			bot = builder.build();
-			DISCORD_CTL_LOG.log(LogType.INFO, "Logging in with "+bot.getShardsTotal()+" shards...");
+			DISCORD_CTL_LOG.log(LogType.INFO, "Logging in with "+bot.getShardsTotal()+" shard/-s.");
 			bot.getShards().forEach(jda->{
 				try {
 					jda.awaitReady();
@@ -79,7 +79,7 @@ public class NightDream {
 					Thread.currentThread().interrupt();
 				}
 			});
-			DISCORD_CTL_LOG.log(LogType.INFO, "Logged in. "+bot.getShardsRunning()+"/"+bot.getShardsTotal()+" shards online.");
+			DISCORD_CTL_LOG.log(LogType.INFO, "Logged in. "+bot.getShardsRunning()+"/"+bot.getShardsTotal()+" shard/-s online.");
 			
 		} catch (final LoginException e) {
 			DISCORD_CTL_LOG.log(LogType.ERROR, "The entered token is not valid!");
