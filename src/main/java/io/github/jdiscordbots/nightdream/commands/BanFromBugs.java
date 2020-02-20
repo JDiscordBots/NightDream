@@ -33,7 +33,7 @@ public class BanFromBugs implements Command {
 			event.getChannel().sendMessage("Done").queue();
 			break;
 		default:
-			event.getChannel().sendMessage(IconChooser.getArrowIcon(event.getChannel())+" Format: `"+BotData.getPrefix(event.getGuild())+"-banfrombugs [add,remove] userID`").queue();
+			event.getChannel().sendMessage(IconChooser.getArrowIcon(event.getChannel())+" Format: `"+BotData.getPrefix(event.getGuild())+"banfrombugs [add,remove] userID`").queue();
 		}
 	}
 
