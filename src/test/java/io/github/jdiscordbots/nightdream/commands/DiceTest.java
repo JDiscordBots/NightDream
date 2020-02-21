@@ -33,6 +33,9 @@ public class DiceTest {
 		resp.delete().queue();
 	}
 	private void testStandardExecution(int end) {
+		testStandardExecution(end,Math.min(1, end),Math.max(1, end));
+	}
+	private void testStandardExecution(int end,int from,int to) {
 		sendCommand("dice "+end);
 		Duration defaultTimeout=getTimeout();
 		setTimeout(Durations.TEN_SECONDS);
@@ -41,8 +44,8 @@ public class DiceTest {
 			return "Done!".equals(embed.getTitle())&&
 			embed.getDescription()!=null&&
 			embed.getDescription().startsWith("It landed on a ")&&
-			(i=Integer.parseInt(embed.getDescription().substring(15)))>=Math.min(1, end)&&
-			i<=Math.max(1, end);
+			(i=Integer.parseInt(embed.getDescription().substring(15)))>=from&&
+			i<=to;
 		}));
 		assertNotNull(resp);
 		resp.delete().queue();
@@ -51,6 +54,10 @@ public class DiceTest {
 	@Test
 	public void testNegativeArg() {
 		testStandardExecution(-5);
+	}
+	@Test
+	public void testZero() {
+		testStandardExecution(0,0,0);
 	}
 	@Test
 	public void testNormalArg() {

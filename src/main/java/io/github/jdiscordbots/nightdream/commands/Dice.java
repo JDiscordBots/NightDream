@@ -23,13 +23,18 @@ public class Dice implements Command {
             event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" Not enough arguments!").queue();
             return;
         }
+        long max=Long.parseLong(args[0]);
+        if(max<1) {
+        	max--;
+        }
         final long l;
         try {
-            l = (long)(Math.floor(Math.random() * Long.parseLong(args[0]) + 1));
+            l = (long)(Math.floor(Math.random() * max + 1));
         } catch (NumberFormatException e) {
             event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" argument needs to be an integer!").queue();
             return;
         }
+        
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("Rolling the dice...")
                 .setDescription(String.format("From 1 to %s", args[0]));
 
