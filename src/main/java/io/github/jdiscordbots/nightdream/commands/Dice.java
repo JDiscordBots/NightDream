@@ -23,12 +23,13 @@ public class Dice implements Command {
             event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" Not enough arguments!").queue();
             return;
         }
-        long max=Long.parseLong(args[0]);
-        if(max<1) {
-        	max--;
-        }
+        
         final long l;
         try {
+        	long max=Long.parseLong(args[0]);
+            if(max<1) {
+            	max--;
+            }
             l = (long)(Math.floor(Math.random() * max + 1));
         } catch (NumberFormatException e) {
             event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" argument needs to be an integer!").queue();
