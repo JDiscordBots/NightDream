@@ -52,8 +52,10 @@ jobs:
        java-version: 1.8
     - name: update dependencies
       run: mvn versions:use-latest-versions
-    - name: "setup user info"
+    - name: "setup git"
       run: |
+        git remote add github https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+        git pull github ${GITHUB_REF} --ff-only
         git config --global user.email "CI@github.com"
         git config --global user.name "CI"
     - name: commit
@@ -61,7 +63,7 @@ jobs:
         git add pom.xml
         git commit -m "update dependencies"
     - name: push
-      run: git push https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+      run: git push github HEAD:${GITHUB_REF}
   SonarCloud:
     needs: commit
     runs-on: ubuntu-latest
@@ -89,7 +91,7 @@ jobs:
           git config --global user.email "CI@github.com"
           git config --global user.name "CI"
       - name: "clone Wiki"
-        run: git clone https://github.com/JDiscordBots/NightDream.wiki.git wiki
+        run: git clone https://github.com/$GITHUB_REPOSITORY.wiki.git wiki
       - name: "create JAR and copy it to the wiki"
         run: |
           mvn package -DskipTests=true
