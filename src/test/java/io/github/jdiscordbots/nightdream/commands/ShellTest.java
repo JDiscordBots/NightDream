@@ -42,7 +42,7 @@ public class ShellTest extends AbstractAdminCommandTest{
 	@Test
 	public void testInvalidCommand() {
 		sendCommand("shell invalidcommand");
-		Message resp = getMessage(msg->hasEmbed(msg, embed->embed.getDescription().startsWith("**Command**: ```bash\ninvalidcommand```\n\nCannot start Process under "+OS_NAME)));
+		Message resp = getMessage(msg->hasEmbed(msg, embed->embed.getDescription()!=null&&embed.getDescription().startsWith("**Command**: ```bash\ninvalidcommand```\n\nCannot start Process under "+OS_NAME)));
 		assertNotNull(resp);
 		resp.delete().queue();
 	}
