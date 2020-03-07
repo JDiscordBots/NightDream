@@ -56,8 +56,10 @@ jobs:
       run: |
         git remote add github https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
         git pull github ${GITHUB_REF} --ff-only
-        git config --global user.email "CI@github.com"
-        git config --global user.name "CI"
+        git config --global user.email "${GITHUB_ACTOR}@github.com"
+        git config --global user.name "${GITHUB_ACTOR}"
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: commit
       run: |
         git add pom.xml
@@ -88,8 +90,8 @@ jobs:
           java-version: 1.8
       - name: "setup user info"
         run: |
-          git config --global user.email "CI@github.com"
-          git config --global user.name "CI"
+          git config --global user.email "${GITHUB_ACTOR}@github.com"
+          git config --global user.name "${GITHUB_ACTOR}"
       - name: "clone Wiki"
         run: git clone https://github.com/$GITHUB_REPOSITORY.wiki.git wiki
       - name: "create JAR and copy it to the wiki"
