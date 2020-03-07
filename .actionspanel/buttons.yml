@@ -1,0 +1,4 @@
+buttons:
+  - title: Update dependencies
+    action: "update"
+    description: Updates all dependencies
