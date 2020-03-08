@@ -62,11 +62,8 @@ public class Eval implements Command {
 		} catch (EvalError e) {
 			NDLogger.logWithoutModule(LogType.WARN, "eval exception while setting command values",e);
 		}
-        StringBuilder scriptBuilder = new StringBuilder();
-        for (String string : args) {
-			scriptBuilder.append(string).append(" ");
-		}
-        String script=scriptBuilder.toString();
+        int index=event.getMessage().getContentRaw().indexOf(' ');
+        String script=index==-1?"":event.getMessage().getContentRaw().substring(index+1);
         if (script.contains("getToken")) {
         	NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
         	event.getJDA().shutdown();
