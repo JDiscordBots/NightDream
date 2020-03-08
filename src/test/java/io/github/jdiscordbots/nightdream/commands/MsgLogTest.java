@@ -4,8 +4,8 @@ import static io.github.jdiscordbots.jdatesting.TestUtils.getJDA;
 import static io.github.jdiscordbots.jdatesting.TestUtils.getMessage;
 import static io.github.jdiscordbots.jdatesting.TestUtils.getTestingChannel;
 import static io.github.jdiscordbots.jdatesting.TestUtils.sendCommand;
-import static io.github.jdiscordbots.jdatesting.TestUtils.sendMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -77,12 +77,14 @@ public class MsgLogTest {
 		sendCommand("msglog "+otherGuild.getTextChannels().get(0).getAsMention());
 		Message resp=getMessage(msg->msg.getContentRaw().endsWith(" You can only set msglog channels in the same server."));
 		assertNotNull(resp);
+		assertNotEquals(otherGuild.getTextChannels().get(0).getAsMention(),BotData.getMsgLogChannel(getTestingChannel().getGuild()));
 		resp.delete().queue();
 	}
 	private Guild getOtherGuild() {
 		return getJDA().getGuilds().stream().filter(g->g!=getTestingChannel().getGuild()&&!g.getTextChannels().isEmpty()).findAny().orElseGet(()->{
 			GuildAction createGuild = getJDA().createGuild("secondary guild for CI tests");
-			createGuild.newChannel(ChannelType.TEXT, "testing channel");
+			createGuild.newChannel(ChannelType.TEXT, "testing_channel");
+			createGuild.complete();
 			return getOtherGuild();
 		});
 	}
