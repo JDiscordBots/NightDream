@@ -18,7 +18,7 @@ You can download NightDream [here](https://github.com/JDiscordBots/Nightdream/wi
 * Java 1.8.0_221
 
 ### Build your own NightDream instance
-* execute `mvn clean install package` in the project directory
+* execute `mvn clean install package -DskipTests=true` in the project directory
 * the executable JAR file is in the directory `target`
 
 ## Invite Nightdream to your Server
