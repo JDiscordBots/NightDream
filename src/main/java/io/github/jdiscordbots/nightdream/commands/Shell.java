@@ -97,57 +97,29 @@ public class Shell implements Command {
 		ShellCommand cmd=new ShellCommand(String.join(" ",args));
 		List<String> cmdBuilder=new ArrayList<>(cmd.originalCommand.length());
 		cmd.cmd=cmdBuilder;
-		boolean inQuoute = false;
-		boolean finished=false;
 		for (int i = start; i < end; i++) {
 			String arg=args[i];
-			if(!inQuoute) {
-				switch (arg) {
-				case "|":
-					cmd.pipeRedirection = parse(args, i + 1, end);
-					cmd.sendResponse=cmd.sendResponse&&cmd.pipeRedirection.sendResponse;
-					finished=true;
-					break;
-				case ">":
-					cmd.outRedirection=args[i+1];
-					finished=true;
-					break;
-				case "2>":
-					cmd.errRedirection=args[i+1];
-					finished=true;
-					break;
-				case "&":
-					if(i==end-1) {
-						cmd.sendResponse=false;
-					}
-					break;
-				default:
-					inQuoute=addArgumentSupportQuoting(cmdBuilder,inQuoute,arg,finished);
+			switch (arg) {
+			case "|":
+				cmd.pipeRedirection = parse(args, i + 1, end);
+				cmd.sendResponse=cmd.sendResponse&&cmd.pipeRedirection.sendResponse;
+				break;
+			case ">":
+				cmd.outRedirection=args[i+1];
+				break;
+			case "2>":
+				cmd.errRedirection=args[i+1];
+				break;
+			case "&":
+				if(i==end-1) {
+					cmd.sendResponse=false;
 				}
-			}else {
-				inQuoute=addArgumentSupportQuoting(cmdBuilder,inQuoute,arg,finished);
-			}
-		}
-		return cmd;
-	}
-	private boolean addArgumentSupportQuoting(List<String> cmdBuilder,boolean inQuoute,String arg,boolean finished) {
-		if(!finished) {
-			if (inQuoute) {
-				
-				if (arg.endsWith("\"")) {
-					inQuoute = false;
-					arg=arg.substring(0,arg.length()-1);
-				}
-				cmdBuilder.add(cmdBuilder.remove(cmdBuilder.size()-1).concat(" ").concat(arg.substring(0,arg.length()-1)));//NOSONAR
-			} else {
-				if (arg.startsWith("\"")&&!arg.endsWith("\"")) {
-					inQuoute = true;
-					arg = arg.substring(1);
-				}
+				break;
+			default:
 				cmdBuilder.add(arg);
 			}
 		}
-		return inQuoute;
+		return cmd;
 	}
 	private Process startProcess(EmbedBuilder eb,TextChannel tc,ShellCommand cmd,User executor) throws IOException {
 		ProcessBuilder pBuilder=new ProcessBuilder(cmd.cmd);
