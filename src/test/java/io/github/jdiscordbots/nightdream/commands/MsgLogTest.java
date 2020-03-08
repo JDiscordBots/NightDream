@@ -1,8 +1,10 @@
 package io.github.jdiscordbots.nightdream.commands;
 
+import static io.github.jdiscordbots.jdatesting.TestUtils.getJDA;
 import static io.github.jdiscordbots.jdatesting.TestUtils.getMessage;
 import static io.github.jdiscordbots.jdatesting.TestUtils.getTestingChannel;
 import static io.github.jdiscordbots.jdatesting.TestUtils.sendCommand;
+import static io.github.jdiscordbots.jdatesting.TestUtils.sendMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -11,8 +13,11 @@ import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import io.github.jdiscordbots.nightdream.util.BotData;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.requests.restaction.GuildAction;
 
 public class MsgLogTest {
 	/*@Test
@@ -65,6 +70,21 @@ public class MsgLogTest {
 	@Test
 	public void testPermNeeded() {
 		assertEquals("Manage Messages", new MsgLog().permNeeded());
+	}
+	@Test
+	public void testCrossMsgLogDenied() {
+		Guild otherGuild = getOtherGuild();
+		sendCommand("msglog "+otherGuild.getTextChannels().get(0).getAsMention());
+		Message resp=getMessage(msg->msg.getContentRaw().endsWith(" You can only set msglog channels in the same server."));
+		assertNotNull(resp);
+		resp.delete().queue();
+	}
+	private Guild getOtherGuild() {
+		return getJDA().getGuilds().stream().filter(g->g!=getTestingChannel().getGuild()&&!g.getTextChannels().isEmpty()).findAny().orElseGet(()->{
+			GuildAction createGuild = getJDA().createGuild("secondary guild for CI tests");
+			createGuild.newChannel(ChannelType.TEXT, "testing channel");
+			return getOtherGuild();
+		});
 	}
 	@Test
 	public void testHelp() {

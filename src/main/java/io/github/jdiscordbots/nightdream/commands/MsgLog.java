@@ -16,11 +16,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("msglog")
 public class MsgLog implements Command {
-	
+
 	private void sendNeedMentionedChannelMessage(TextChannel tc) {
-		tc.sendMessage(IconChooser.getInfoIcon(tc)+" I need a mentioned channel").queue();
+		tc.sendMessage(IconChooser.getInfoIcon(tc) + " I need a mentioned channel").queue();
 	}
-	
+
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if (args.length == 0) {
@@ -37,8 +37,13 @@ public class MsgLog implements Command {
 			return;
 		}
 		TextChannel channel = event.getMessage().getMentionedChannels().get(0);
+		if (channel.getGuild() != event.getGuild()) {
+			event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" You can only set msglog channels in the same server.").queue();
+			return;
+		}
 		BotData.setMsgLogChannel(channel.getId(), event.getGuild());
-		event.getChannel().sendMessage("Set! `" + BotData.getPrefix(event.getGuild()) + "msglog none` to disable.").queue();
+		event.getChannel().sendMessage("Set! `" + BotData.getPrefix(event.getGuild()) + "msglog none` to disable.")
+				.queue();
 	}
 
 	@Override
@@ -48,18 +53,20 @@ public class MsgLog implements Command {
 
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
-		boolean allow = event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || JDAUtils.checkOwner(event,false);
-		if(!allow) {
-			event.getChannel().sendMessage("This command requires the "+Permission.MESSAGE_MANAGE.getName()+" permission.").queue();
+		boolean allow = event.getMember().hasPermission(Permission.MESSAGE_MANAGE) || JDAUtils.checkOwner(event, false);
+		if (!allow) {
+			event.getChannel()
+					.sendMessage("This command requires the " + Permission.MESSAGE_MANAGE.getName() + " permission.")
+					.queue();
 		}
 		return allow;
 	}
-	
+
 	@Override
-    public String permNeeded() {
-    	return Permission.MESSAGE_MANAGE.getName();
-    }
-	
+	public String permNeeded() {
+		return Permission.MESSAGE_MANAGE.getName();
+	}
+
 	@Override
 	public CommandType getType() {
 		return CommandType.CONFIG;
