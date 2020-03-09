@@ -2,10 +2,13 @@ package io.github.jdiscordbots.nightdream.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.json.JSONObject;
@@ -59,11 +62,16 @@ public class GeneralUtils {
 		return rand;
 	}
 	public static JSONObject getJSONFromURL(String url) {
-		try(BufferedReader reader=new BufferedReader(new InputStreamReader(new URL(url).openStream(),StandardCharsets.UTF_8))){
+		try(BufferedReader reader=new BufferedReader(new InputStreamReader(openStreamWithRandomUserAgent(url),StandardCharsets.UTF_8))){
 			return new JSONObject(reader.lines().collect(Collectors.joining()));
 		} catch (IOException e) {
 			return null;
 		}
 		
-	}
+    }
+    public static InputStream openStreamWithRandomUserAgent(String url)throws IOException{
+        URLConnection con=new URL(url).openConnection();
+        con.setRequestProperty("User-Agent", UUID.randomUUID().toString());
+        return con.getInputStream();
+    }
 }
