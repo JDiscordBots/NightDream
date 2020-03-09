@@ -58,7 +58,7 @@ public class PhotoTest {
 	@Test
 	public void testInvalidImage() {
 		sendCommand("photo thisisaninvalidargument");
-		Message resp=getMessage(msg->hasEmbed(msg, embed->embed.getTitle().endsWith(" Nothing found")&&"Try something different.".equals(embed.getDescription())));
+		Message resp=getMessage(msg->hasEmbed(msg, embed->embed.getTitle()!=null&&embed.getTitle().endsWith(" Nothing found")&&"Try something different.".equals(embed.getDescription())));
 		assertNotNull(resp);
 		resp.delete().queue();
 	}
