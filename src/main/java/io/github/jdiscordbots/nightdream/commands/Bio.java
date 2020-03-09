@@ -46,8 +46,10 @@ public class Bio implements Command {
 
 			final JSONObject object = GeneralUtils.getJSONFromURL(BASE_URL + "userdetails/" + slug);
 
-			if (object == null || !object.getBoolean("success"))
+			if (object == null || !object.getBoolean("success")) {
 				channel.sendMessage(error404).queue();
+                                return;
+                        }
 			else {
 				final JSONObject settings = object.getJSONObject("payload").getJSONObject("settings");
 				final JSONObject discord = object.getJSONObject("payload").getJSONObject("discord");
