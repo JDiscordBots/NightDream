@@ -26,6 +26,7 @@ public class NPM implements Command{
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
 			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need a package name").queue();
+			return;
 		}
 		String url="https://registry.yarnpkg.com/"+args[0];
 		JSONObject jsonObj=GeneralUtils.getJSONFromURL(url);
