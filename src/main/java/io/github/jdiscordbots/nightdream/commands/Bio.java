@@ -42,33 +42,33 @@ public class Bio implements Command {
 		}
 
 		try {
-			String slug = URLEncoder.encode(String.join(" ", args), "UTF-8");
+			final String slug = URLEncoder.encode(String.join(" ", args), "UTF-8");
 
 			final JSONObject object = GeneralUtils.getJSONFromURL(BASE_URL + "userdetails/" + slug);
 
 			if (object == null || !object.getBoolean("success")) {
 				channel.sendMessage(error404).queue();
-                                return;
-                        }
+			}
 			else {
 				final JSONObject settings = object.getJSONObject("payload").getJSONObject("settings");
 				final JSONObject discord = object.getJSONObject("payload").getJSONObject("discord");
 				final String avatarKey = discord.getString("avatar");
 				final String notSet = "Not set";
+				final String iconUrl = DISCORD_CDN_AVATARS_BASE_URL + settings.getString("user_id") + "/" + avatarKey + (avatarKey.startsWith("a_") ? ".gif" : ".png");
 
 				final EmbedBuilder eb = new EmbedBuilder().setColor(0xffffff)
-						.setAuthor(String.format("%s#%s", discord.getString("username"), discord.getString("discriminator")))
+						.setAuthor(String.format("%s#%s", discord.getString("username"), discord.getString("discriminator")), "https://discord.bio/p/" + slug, iconUrl)
 						.setDescription(settings.getString("status"))
 						.addField("About", settings.getString("description"), true)
 						.addField("Upvotes", String.valueOf(settings.getInt("upvotes")), true)
 						.addField("Location", (settings.isNull("location") ? notSet : settings.getString("location")), true)
 						.addField("Birthday", (settings.isNull("birthday")? notSet : settings.getString("birthday")), true)
 						.addField("E-Mail", (settings.getString("email").equals("") ? notSet : settings.getString("email")), true)
-						.addField("Occupation", (settings.isNull("occupation")? notSet : String.valueOf(settings.get("occupation"))), true)
+						.addField("Occupation", (settings.isNull("occupation") ? notSet : String.valueOf(settings.get("occupation"))), true)
 						.addField("Verified", settings.getInt("verified") == 1 ? "Yes" : "No", true)
 						.addField("ID", discord.getString("id"), true)
 						.addField("Gender", getGender(settings), true)
-						.setThumbnail(DISCORD_CDN_AVATARS_BASE_URL + settings.getString("user_id") + "/" + avatarKey + (avatarKey.startsWith("a_") ? ".gif" : ".png"));
+						.setThumbnail(iconUrl);
 
 				channel.sendMessage(eb.build()).queue();
 			}
@@ -79,18 +79,28 @@ public class Bio implements Command {
 	}
 
 	private String getGender(JSONObject settings) {
-		Object gender = settings.get("gender");
+		String gender;
 
-		if ("null".equals(gender) || gender == null) {
-			gender = "Unspecified";
-		} else if ((Integer) gender == 1) {
-			gender = "Male";
-		} else if ((Integer) gender == 2) {
-			gender = "Female";
-		} else if ((Integer) gender == 3) {
-			gender = "Other";
+		if (settings.isNull("gender"))
+			return "Unspecified";
+
+		final int genderCode = settings.getInt("gender");
+
+		switch (genderCode) {
+			case 1:
+				gender = "Male";
+				break;
+			case 2:
+				gender = "Female";
+				break;
+			case 3:
+				gender = "Other";
+				break;
+			default:
+				gender = "Unspecified";
 		}
-		return String.valueOf(gender);
+
+		return gender;
 	}
 
 	@Override
