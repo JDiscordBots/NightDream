@@ -24,6 +24,7 @@ public class Bio implements Command {
 
 	private static final String BASE_URL = "https://api.discord.bio/v1/";
 	private static final String DISCORD_CDN_AVATARS_BASE_URL = "https://cdn.discordapp.com/avatars/";
+	private static final String GENDER_KEY="gender";
 
 
 	@Override
@@ -43,33 +44,27 @@ public class Bio implements Command {
 
 		try {
 			String slug = URLEncoder.encode(String.join(" ", args), "UTF-8");
-
 			final JSONObject object = GeneralUtils.getJSONFromURL(BASE_URL + "userdetails/" + slug);
-
 			if (object == null || !object.getBoolean("success")) {
 				channel.sendMessage(error404).queue();
-                                return;
-                        }
+			}
 			else {
 				final JSONObject settings = object.getJSONObject("payload").getJSONObject("settings");
 				final JSONObject discord = object.getJSONObject("payload").getJSONObject("discord");
 				final String avatarKey = discord.getString("avatar");
-				final String notSet = "Not set";
-
 				final EmbedBuilder eb = new EmbedBuilder().setColor(0xffffff)
 						.setAuthor(String.format("%s#%s", discord.getString("username"), discord.getString("discriminator")))
 						.setDescription(settings.getString("status"))
 						.addField("About", settings.getString("description"), true)
 						.addField("Upvotes", String.valueOf(settings.getInt("upvotes")), true)
-						.addField("Location", (settings.isNull("location") ? notSet : settings.getString("location")), true)
-						.addField("Birthday", (settings.isNull("birthday")? notSet : settings.getString("birthday")), true)
-						.addField("E-Mail", (settings.getString("email").equals("") ? notSet : settings.getString("email")), true)
-						.addField("Occupation", (settings.isNull("occupation")? notSet : String.valueOf(settings.get("occupation"))), true)
+						.addField("Location", getPossibleNullElement(settings,"location"), true)
+						.addField("Birthday", getPossibleNullElement(settings,"birthday"), true)
+						.addField("E-Mail", getPossibleNullElement(settings,"email"), true)
+						.addField("Occupation", getPossibleNullElement(settings,"occupation"), true)
 						.addField("Verified", settings.getInt("verified") == 1 ? "Yes" : "No", true)
 						.addField("ID", discord.getString("id"), true)
 						.addField("Gender", getGender(settings), true)
 						.setThumbnail(DISCORD_CDN_AVATARS_BASE_URL + settings.getString("user_id") + "/" + avatarKey + (avatarKey.startsWith("a_") ? ".gif" : ".png"));
-
 				channel.sendMessage(eb.build()).queue();
 			}
 		} catch (Exception e) {
@@ -78,19 +73,21 @@ public class Bio implements Command {
 		}
 	}
 
+	private String getPossibleNullElement(JSONObject settings,String name) {
+		return !settings.has(name)||settings.isNull(name)||settings.getString(name).isEmpty() ? "Not set" : settings.getString(name);
+	}
 	private String getGender(JSONObject settings) {
-		Object gender = settings.get("gender");
-
-		if ("null".equals(gender) || gender == null) {
-			gender = "Unspecified";
-		} else if ((Integer) gender == 1) {
-			gender = "Male";
-		} else if ((Integer) gender == 2) {
-			gender = "Female";
-		} else if ((Integer) gender == 3) {
-			gender = "Other";
+		if (!settings.has(GENDER_KEY) || settings.isNull(GENDER_KEY)) {
+			return "Unspecified";
+		} 
+		switch(settings.getInt(GENDER_KEY)) {
+			case 1:
+				return "male";
+			case 2:
+				return "Female";
+			default:
+				return "Other";
 		}
-		return String.valueOf(gender);
 	}
 
 	@Override
