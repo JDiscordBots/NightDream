@@ -33,13 +33,11 @@ public class Bio implements Command {
 		final String error = IconChooser.getErrorIcon(channel) + " Something went wrong.\n\n" +
 				"This command is in beta for now, this means among other things that bugs are not automatically reported.\n" +
 				"Please use `" + BotData.getPrefix(event.getGuild()) + "bugreport` to report the bug manually with with the exact input provided.";
-		final String missingArgs = IconChooser.getErrorIcon(channel) + " Please provide at least **one** argument.";
 		final String error404 = IconChooser.getErrorIcon(channel) + " This user does not exist on https://discord.bio. Try again with another username.";
 
 
 		if (args.length < 1) {
-			channel.sendMessage(missingArgs).queue();
-			return;
+			args=new String[] {event.getAuthor().getId()};
 		}
 
 		try {
@@ -86,7 +84,7 @@ public class Bio implements Command {
 		} 
 		switch(settings.getInt(GENDER_KEY)) {
 			case 1:
-				return "male";
+				return "Male";
 			case 2:
 				return "Female";
 			default:

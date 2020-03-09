@@ -16,12 +16,12 @@ import org.junit.jupiter.api.Test;
 import static io.github.jdiscordbots.jdatesting.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BioTest {
+public class BioTest {
 
 	@Test
 	public void testWithoutArguments() {
 		sendCommand("bio");
-		Message response = getMessage(IconChooser.getErrorIcon(getTestingChannel()) + " Please provide at least **one** argument.");
+		Message response = getMessage(IconChooser.getErrorIcon(getTestingChannel()) + " This user does not exist on https://discord.bio. Try again with another username.");
 		assertNotNull(response);
 		response.delete().queue();
 	}
