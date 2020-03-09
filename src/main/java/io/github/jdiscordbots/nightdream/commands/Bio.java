@@ -93,7 +93,7 @@ public class Bio implements Command {
 
 	@Override
 	public String help() {
-		return "The first Discord-based discord.bio UI";
+		return "The first Discord-based discord.bio UI in Java";
 	}
 
 	@Override
