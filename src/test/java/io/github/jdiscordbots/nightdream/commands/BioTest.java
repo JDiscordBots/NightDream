@@ -43,7 +43,7 @@ public class BioTest {
 		sendCommand("bio dan1st");
 		Message response = getMessage(msg -> hasEmbed(msg, null, settings.getString("status")));
 		assertTrue(hasEmbedField(response, "ID", settings.getString("user_id")));
-		assertTrue(hasEmbedField(response, "Verified", "" + settings.getInt("verified")));
+		assertTrue(hasEmbedField(response, "Verified", settings.getInt("verified") == 1 ? "Yes" : "No"));
 	}
 
 	@Test
