@@ -2,6 +2,7 @@ package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -165,7 +166,7 @@ public class Shell implements Command {
 		return p;
 	}
 	private void testToken(String toValidate,User user) {
-		if(toValidate != null&&toValidate.contains(user.getJDA().getToken())) {
+		if(toValidate != null&&toValidate.contains(BotData.getToken())) {
 			NDLogger.logWithModule(LogType.FATAL, "Eval", user.getAsTag() + "(" + user.getId() + ") tried to get the bot token");
 			user.getJDA().shutdownNow();
 		}

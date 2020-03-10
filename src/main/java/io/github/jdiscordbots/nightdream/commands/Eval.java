@@ -9,6 +9,7 @@ package io.github.jdiscordbots.nightdream.commands;
 
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -35,7 +36,7 @@ public class Eval implements Command {
 			long time=System.nanoTime();
 			Object result=shell.eval(script);
 			time=System.nanoTime()-time;
-			if(result != null&&result.toString().contains(event.getJDA().getToken())) {
+			if(result != null&&result.toString().contains(BotData.getToken())) {
 				NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
 	        	event.getJDA().shutdownNow();
 			}else {
