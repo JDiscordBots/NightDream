@@ -1,5 +1,6 @@
 package io.github.jdiscordbots.nightdream;
 
+import static io.github.jdiscordbots.jdatesting.TestUtils.setNumOfMessagesToCheck;
 import static io.github.jdiscordbots.jdatesting.TestUtils.setTimeout;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class JDALoader {
 			TestUtils.setLogger(str->log.log(LogType.INFO, str));
 		}
 		setTimeout(Durations.TEN_SECONDS);
+		setNumOfMessagesToCheck(10);
 		return jda;
 	}
 
