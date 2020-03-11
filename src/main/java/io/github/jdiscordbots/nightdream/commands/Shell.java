@@ -167,8 +167,7 @@ public class Shell implements Command {
 	}
 	private void testToken(String toValidate,User user) {
 		if(toValidate != null&&toValidate.contains(BotData.getToken())) {
-			NDLogger.logWithModule(LogType.FATAL, "Eval", user.getAsTag() + "(" + user.getId() + ") tried to get the bot token");
-			user.getJDA().shutdownNow();
+			JDAUtils.tokenLeakAlert(user);
 		}
 	}
 	@Override
@@ -178,8 +177,7 @@ public class Shell implements Command {
 			return;
 		}
 		if(String.join("", args).toLowerCase().contains("token")) {
-			NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
-			event.getJDA().shutdownNow();
+			JDAUtils.tokenLeakAlert(event.getAuthor());
 		}
 		EmbedBuilder eb=new EmbedBuilder();
 		ShellCommand cmd=parse(args,0,args.length);

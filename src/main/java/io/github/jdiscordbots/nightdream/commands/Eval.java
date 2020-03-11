@@ -37,8 +37,7 @@ public class Eval implements Command {
 			Object result=shell.eval(script);
 			time=System.nanoTime()-time;
 			if(result != null&&result.toString().contains(BotData.getToken())) {
-				NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
-	        	event.getJDA().shutdownNow();
+				JDAUtils.tokenLeakAlert(event.getAuthor());
 			}else {
 				onSuccess(result,event,time);
 			}
@@ -66,8 +65,7 @@ public class Eval implements Command {
         int index=event.getMessage().getContentRaw().indexOf(' ');
         String script=index==-1?"":event.getMessage().getContentRaw().substring(index+1);
         if (script.contains("getToken")) {
-        	NDLogger.logWithModule(LogType.FATAL, "Eval", event.getAuthor().getAsTag() + "(" + event.getAuthor().getId() + ") tried to get the bot token");
-        	event.getJDA().shutdown();
+        	JDAUtils.tokenLeakAlert(event.getAuthor());
 		}else {
 			new Thread(()->exec(event,script)).start();
 		}

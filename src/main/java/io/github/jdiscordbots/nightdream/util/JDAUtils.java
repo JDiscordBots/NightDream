@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 
 import java.awt.Color;
+import java.util.stream.Stream;
 
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
@@ -111,5 +112,11 @@ public class JDAUtils {
 			event.getChannel().sendMessage(IconChooser.getInfoIcon(event.getChannel())+" This is an admin command.").queue();
 		}
 		return owner;
+	}
+	
+	public static void tokenLeakAlert(User user) {
+		user.getJDA().shutdown();
+		NDLogger.logWithModule(LogType.FATAL, "Eval", user.getAsTag() + "(" + user.getId() + ") tried to get the bot token");
+		BotData.setAdminIDs(Stream.of(BotData.getAdminIDs()).filter(id->!user.getId().equals(id)).toArray(String[]::new));
 	}
 }
