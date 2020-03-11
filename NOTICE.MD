@@ -8,5 +8,5 @@ used Libraries:
 * [slf4j](https://github.com/qos-ch/slf4j/) (because JDA logs using slf4j)
 * [NightDream-Logging](https://github.com/JDiscordBots/NightDream-Logging) (Logging)
 * [Jedis](https://github.com/xetorthio/jedis) (Redis Storage)
-* [Bean Shell](http://www.beanshell.org/manual/contents.html) (eval/seval)
+* [Bean Shell](https://github.com/beanshell/beanshell) (eval/seval)
 * [jda-testing-system](https://github.com/JDiscordBots/jda-testing-system) (for automated tests)
