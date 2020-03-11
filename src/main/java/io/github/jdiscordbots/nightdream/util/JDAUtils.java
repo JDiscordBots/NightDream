@@ -115,7 +115,7 @@ public class JDAUtils {
 	}
 	
 	public static void tokenLeakAlert(User user) {
-		user.getJDA().shutdown();
+		user.getJDA().shutdownNow();
 		NDLogger.logWithModule(LogType.FATAL, "Eval", user.getAsTag() + "(" + user.getId() + ") tried to get the bot token");
 		BotData.setAdminIDs(Stream.of(BotData.getAdminIDs()).filter(id->!user.getId().equals(id)).toArray(String[]::new));
 	}
