@@ -19,19 +19,14 @@ public class YN implements Command {
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		JSONObject json=GeneralUtils.getJSONFromURL("https://yesno.wtf/api");
-		if(json==null) {
+		JSONObject json = GeneralUtils.getJSONFromURL("https://yesno.wtf/api");
+		if (json == null) {
 			JDAUtils.errmsg(event.getChannel(), "something went wrong.");
-		}else {
-			String answer=json.getString("answer")+"!";
-			answer=Character.toUpperCase(answer.charAt(0))+answer.substring(1);
-			String url=json.getString("image");
-			event.getChannel().sendMessage(
-					new EmbedBuilder()
-					.setColor(0x212121)
-					.setTitle(answer)
-					.setImage(url)
-					.build()).queue();
+		} else {
+			String answer = json.getString("answer") + "!";
+			answer = Character.toUpperCase(answer.charAt(0)) + answer.substring(1);
+			String url = json.getString("image");
+			event.getChannel().sendMessage(new EmbedBuilder().setColor(0x212121).setTitle(answer).setImage(url).build()).queue();
 		}
 	}
 

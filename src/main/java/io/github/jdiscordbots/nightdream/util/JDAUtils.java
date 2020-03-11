@@ -113,7 +113,11 @@ public class JDAUtils {
 		}
 		return owner;
 	}
-	
+	/**
+	 * This method should be called if a token leak occurs.<br>
+	 * This shuts down the bot, logs the token leak using the FATAL level and removes the user from the admin IDs.
+	 * @param user the {@link User} that caused/commanded the token leak
+	 */
 	public static void tokenLeakAlert(User user) {
 		user.getJDA().shutdownNow();
 		NDLogger.logWithModule(LogType.FATAL, "Eval", user.getAsTag() + "(" + user.getId() + ") tried to get the bot token");
