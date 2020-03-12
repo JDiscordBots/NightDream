@@ -1,5 +1,6 @@
 package io.github.jdiscordbots.nightdream;
 
+import static io.github.jdiscordbots.jdatesting.TestUtils.setNumOfMessagesForAutoDelete;
 import static io.github.jdiscordbots.jdatesting.TestUtils.setNumOfMessagesToCheck;
 import static io.github.jdiscordbots.jdatesting.TestUtils.setTimeout;
 
@@ -43,7 +44,8 @@ public class JDALoader {
 			TestUtils.setLogger(str->log.log(LogType.INFO, str));
 		}
 		setTimeout(Durations.TEN_SECONDS);
-		setNumOfMessagesToCheck(10);
+		setNumOfMessagesToCheck(2);
+		setNumOfMessagesForAutoDelete(5);
 		return jda;
 	}
 
