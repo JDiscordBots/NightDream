@@ -58,7 +58,7 @@ public class Info implements Command {
                 JDAInfo.VERSION,
                 Year.now().getValue(), NightDream.VERSION
     			);
-        if (event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_ATTACH_FILES)) {
+        if (event.getGuild().getSelfMember().hasPermission(event.getChannel(),Permission.MESSAGE_ATTACH_FILES)) {
         	TextToGraphics.sendTextAsImage(event.getChannel(), "info", send, event.getAuthor().getAsMention());
         }else {
         	event.getChannel().sendMessage(send).queue();
