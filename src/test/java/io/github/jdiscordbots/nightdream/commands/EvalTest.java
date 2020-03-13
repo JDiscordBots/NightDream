@@ -24,7 +24,6 @@ public class EvalTest extends AbstractAdminCommandTest{
 	public void testCommandType() {
 		assertSame(CommandType.META, new Eval().getType());
 	}
-	
 	@Test
 	public void testNoErrorOnEmptyExpression() {
 		sendCommand("eval");
@@ -33,7 +32,7 @@ public class EvalTest extends AbstractAdminCommandTest{
 	}
 	@Test
 	public void testSimpleExpression() {
-		sendCommand("eval 1+1");
+		sendCommand("eval return 1+1;");
 		Message resp=getMessage(msg->hasEmbed(msg,null, "```java\n2\n```"));
 		assertNotNull(resp);
 		assertTrue(hasEmbed(resp, embed->embed.getFooter().getText().startsWith("java.lang.Integer | ")));
@@ -41,8 +40,9 @@ public class EvalTest extends AbstractAdminCommandTest{
 	}
 	@Test
 	public void testCorrectMessageObj() {
-		sendCommand("eval message");
-		Message cmdMsg=getMessage(message->message.getContentRaw().endsWith("eval message"));
+		sendCommand("eval return message;");
+		Message cmdMsg=getMessage(message->message.getContentRaw().endsWith("eval return message;"));
+		assertNotNull(cmdMsg);
 		Message resp=getMessage(msg->hasEmbed(msg,null, "```java\n"+cmdMsg+"\n```"));
 		assertNotNull(resp);
 		assertTrue(hasEmbed(resp, embed->embed.getFooter().getText().startsWith(ReceivedMessage.class.getCanonicalName()+" | ")));

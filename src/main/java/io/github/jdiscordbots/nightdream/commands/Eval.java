@@ -13,55 +13,158 @@ import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import bsh.EvalError;
 import bsh.Interpreter;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
+import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
+import javax.tools.ToolProvider;
 
 @BotCommand("eval")
 public class Eval implements Command {
 
 	private static final String LATEST_EXCEPTION_KEY_NAME="err";
-	private static final Interpreter shell=new Interpreter();
-
+	
+	//bsh
+	private static Interpreter shell=new Interpreter();
+	
+	//Java Compiler(only in JDK)
+	private static JavaCompiler compiler;
+	private static File parentDir;
+	
+	static {
+		try {
+			compiler=ToolProvider.getSystemJavaCompiler();
+			parentDir=Files.createTempDirectory("NightDreamEval").toFile();
+		} catch (IOException e) {
+			compiler=null;
+			parentDir=null;
+		}
+	}
+	
+	private Object compileAndEvaluate(String className,String code,Map<String,Object> params)throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		
+		File sourceFile = new File(parentDir,className+".java");
+		if(!sourceFile.exists()) {
+			try(Writer writer=new BufferedWriter(new FileWriter(sourceFile))){
+				writer.write("public class ");
+				writer.write(className);
+				writer.write("{public static Object eval(");
+				boolean[] hasPrev= {false};//array because lamda can only use effectively final variables
+				params.forEach((k,v)->{
+					try {
+						if(hasPrev[0]) {
+							writer.write(',');
+						}else {
+							hasPrev[0]=true;
+						}
+						writer.write(v.getClass().getCanonicalName());
+						writer.write(' ');
+						writer.write(k);
+						
+					} catch (IOException e) {
+						throw new UncheckedIOException(e);
+					}
+				});
+				writer.write("){if(true){\n"+code+"\n}return null;}}");
+			}catch(UncheckedIOException e) {
+				throw e.getCause();
+			}
+			try(StandardJavaFileManager standardFileManager = compiler.getStandardFileManager(null, null, null)){
+				standardFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(parentDir));
+				Iterable<? extends JavaFileObject> compilationUnits = standardFileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile));
+				compiler.getTask(null, standardFileManager, null,null,null, compilationUnits).call();
+			}
+		}
+		try(URLClassLoader loader = URLClassLoader.newInstance(new URL[] {parentDir.toURI().toURL()}, Eval.class.getClassLoader())){
+			Class<?> clazz = loader.loadClass(className);
+			Method method = clazz.getDeclaredMethod("eval",params.values().stream().map(Object::getClass).toArray(Class<?>[]::new));
+			return method.invoke(null,params.values().toArray());
+		}
+	}
+	private String getClassName(String code, Map<String, Object> params) {
+		try {
+			MessageDigest digest=MessageDigest.getInstance("SHA-256");
+			digest.update(params.keySet().toString().getBytes(StandardCharsets.UTF_8));
+			return binToString(digest.digest(code.getBytes(StandardCharsets.UTF_8)));
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	private String binToString(byte[] data) {
+		StringBuilder sb=new StringBuilder();
+		for (int i = 0; i < data.length; i++) {
+			if(data[i]<0) {
+				data[i]*=-1;
+			}
+			do{
+				sb.append((char)('A'+data[i]%26));
+				data[i]/=26;
+			}while(data[i]>0);
+		}
+		return sb.toString();
+	}
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		return JDAUtils.checkOwner(event,args!=null);	
 	}
 	private void exec(GuildMessageReceivedEvent event,String script) {
 		try {
+			if(compiler==null) {
+				for (Entry<String, Object> entry : params.entrySet()) {
+					shell.set(entry.getKey(), entry.getValue());
+				}
+			}
 			long time=System.nanoTime();
-			Object result=shell.eval(script);
+			Object result;
+			if(compiler!=null) {
+				result=compileAndEvaluate(getClassName(script,params), script, params);
+			}else {
+				
+				result = shell.eval(script);
+			}
 			time=System.nanoTime()-time;
 			if(result != null&&result.toString().contains(BotData.getToken())) {
 				JDAUtils.tokenLeakAlert(event.getAuthor());
 			}else {
 				onSuccess(result,event,time);
 			}
-		} catch (EvalError|RuntimeException e) {
-			try {
-				shell.set(LATEST_EXCEPTION_KEY_NAME, e);
-			} catch (EvalError e1) {
-				NDLogger.logWithoutModule(LogType.WARN, "eval exception while setting error value",e);
-			}
+		} catch (Exception e) {
+			params.put(LATEST_EXCEPTION_KEY_NAME, e);
 			onError(e,event);
 		}
 	}
+	private Map<String,Object> params=new HashMap<>();
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
+		params.put("event", event);
+    	params.put("jda", event.getJDA());
+    	params.put("guild", event.getGuild());
+    	params.put("channel", event.getChannel());
+    	params.put("message", event.getMessage());
         
-        try {
-        	shell.set("event", event);
-			shell.set("jda", event.getJDA());
-			shell.set("guild", event.getGuild());
-	        shell.set("channel", event.getChannel());
-	        shell.set("message", event.getMessage());
-		} catch (EvalError e) {
-			NDLogger.logWithoutModule(LogType.WARN, "eval exception while setting command values",e);
-		}
         int index=event.getMessage().getContentRaw().indexOf(' ');
         String script=index==-1?"":event.getMessage().getContentRaw().substring(index+1);
         if (script.contains("getToken")) {
