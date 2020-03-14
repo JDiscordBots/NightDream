@@ -11,120 +11,57 @@ import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
+import javassist.CannotCompileException;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.CtNewMethod;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import bsh.Interpreter;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.UncheckedIOException;
-import java.io.Writer;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.StandardLocation;
-import javax.tools.ToolProvider;
+import java.util.UUID;
 
 @BotCommand("eval")
 public class Eval implements Command {
 
-	private static final String LATEST_EXCEPTION_KEY_NAME="err";
-	
-	//bsh
-	private static Interpreter shell=new Interpreter();
-	
-	//Java Compiler(only in JDK)
-	private static JavaCompiler compiler;
-	private static File parentDir;
-	
-	static {
-		try {
-			compiler=ToolProvider.getSystemJavaCompiler();
-			parentDir=Files.createTempDirectory("NightDreamEval").toFile();
-		} catch (IOException e) {
-			compiler=null;
-			parentDir=null;
+	private Exception lastErr;
+	public abstract static class Sandbox{
+		protected Exception err;
+		protected GuildMessageReceivedEvent event;
+		protected JDA jda;
+		protected Guild guild;
+		protected GuildChannel channel;
+		protected Message message;
+		public Sandbox(GuildMessageReceivedEvent event) {
+			this.event=event;
+			jda=event.getJDA();
+			guild=event.getGuild();
+			channel=event.getChannel();
+			message=event.getMessage();
 		}
+		public abstract Object execute();
 	}
-	
-	private Object compileAndEvaluate(String className,String code,Map<String,Object> params)throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		
-		File sourceFile = new File(parentDir,className+".java");
-		if(!sourceFile.exists()) {
-			try(Writer writer=new BufferedWriter(new FileWriter(sourceFile))){
-				writer.write("public class ");
-				writer.write(className);
-				writer.write("{public static Object eval(");
-				boolean[] hasPrev= {false};//array because lamda can only use effectively final variables
-				params.forEach((k,v)->{
-					try {
-						if(hasPrev[0]) {
-							writer.write(',');
-						}else {
-							hasPrev[0]=true;
-						}
-						writer.write(v.getClass().getCanonicalName());
-						writer.write(' ');
-						writer.write(k);
-						
-					} catch (IOException e) {
-						throw new UncheckedIOException(e);
-					}
-				});
-				writer.write("){if(true){\n"+code+"\n}return null;}}");
-			}catch(UncheckedIOException e) {
-				throw e.getCause();
-			}
-			try(StandardJavaFileManager standardFileManager = compiler.getStandardFileManager(null, null, null)){
-				standardFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(parentDir));
-				Iterable<? extends JavaFileObject> compilationUnits = standardFileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile));
-				compiler.getTask(null, standardFileManager, null,null,null, compilationUnits).call();
-			}
-		}
-		try(URLClassLoader loader = URLClassLoader.newInstance(new URL[] {parentDir.toURI().toURL()}, Eval.class.getClassLoader())){
-			Class<?> clazz = loader.loadClass(className);
-			Method method = clazz.getDeclaredMethod("eval",params.values().stream().map(Object::getClass).toArray(Class<?>[]::new));
-			return method.invoke(null,params.values().toArray());
-		}
-	}
-	private String getClassName(String code, Map<String, Object> params) {
-		try {
-			MessageDigest digest=MessageDigest.getInstance("SHA-256");
-			digest.update(params.keySet().toString().getBytes(StandardCharsets.UTF_8));
-			return binToString(digest.digest(code.getBytes(StandardCharsets.UTF_8)));
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
-		}
-	}
-	private String binToString(byte[] data) {
-		StringBuilder sb=new StringBuilder();
-		for (int i = 0; i < data.length; i++) {
-			if(data[i]<0) {
-				data[i]*=-1;
-			}
-			do{
-				sb.append((char)('A'+data[i]%26));
-				data[i]/=26;
-			}while(data[i]>0);
-		}
-		return sb.toString();
+	private Object compileAndEvaluate(String code,GuildMessageReceivedEvent event)throws Exception {
+		ClassPool pool=ClassPool.getDefault();
+		CtClass superClass=pool.getCtClass(Eval.class.getCanonicalName()+"$"+Sandbox.class.getSimpleName());
+		CtClass cl=pool.makeClass(UUID.randomUUID().toString(), superClass);
+		pool.importPackage("java.util.stream");
+		cl.defrost();
+		CtMethod method = CtNewMethod.delegator(superClass.getDeclaredMethod("execute"), cl);
+		method.setBody("{if(true){\n"+code+"\n}return null;}");
+		cl.addMethod(method);
+		Class<?> clazz = cl.toClass();
+		Sandbox instance= (Sandbox) clazz.getConstructor(event.getClass()).newInstance(event);
+		instance.err=lastErr;
+		return instance.execute();
 	}
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
@@ -132,19 +69,9 @@ public class Eval implements Command {
 	}
 	private void exec(GuildMessageReceivedEvent event,String script) {
 		try {
-			if(compiler==null) {
-				for (Entry<String, Object> entry : params.entrySet()) {
-					shell.set(entry.getKey(), entry.getValue());
-				}
-			}
 			long time=System.nanoTime();
 			Object result;
-			if(compiler!=null) {
-				result=compileAndEvaluate(getClassName(script,params), script, params);
-			}else {
-				
-				result = shell.eval(script);
-			}
+			result=compileAndEvaluate(script, event);
 			time=System.nanoTime()-time;
 			if(result != null&&result.toString().contains(BotData.getToken())) {
 				JDAUtils.tokenLeakAlert(event.getAuthor());
@@ -152,19 +79,13 @@ public class Eval implements Command {
 				onSuccess(result,event,time);
 			}
 		} catch (Exception e) {
-			params.put(LATEST_EXCEPTION_KEY_NAME, e);
+			lastErr=e;
 			onError(e,event);
 		}
 	}
-	private Map<String,Object> params=new HashMap<>();
+	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
-		params.put("event", event);
-    	params.put("jda", event.getJDA());
-    	params.put("guild", event.getGuild());
-    	params.put("channel", event.getChannel());
-    	params.put("message", event.getMessage());
-        
         int index=event.getMessage().getContentRaw().indexOf(' ');
         String script=index==-1?"":event.getMessage().getContentRaw().substring(index+1);
         if (script.contains("getToken")) {
@@ -192,10 +113,16 @@ public class Eval implements Command {
 		}
 	}
 	protected void onError(Exception e,GuildMessageReceivedEvent event) {
-		e.setStackTrace(new StackTraceElement[0]);
+		
+		//
 		try(StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw)){
-			e.printStackTrace(pw);
+			if(e instanceof CannotCompileException) {
+				pw.println(((CannotCompileException) e).getReason());
+			}else {
+				e.printStackTrace(pw);
+			}
+			
 			String exStr = sw.getBuffer().toString();
 			int len = exStr.length();
 			if(len > 1000) {

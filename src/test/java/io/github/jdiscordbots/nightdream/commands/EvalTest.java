@@ -32,7 +32,7 @@ public class EvalTest extends AbstractAdminCommandTest{
 	}
 	@Test
 	public void testSimpleExpression() {
-		sendCommand("eval return 1+1;");
+		sendCommand("eval return Integer.valueOf(1+1);");
 		Message resp=getMessage(msg->hasEmbed(msg,null, "```java\n2\n```"));
 		assertNotNull(resp);
 		assertTrue(hasEmbed(resp, embed->embed.getFooter().getText().startsWith("java.lang.Integer | ")));
