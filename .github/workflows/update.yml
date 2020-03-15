@@ -12,7 +12,7 @@ jobs:
     - name: update dependencies
       run: mvn versions:use-latest-versions
     - name: fail if there are no dependency updates
-      run: git diff --exit-code
+      run: ! git diff --exit-code
   test:
     strategy:
       max-parallel: 1
