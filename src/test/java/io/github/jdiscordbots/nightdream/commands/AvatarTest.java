@@ -30,7 +30,7 @@ public class AvatarTest {
 	}
 	@Test
 	public void testWithServerOwner() {
-		Member owner = getTestingChannel().getGuild().getOwner();
+		Member owner = getTestingChannel().getGuild().retrieveOwner(false).complete();
 		assertNull(getAlreadySentMessage(getTestingChannel(), msg->hasEmbed(msg, embed->embed.getImage()!=null&&Objects.equals(embed.getImage().getUrl(),getJDA().getSelfUser().getAvatarUrl()))));
 		sendCommand("avatar "+owner.getAsMention());
 		Message resp=getMessage(msg->hasEmbed(msg, embed->embed.getImage()!=null&&embed.getImage().getUrl().equals(owner.getUser().getAvatarUrl()+"?size=2048")));
