@@ -16,6 +16,7 @@ import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.internal.JDAImpl;
@@ -37,7 +38,8 @@ public class NightDream {
 	private static final NDLogger DISCORD_CTL_LOG=NDLogger.getLogger("Discord");
 	
 	public static ShardManager initialize() {
-		final DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder(BotData.getToken())
+		//final DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder(BotData.getToken())
+		final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createLight(BotData.getToken(), GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
 			.setAutoReconnect(true) //should the Bot reconnect?
 			.setStatus(OnlineStatus.ONLINE) //the online Status
 			/*	possible statuses:
@@ -58,9 +60,6 @@ public class NightDream {
 			.setRequestTimeoutRetry(true);
 		ShardManager bot=null;
 		try {
-			
-			
-
 			// initialize commands and listeners
 			Reflections ref = new Reflections("io.github.jdiscordbots.nightdream");
 			CMD_CTL_LOG.log(LogType.INFO, "Loading Commands and Listeners...");

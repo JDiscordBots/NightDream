@@ -47,13 +47,18 @@ public class Eval implements Command {
 			channel=event.getChannel();
 			message=event.getMessage();
 		}
-		public abstract Object execute();
+		public abstract Object execute() throws Exception;//NOSONAR
 	}
 	private Object compileAndEvaluate(String code,GuildMessageReceivedEvent event)throws Exception {
 		ClassPool pool=ClassPool.getDefault();
 		CtClass superClass=pool.getCtClass(Eval.class.getCanonicalName()+"$"+Sandbox.class.getSimpleName());
 		CtClass cl=pool.makeClass(UUID.randomUUID().toString(), superClass);
 		pool.importPackage("java.util.stream");
+		pool.importPackage("io.github.jdiscordbots.nightdream.util");
+		pool.importPackage("java.util");
+		pool.importPackage("net.dv8tion.jda.api");
+		pool.importPackage("net.dv8tion.jda.api.entities");
+		pool.importPackage("org.json");
 		cl.defrost();
 		CtMethod method = CtNewMethod.delegator(superClass.getDeclaredMethod("execute"), cl);
 		method.setBody("{if(true){\n"+code+"\n}return null;}");
