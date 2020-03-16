@@ -38,8 +38,7 @@ public class NightDream {
 	private static final NDLogger DISCORD_CTL_LOG=NDLogger.getLogger("Discord");
 	
 	public static ShardManager initialize() {
-		//final DefaultShardManagerBuilder builder = new DefaultShardManagerBuilder(BotData.getToken())
-		final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createLight(BotData.getToken(), GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
+		final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createLight(BotData.getToken(), GatewayIntent.getIntents(GatewayIntent.DEFAULT))
 			.setAutoReconnect(true) //should the Bot reconnect?
 			.setStatus(OnlineStatus.ONLINE) //the online Status
 			/*	possible statuses:
