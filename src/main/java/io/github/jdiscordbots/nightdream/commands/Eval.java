@@ -16,6 +16,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+import javassist.LoaderClassPath;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
@@ -31,7 +32,6 @@ import java.util.UUID;
 
 @BotCommand("eval")
 public class Eval implements Command {
-
 	private Exception lastErr;
 	public abstract static class Sandbox{
 		protected Exception err;
@@ -51,6 +51,7 @@ public class Eval implements Command {
 	}
 	private Object compileAndEvaluate(String code,GuildMessageReceivedEvent event)throws Exception {
 		ClassPool pool=ClassPool.getDefault();
+		pool.insertClassPath(new LoaderClassPath(Eval.class.getClassLoader()));
 		CtClass superClass=pool.getCtClass(Eval.class.getCanonicalName()+"$"+Sandbox.class.getSimpleName());
 		CtClass cl=pool.makeClass(UUID.randomUUID().toString(), superClass);
 		pool.importPackage("java.util.stream");
@@ -63,7 +64,7 @@ public class Eval implements Command {
 		CtMethod method = CtNewMethod.delegator(superClass.getDeclaredMethod("execute"), cl);
 		method.setBody("{if(true){\n"+code+"\n}return null;}");
 		cl.addMethod(method);
-		Class<?> clazz = cl.toClass();
+		Class<?> clazz = cl.toClass(Eval.class.getClassLoader(),Eval.class.getProtectionDomain());
 		Sandbox instance= (Sandbox) clazz.getConstructor(event.getClass()).newInstance(event);
 		instance.err=lastErr;
 		return instance.execute();
@@ -134,6 +135,7 @@ public class Eval implements Command {
 				len = 1000;
 			}
 			event.getChannel().sendMessage("`ERROR`\n```java\n" + exStr.substring(0, len) + "\n```").queue();
+			NDLogger.logWithModule(LogType.INFO, "eval", "error: ", e);
 		} catch (IOException ignored) {
 			NDLogger.logWithoutModule(LogType.ERROR, "Error within incorrect user input/eval execution error handling", e);
 		}
