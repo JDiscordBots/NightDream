@@ -47,8 +47,8 @@ public class SQLStorage implements Storage {
 	private static final String INSERT_FORMAT="INSERT INTO %s ("+DEFAULT_KEY_NAME+",%s) VALUES (?, ?);";
 	private static final String UPDATE_FORMAT="UPDATE %s SET %s = ? WHERE "+DEFAULT_KEY_NAME+" = ?;";
 	private static final String DELETE_FORMAT="DELETE FROM %s WHERE %s = ?;";
-	private static final String CREATE_FORMAT="CREATE TABLE  %s ("+DEFAULT_KEY_NAME+" varchar(46) primary key,"+DEFAULT_VALUE_NAME+" varchar(46));";
-	private static final String CREATE_SUB_FORMAT="CREATE TABLE %s ("+DEFAULT_KEY_NAME+" varchar(46) primary key,%s);";
+	private static final String CREATE_FORMAT="CREATE TABLE  %s ("+DEFAULT_KEY_NAME+" varchar(100) primary key,"+DEFAULT_VALUE_NAME+" varchar(100));";
+	private static final String CREATE_SUB_FORMAT="CREATE TABLE %s ("+DEFAULT_KEY_NAME+" varchar(100) primary key,%s);";
 
 	private final Statement stmt;
 	private void close(AutoCloseable toClose) {
@@ -144,7 +144,7 @@ public class SQLStorage implements Storage {
 				insertStmt.setString(2, defaultValue);
 			}
 			ret = read(selectStmt, insertStmt,
-					String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->""+s+" varchar(46) default ''").collect(Collectors.joining(", "))));
+					String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->""+s+" varchar(100) default ''").collect(Collectors.joining(", "))));
 		} catch (SQLException e) {
 			LOG.log(LogType.WARN, DB_READ_FAIL_MSG, e);
 		}
@@ -199,7 +199,7 @@ public class SQLStorage implements Storage {
 			PreparedStatement updateStmt=prepareStatement(UPDATE_FORMAT,unit,subUnit);
 			updateStmt.setString(1, value);
 			updateStmt.setString(2, key);
-			write(selector,insertStmt,updateStmt,String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->""+s+" varchar(46) default ''").collect(Collectors.joining(", "))));
+			write(selector,insertStmt,updateStmt,String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->""+s+" varchar(100) default ''").collect(Collectors.joining(", "))));
 		}catch (SQLException e) {
 			LOG.log(LogType.WARN, DB_WRITE_FAIL_MSG, e);
 		}

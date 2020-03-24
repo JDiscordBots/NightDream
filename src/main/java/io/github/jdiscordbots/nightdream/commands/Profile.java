@@ -119,7 +119,7 @@ public class Profile implements Command {
 	}
 	private static void desc(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
 		if(args.length<offset+1) {
-			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need more than "+offset+" argument"+(offset==1?"":"s")+".").queue();
+			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need more than "+args.length+" argument"+(args.length==1?"":"s")+".").queue();
 			return;
 		}
 		
@@ -128,7 +128,7 @@ public class Profile implements Command {
 		setProp(event.getAuthor(), DESC_PROP_NAME, desc);
 	}
 	private static void color(EmbedBuilder builder,String[] args,int offset,GuildMessageReceivedEvent event) {
-		if(args.length<offset+1||args[offset].length()!=7) {
+		if(args.length!=offset+1||args[offset].length()!=7||!args[offset].startsWith("#")) {
 			event.getChannel().sendMessage("Format "+IconChooser.getArrowIcon(event.getChannel())+" `" + BotData.getPrefix(event.getGuild()) + "profile color #123456`").queue();
 			return;
 		}
@@ -154,7 +154,7 @@ public class Profile implements Command {
 			return;
 		}
 		if(args.length<offset+2) {
-			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need more than "+offset+" argument"+(offset==0?"":"s")+".").queue();
+			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need more than "+args.length+" argument"+(args.length==1?"":"s")+".").queue();
 			return;
 		}
 		String name=args[offset];
