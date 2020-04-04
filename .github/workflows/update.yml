@@ -44,6 +44,7 @@ jobs:
       env:
         ND_token: ${{secrets.botToken}}
         ND_admin: ${{ secrets.botAdmin }}
+        ND_testuser: ${{secrets.testUser}}
   Spotbugs:
     runs-on: ubuntu-latest
     needs: update

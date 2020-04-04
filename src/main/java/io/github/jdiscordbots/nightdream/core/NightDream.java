@@ -19,12 +19,15 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.dv8tion.jda.internal.JDAImpl;
 import org.reflections.Reflections;
 
 import javax.security.auth.login.LoginException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
+import java.util.EnumSet;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -40,6 +43,7 @@ public class NightDream {
 	public static ShardManager initialize() {
 		final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createLight(BotData.getToken(), GatewayIntent.getIntents(GatewayIntent.DEFAULT))
 			.setAutoReconnect(true) //should the Bot reconnect?
+			.setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
 			.setStatus(OnlineStatus.ONLINE) //the online Status
 			/*	possible statuses:
 				OnlineStatus.DO_NOT_DISTURB
@@ -82,7 +86,7 @@ public class NightDream {
 		} catch (final LoginException e) {
 			DISCORD_CTL_LOG.log(LogType.ERROR, "The entered token is not valid!");
 		} catch (final IllegalArgumentException e) {
-			DISCORD_CTL_LOG.log(LogType.ERROR, "There is no token entered!");
+			DISCORD_CTL_LOG.log(LogType.ERROR, "There is no token entered!",e);
 		}
 		return bot;
 	}
