@@ -24,11 +24,25 @@ public class EvalTest extends AbstractAdminCommandTest{
 	public void testCommandType() {
 		assertSame(CommandType.META, new Eval().getType());
 	}
-	@Test
-	public void testNoErrorOnEmptyExpression() {
-		sendCommand("eval");
+	private void testNull(String code) {
+		sendCommand("eval "+code);
 		Message resp=getMessage(msg->msg.getContentRaw().startsWith("`ERROR`\n"));
 		assertNull(resp);
+		resp=getMessage(msg->hasEmbed(msg, embed->embed.getFooter()!=null&&embed.getFooter().getText().startsWith("null | ")));
+		assertNotNull(resp);
+		resp.delete().queue();
+	}
+	@Test
+	public void testNoErrorOnEmptyExpression() {
+		testNull("");
+	}
+	@Test
+	public void testInlineComment() {
+		testNull("//");
+	}
+	@Test
+	public void testMultiLineComment() {
+		testNull("/*");
 	}
 	@Test
 	public void testSimpleExpression() {
@@ -48,6 +62,14 @@ public class EvalTest extends AbstractAdminCommandTest{
 		assertTrue(hasEmbed(resp, embed->embed.getFooter().getText().startsWith(ReceivedMessage.class.getCanonicalName()+" | ")));
 		resp.delete().queue();
 	}
+	@Test
+	public void testPrimitiveReturnType() {
+		sendCommand("eval return 0;");
+		Message resp=getMessage("`ERROR`\n```java\nInvalid return type - The method must either return an object or nothing.\n```");
+		assertNotNull(resp);
+		resp.delete().queue();
+	}
+	
 	@Override
 	protected String cmdName() {
 		return "eval";

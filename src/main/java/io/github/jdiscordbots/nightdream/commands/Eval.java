@@ -20,8 +20,8 @@ import javassist.LoaderClassPath;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.IOException;
@@ -32,13 +32,13 @@ import java.util.UUID;
 
 @BotCommand("eval")
 public class Eval implements Command {
-	private Exception lastErr;
+	private Throwable lastErr;
 	public abstract static class Sandbox{
-		protected Exception err;
+		protected Throwable err;
 		protected GuildMessageReceivedEvent event;
 		protected JDA jda;
 		protected Guild guild;
-		protected GuildChannel channel;
+		protected TextChannel channel;
 		protected Message message;
 		public Sandbox(GuildMessageReceivedEvent event) {
 			this.event=event;
@@ -62,7 +62,7 @@ public class Eval implements Command {
 		pool.importPackage("org.json");
 		cl.defrost();
 		CtMethod method = CtNewMethod.delegator(superClass.getDeclaredMethod("execute"), cl);
-		method.setBody("{if(true){\n"+code+"\n}return null;}");
+		method.setBody("{if(true){\n"+code+"\n/**/}return null;}");
 		cl.addMethod(method);
 		Class<?> clazz = cl.toClass(Eval.class.getClassLoader(),Eval.class.getProtectionDomain());
 		Sandbox instance= (Sandbox) clazz.getConstructor(event.getClass()).newInstance(event);
@@ -84,7 +84,7 @@ public class Eval implements Command {
 			}else {
 				onSuccess(result,event,time);
 			}
-		} catch (Exception e) {
+		} catch (VerifyError|Exception e) {
 			lastErr=e;
 			onError(e,event);
 		}
@@ -118,13 +118,13 @@ public class Eval implements Command {
 			event.getChannel().sendMessage(eb.build()).queue();
 		}
 	}
-	protected void onError(Exception e,GuildMessageReceivedEvent event) {
-		
-		//
+	protected void onError(Throwable e,GuildMessageReceivedEvent event) {
 		try(StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw)){
 			if(e instanceof CannotCompileException) {
 				pw.println(((CannotCompileException) e).getReason());
+			}else if(e instanceof VerifyError){
+				pw.println("Invalid return type - The method must either return an object or nothing.");
 			}else {
 				e.printStackTrace(pw);
 			}

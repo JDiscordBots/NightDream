@@ -23,22 +23,22 @@ public class SEval extends Eval {
 	}
 	
 	@Override
-	protected void onError(Exception e, GuildMessageReceivedEvent event) {
-		final Message msg = event.getChannel().sendMessage("No...").complete();
-		msg.addReaction("\u274C").queue();
-		new Timer().schedule(new TimerTask() {
-			
-			@Override
-			public void run() {
-				Message message = event.getChannel().retrieveMessageById(msg.getId()).complete();
-				for (MessageReaction reaction : message.getReactions()) {
-					if("\u274C".equals(reaction.getReactionEmote().getEmoji()) && reaction.retrieveUsers().complete().contains(event.getAuthor())) {
-						message.delete().queue();
-						return;
+	protected void onError(Throwable e, GuildMessageReceivedEvent event) {
+		event.getChannel().sendMessage("No...").queue(msg->{
+			msg.addReaction("\u274C").queue();
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					Message message = event.getChannel().retrieveMessageById(msg.getId()).complete();
+					for (MessageReaction reaction : message.getReactions()) {
+						if("\u274C".equals(reaction.getReactionEmote().getEmoji()) && reaction.retrieveUsers().complete().contains(event.getAuthor())) {
+							message.delete().queue();
+							return;
+						}
 					}
 				}
-			}
-		}, 60000);
+			}, 60000);
+		});
 	}
 	@Override
 	public String help() {

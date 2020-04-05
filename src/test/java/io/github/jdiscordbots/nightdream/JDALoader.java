@@ -44,7 +44,7 @@ public class JDALoader {
 		NDLogger log=NDLogger.getLogger("test");
 		log.log(LogType.DEBUG,"Admins: "+Arrays.toString(BotData.getAdminIDs()));
 		if(log.isLoggable(LogType.INFO)) {
-			TestUtils.setLogger(str->log.log(LogType.INFO, str));
+			TestUtils.setLogger(str->log.log(LogType.DEBUG, str));
 		}
 		setTimeout(Durations.TEN_SECONDS);
 		setNumOfMessagesToCheck(2);
