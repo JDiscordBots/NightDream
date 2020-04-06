@@ -9,9 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import javax.tools.ToolProvider;
+
 import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
+import io.github.jdiscordbots.nightdream.logging.LogType;
+import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.internal.entities.ReceivedMessage;
 
@@ -65,11 +69,27 @@ public class EvalTest extends AbstractAdminCommandTest{
 	@Test
 	public void testPrimitiveReturnType() {
 		sendCommand("eval return 0;");
-		Message resp=getMessage("`ERROR`\n```java\nInvalid return type - The method must either return an object or nothing.\n```");
+		Message resp;
+		if(ToolProvider.getSystemJavaCompiler()==null) {
+			NDLogger.getLogger("test").log(LogType.INFO,"testing eval without a java compiler");
+			resp = getMessage("`ERROR`\n```java\nInvalid return type - The method must either return an object or nothing.\n```");
+		}else {
+			NDLogger.getLogger("test").log(LogType.INFO,"testing eval with a java compiler");
+			resp=getMessage(msg->hasEmbed(msg,null, "```java\n0\n```"));
+		}
 		assertNotNull(resp);
 		resp.delete().queue();
 	}
-	
+	@Test
+	public void testJavaStreams() {
+		if(ToolProvider.getSystemJavaCompiler()!=null) {
+			sendCommand("eval return Stream.of(3,4,5).filter(number->number%2==0).findFirst().orElse(-1);");
+			Message resp=getMessage(msg->hasEmbed(msg,null, "```java\n4\n```"));
+			assertNotNull(resp);
+			assertTrue(hasEmbed(resp, embed->embed.getFooter().getText().startsWith("java.lang.Integer | ")));
+			resp.delete().queue();
+		}
+	}
 	@Override
 	protected String cmdName() {
 		return "eval";

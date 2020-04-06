@@ -36,6 +36,7 @@ public class SEvalTest extends AbstractAdminCommandTest{
 		Message resp=getMessage("No...");
 		assertNotNull(resp);
 		Message respDel=getMessage(msg->"No...".equals(msg.getContentRaw())&&!msg.getId().equals(resp.getId()));
+		assertNotNull(respDel);
 		resp.clearReactions().queue();
 		Awaitility.await().atLeast(59, TimeUnit.SECONDS).atMost(65,TimeUnit.SECONDS).until(()->getAlreadySentMessage(getTestingChannel(),msg->msg.getId().equals(respDel.getId()))==null);
 		Message stillResp=getAlreadySentMessage(getTestingChannel(), msg->msg.getId().equals(resp.getId()));
