@@ -42,7 +42,7 @@ public class NightDream {
 	public static ShardManager initialize() {
 		final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createLight(BotData.getToken(), GatewayIntent.getIntents(GatewayIntent.DEFAULT))
 			.setAutoReconnect(true) //should the Bot reconnect?
-			.setEnabledCacheFlags(EnumSet.of(CacheFlag.VOICE_STATE))
+			.enableCache(EnumSet.of(CacheFlag.VOICE_STATE))
 			.setStatus(OnlineStatus.ONLINE) //the online Status
 			/*	possible statuses:
 				OnlineStatus.DO_NOT_DISTURB

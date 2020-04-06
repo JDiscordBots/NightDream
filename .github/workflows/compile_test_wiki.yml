@@ -46,7 +46,7 @@ jobs:
         propFile:  src/test/resources/jda-tests.properties
         pixabayAPIKey: ${{ secrets.pixabayAPIKey }}
     - name: "automated (feature) tests"
-      run: "mvn -B test"
+      run: "mvn -B -Dio.github.jdiscordbots.nightdream.logging.Level.test=DEBUG test"
       env:
         ND_token: ${{secrets.botToken}}
         ND_admin: ${{secrets.botAdmin}}

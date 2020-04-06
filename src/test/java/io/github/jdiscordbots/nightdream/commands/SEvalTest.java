@@ -5,10 +5,7 @@ import static io.github.jdiscordbots.jdatesting.TestUtils.getMessage;
 import static io.github.jdiscordbots.jdatesting.TestUtils.getTestingChannel;
 import static io.github.jdiscordbots.jdatesting.TestUtils.hasEmbed;
 import static io.github.jdiscordbots.jdatesting.TestUtils.sendCommand;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +34,7 @@ public class SEvalTest extends AbstractAdminCommandTest{
 		assertNotNull(resp);
 		Message respDel=getMessage(msg->"No...".equals(msg.getContentRaw())&&!msg.getId().equals(resp.getId()));
 		assertNotNull(respDel);
+		assertNotEquals(resp.getId(),respDel.getId());
 		resp.clearReactions().queue();
 		Awaitility.await().atLeast(59, TimeUnit.SECONDS).atMost(65,TimeUnit.SECONDS).until(()->getAlreadySentMessage(getTestingChannel(),msg->msg.getId().equals(respDel.getId()))==null);
 		Message stillResp=getAlreadySentMessage(getTestingChannel(), msg->msg.getId().equals(resp.getId()));

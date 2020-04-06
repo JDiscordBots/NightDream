@@ -41,10 +41,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -73,7 +70,7 @@ public class Eval implements Command {
 			parentDir=null;
 		}
 	}
-	private Object compileAndEvaluateJdkCompiler(String code,GuildMessageReceivedEvent event)throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, CannotCompileException {
+	private Object compileAndEvaluateJdkCompiler(String code,GuildMessageReceivedEvent event) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, CannotCompileException, NoSuchAlgorithmException {
 		Map<String,Object> params=new HashMap<>();
 		params.put("event", event);
     	params.put("jda", event.getJDA());
@@ -83,7 +80,7 @@ public class Eval implements Command {
     	params.put("err", lastErr);
 		return compileAndEvaluateJdkCompiler(getClassName(code,params), code, params);
 	}
-	private Object compileAndEvaluateJdkCompiler(String className,String code,Map<String,Object> params)throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, CannotCompileException {
+	private Object compileAndEvaluateJdkCompiler(String className,String code,Map<String,Object> params)throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, CannotCompileException {
 		File sourceFile = new File(parentDir,className+".java");
 		String errData="This file has previously been compiled and there was a compilation error";
 		if(!sourceFile.exists()) {
@@ -118,8 +115,8 @@ public class Eval implements Command {
 			}
 			try(StandardJavaFileManager standardFileManager = compiler.getStandardFileManager(null, null, null);
 					StringWriter out=new StringWriter()){
-				standardFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(parentDir));
-				Iterable<? extends JavaFileObject> compilationUnits = standardFileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile));
+				standardFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singletonList(parentDir));
+				Iterable<? extends JavaFileObject> compilationUnits = standardFileManager.getJavaFileObjectsFromFiles(Collections.singletonList(sourceFile));
 				compiler.getTask(out, standardFileManager, null,null,null, compilationUnits).call();
 				errData=out.toString();
 			}
@@ -132,14 +129,10 @@ public class Eval implements Command {
 			throw new CannotCompileException(errData);
 		}
 	}
-	private String getClassName(String code, Map<String, Object> params) {
-		try {
-			MessageDigest digest=MessageDigest.getInstance("SHA-256");
-			digest.update(params.keySet().toString().getBytes(StandardCharsets.UTF_8));
-			return binToString(digest.digest(code.getBytes(StandardCharsets.UTF_8)));
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
-		}
+	private String getClassName(String code, Map<String, Object> params) throws NoSuchAlgorithmException {
+		MessageDigest digest=MessageDigest.getInstance("SHA-256");
+		digest.update(params.keySet().toString().getBytes(StandardCharsets.UTF_8));
+		return binToString(digest.digest(code.getBytes(StandardCharsets.UTF_8)));
 	}
 	private String binToString(byte[] data) {
 		StringBuilder sb=new StringBuilder();
@@ -177,7 +170,7 @@ public class Eval implements Command {
 	
 	
 	
-	private static void init(String... impots) throws NotFoundException {
+	private static void init() throws NotFoundException {
 		ClassPool p=ClassPool.getDefault();
 		p.insertClassPath(new LoaderClassPath(Eval.class.getClassLoader()));
 		CtClass cl=p.getCtClass(Eval.class.getCanonicalName()+"$"+Sandbox.class.getSimpleName());
