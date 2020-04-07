@@ -16,6 +16,7 @@ import java.util.TimerTask;
 
 @BotCommand("seval")
 public class SEval extends Eval {
+	private Timer timer;
 
 	@Override
 	protected void onSuccess(Object result, GuildMessageReceivedEvent event,long time) {
@@ -26,7 +27,7 @@ public class SEval extends Eval {
 	protected void onError(Throwable e, GuildMessageReceivedEvent event) {
 		event.getChannel().sendMessage("No...").queue(msg->{
 			msg.addReaction("\u274C").queue();
-			new Timer().schedule(new TimerTask() {
+			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					Message message = event.getChannel().retrieveMessageById(msg.getId()).complete();
