@@ -16,7 +16,7 @@ import java.util.TimerTask;
 
 @BotCommand("seval")
 public class SEval extends Eval {
-	private Timer timer;
+	private Timer timer=new Timer();
 
 	@Override
 	protected void onSuccess(Object result, GuildMessageReceivedEvent event,long time) {
