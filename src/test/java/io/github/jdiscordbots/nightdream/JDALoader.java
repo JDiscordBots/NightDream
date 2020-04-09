@@ -55,7 +55,7 @@ public class JDALoader {
 		if(testUser==null) {
 			String env=System.getenv("ND_testuser");
 			if(env!=null) {
-				testUser=getTestingChannel().getGuild().getMemberById(env);
+				testUser=getTestingChannel().getGuild().retrieveMemberById(env).complete();
 			}
 			if(testUser==null) {
 				testUser=getTestingChannel().getGuild().retrieveOwner().complete();
