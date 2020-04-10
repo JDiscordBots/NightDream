@@ -15,6 +15,7 @@ import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
+import io.github.jdiscordbots.nightdream.JDALoader;
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -29,11 +30,11 @@ public class AvatarTest {
 		msg.delete().queue();
 	}
 	@Test
-	public void testWithServerOwner() {
-		Member owner = getTestingChannel().getGuild().retrieveOwner(false).complete();
+	public void testWithMention() {
+		Member testUser = JDALoader.getTestUser();
 		assertNull(getAlreadySentMessage(getTestingChannel(), msg->hasEmbed(msg, embed->embed.getImage()!=null&&Objects.equals(embed.getImage().getUrl(),getJDA().getSelfUser().getAvatarUrl()))));
-		sendCommand("avatar "+owner.getAsMention());
-		Message resp=getMessage(msg->hasEmbed(msg, embed->embed.getImage()!=null&&embed.getImage().getUrl().equals(owner.getUser().getAvatarUrl()+"?size=2048")));
+		sendCommand("avatar "+testUser.getAsMention());
+		Message resp=getMessage(msg->hasEmbed(msg, embed->embed.getImage()!=null&&embed.getImage().getUrl().equals(testUser.getUser().getAvatarUrl()+"?size=2048")));
 		assertNotNull(resp);
 		resp.delete().queue();
 	}
