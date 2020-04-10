@@ -26,7 +26,7 @@ public interface Storage {
 	 * @param defaultSubUnits the sub-units that would be created if there is no entry of them in the table(may not be implemented)
 	 * @return the read String
 	 */
-	public String read(String unit,String subUnit, String key, String defaultValue, String... defaultSubUnits);
+	String read(String unit,String subUnit, String key, String defaultValue, String... defaultSubUnits);
 	
 	/**
 	 * reads a String from a given unit and key<br>

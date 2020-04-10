@@ -125,4 +125,8 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 			}
 		}
 	}
+	
+	public Map<String, Message> getMessages() {
+		return messages;
+	}
 }

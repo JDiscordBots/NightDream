@@ -340,7 +340,9 @@ public class BotData {
 	 */
 	public static void reloadAllProperties() {
 		bkpStorage.reload();
-		STORAGE.reload();
+		if(bkpStorage!=STORAGE) {
+			STORAGE.reload();
+		}
 	}
 	/**
 	 * removes the Properties for a Guild

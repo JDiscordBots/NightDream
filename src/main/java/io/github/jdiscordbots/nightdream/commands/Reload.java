@@ -36,7 +36,7 @@ public class Reload implements Command {
 			JDAUtils.msg(event.getChannel(), "reloaded!");
 			return;
 		}
-		switch(args[0]) {
+		switch(args[0].toLowerCase()) {
 		case "login":
 		case "reconnect":
 			JDAUtils.msg(event.getChannel(), "reconnecting...",Color.YELLOW);
@@ -52,12 +52,12 @@ public class Reload implements Command {
 			});
 			break;
 		case "props":
-			JDAUtils.msg(event.getChannel(), "reloading all Properties...");
+			JDAUtils.msg(event.getChannel(), "reloading all Properties...",Color.YELLOW);
 			BotData.reloadAllProperties();
 			JDAUtils.msg(event.getChannel(), "reloaded!");
 			break;
 		case "guild":
-			JDAUtils.msg(event.getChannel(), "reloading guild Properties...");
+			JDAUtils.msg(event.getChannel(), "reloading guild Properties...",Color.YELLOW);
 			BotData.reloadGuildProperties(event.getGuild());
 			JDAUtils.msg(event.getChannel(), "reloaded guild Properties!");
 			break;
@@ -67,6 +67,7 @@ public class Reload implements Command {
 					((MsgLogListener)obj).clearCache();
 				}
 			}
+			JDAUtils.msg(event.getChannel(), "message cache reloaded!");
 			break;
 		default:
 			JDAUtils.errmsg(event.getChannel(), "Invalid argument "+args[0]);
