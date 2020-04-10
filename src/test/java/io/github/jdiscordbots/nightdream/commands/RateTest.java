@@ -42,6 +42,7 @@ public class RateTest {
 	public void testHelp() {
 		assertEquals("Rates a User", new Rate().help());
 	}
+	@Test
 	public void testCommandType() {
 		assertSame(CommandType.FUN, new Rate().getType());
 	}
