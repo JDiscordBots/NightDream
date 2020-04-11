@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Map;
 
 import org.awaitility.Awaitility;
@@ -21,8 +20,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnJre;
-import org.junit.jupiter.api.condition.JRE;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import io.github.jdiscordbots.nightdream.listeners.MsgLogListener;
@@ -31,27 +28,34 @@ import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.JDA.Status;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.internal.JDAImpl;
+import sun.misc.Unsafe;
 
-@EnabledOnJre(value = JRE.JAVA_8)//Field seems not to have the attribute modifiers on newer JDK versions
+@SuppressWarnings("restriction")
 public class ReloadTest extends AbstractAdminCommandTest{
 	
-	private static Field storageField;
 	private static ReloadStorage storage;
+	private static Object staticFieldBase;
+	private static long staticFieldOffset;
+	private static Unsafe unsafe;
 	@BeforeAll
 	public static void setUp() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		getJDA();
 		Storage oldStorage=BotData.STORAGE;
-		storageField = BotData.class.getDeclaredField("STORAGE");
-		storageField.setAccessible(true);
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
-	    modifiersField.setAccessible(true);
-	    modifiersField.setInt(storageField, storageField.getModifiers() & ~Modifier.FINAL);
-	    storage=new ReloadStorage(oldStorage);
-	    storageField.set(null, storage);
+		
+		Field storageField = BotData.class.getDeclaredField("STORAGE");
+		
+		final Field unsafeField = Unsafe.class.getDeclaredField("theUnsafe");
+        unsafeField.setAccessible(true);
+        unsafe = (Unsafe) unsafeField.get(null);
+		
+        staticFieldBase = unsafe.staticFieldBase(storageField);
+        staticFieldOffset = unsafe.staticFieldOffset(storageField);
+        storage=new ReloadStorage(oldStorage);
+        unsafe.putObject(staticFieldBase, staticFieldOffset, storage);
 	}
 	@AfterAll
 	public static void finish() throws IllegalArgumentException, IllegalAccessException {
-		storageField.set(null, storage.getForward());
+		unsafe.putObject(staticFieldBase, staticFieldOffset, storage.getForward());
 	}
 	@AfterEach
 	public void resetStats() {
@@ -90,7 +94,6 @@ public class ReloadTest extends AbstractAdminCommandTest{
 		resp.delete().queue();
 		assertEquals(0, storage.getFullReloadCount());
 		assertTrue(storage.getGuildReloads().isEmpty());
-		
 	}
 	@Test
 	public void testPropsReload() {
