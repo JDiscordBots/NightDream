@@ -24,7 +24,7 @@ public class RateTest {
 		Message resp=getMessage(msg->hasEmbed(msg,embed->("Rating "+getJDA().getSelfUser().getName()).equals(embed.getTitle())));
 		assertNotNull(resp);
 		assertTrue(hasEmbed(resp, embed->embed.getDescription()!=null&&embed.getDescription().matches("[1-9][0-9]?/100")));
-		assertTrue(hasEmbed(resp, embed->Integer.parseInt(embed.getDescription().substring(0, 2))>0));
+		assertTrue(hasEmbed(resp, embed->Integer.parseInt(embed.getDescription().substring(0, embed.getDescription().indexOf('/')))>0));
 		resp.delete().queue();
 	}
 	@Test
@@ -34,7 +34,7 @@ public class RateTest {
 		Message resp=getMessage(msg->hasEmbed(msg,embed->("Rating "+toTag.getUser().getName()).equals(embed.getTitle())));
 		assertNotNull(resp);
 		assertTrue(hasEmbed(resp, embed->embed.getDescription()!=null&&embed.getDescription().matches("[1-9][0-9]?/100")));
-		assertTrue(hasEmbed(resp, embed->Integer.parseInt(embed.getDescription().substring(0, 2))>0));
+		assertTrue(hasEmbed(resp, embed->Integer.parseInt(embed.getDescription().substring(0, embed.getDescription().indexOf('/')))>0));
 		resp.delete().queue();
 	}
 	
