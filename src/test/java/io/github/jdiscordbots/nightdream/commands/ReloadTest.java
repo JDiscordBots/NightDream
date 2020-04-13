@@ -28,6 +28,7 @@ import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.JDA.Status;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.internal.JDAImpl;
+import net.dv8tion.jda.internal.entities.SelfUserImpl;
 import sun.misc.Unsafe;
 
 @SuppressWarnings("restriction")
@@ -79,7 +80,6 @@ public class ReloadTest extends AbstractAdminCommandTest{
 		testFullPropertiesReload();
 	}
 	@Test
-	@Disabled("This test is temporarily disabled as it crashes most tests executed after it.")
 	public void testReconnect() {
 		sendCommand("reload login");
 		Awaitility.await().atMost(Durations.ONE_SECOND).until(()->!((JDAImpl)getJDA()).getClient().isConnected());
