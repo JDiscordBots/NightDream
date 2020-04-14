@@ -34,7 +34,7 @@ jobs:
         echo "testing-channel=$testChan" >> $propFile
         mkdir test
         echo "prefix=nt." >> test/Guild.properties
-        echo "KSoftToken==$kSoftToken=" >> test/NightDream.properties
+        echo "KSoftToken=$kSoftToken" >> test/NightDream.properties
         echo "PixabayAPIKey=$pixabayAPIKey" >> test/NightDream.properties
       env:
         testChan: ${{ secrets.testingChannel }}
