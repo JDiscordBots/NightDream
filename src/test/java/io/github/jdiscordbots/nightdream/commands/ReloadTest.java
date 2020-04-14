@@ -18,7 +18,6 @@ import org.awaitility.Durations;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
@@ -28,7 +27,6 @@ import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.JDA.Status;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.internal.JDAImpl;
-import net.dv8tion.jda.internal.entities.SelfUserImpl;
 import sun.misc.Unsafe;
 
 @SuppressWarnings("restriction")

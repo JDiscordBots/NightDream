@@ -16,6 +16,7 @@ import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import io.github.jdiscordbots.nightdream.util.KSoftUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.image.ImageTag;
 
 public abstract class KSoftImageCommand implements Command {
@@ -24,11 +25,17 @@ public abstract class KSoftImageCommand implements Command {
 	protected abstract ImageTag getImageTag();
 	
 	@Override
-	public void action(String[] args, GuildMessageReceivedEvent event) {
-		if(KSoftUtil.getApi()==null) {
+	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
+		KSoftAPI api = KSoftUtil.getApi();
+		if(api==null&&args==null) {
 			JDAUtils.errmsg(event.getChannel(), "This command is disabled due there is no KSoft API token");
-			return;
 		}
+		//else
+		return api!=null;
+	}
+	
+	@Override
+	public void action(String[] args, GuildMessageReceivedEvent event) {
 		event.getChannel().sendTyping().queue(x->
 			KSoftUtil.getImage(getImageTag(),img->{
 				EmbedBuilder builder=new EmbedBuilder();
