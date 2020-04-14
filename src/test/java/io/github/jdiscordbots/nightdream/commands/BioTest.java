@@ -36,7 +36,7 @@ public class BioTest {
 
 	@Test
 	public void testWithValidArgument() {
-		final JSONObject settings = GeneralUtils.getJSONFromURL("https://api.discord.bio/v1/userdetails/358291050957111296").getJSONObject("payload").getJSONObject("settings");
+		final JSONObject settings = GeneralUtils.getJSONFromURL("https://api.discord.bio/v1/user/details/358291050957111296").getJSONObject("payload").getJSONObject("settings");
 		assertNotNull(settings);
 		assertFalse(settings.isNull("status"));
 		assertFalse(settings.isNull("user_id"));

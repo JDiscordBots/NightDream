@@ -42,7 +42,7 @@ public class Bio implements Command {
 
 		try {
 			final String slug = URLEncoder.encode(String.join(" ", args), "UTF-8");
-			final JSONObject object = GeneralUtils.getJSONFromURL(BASE_URL + "userdetails/" + slug);
+			final JSONObject object = GeneralUtils.getJSONFromURL(BASE_URL + "user/details/" + slug);
 
 			if (object == null || !object.getBoolean("success")) {
 				channel.sendMessage(error404).queue();
