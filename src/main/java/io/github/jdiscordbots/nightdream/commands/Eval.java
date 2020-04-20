@@ -117,11 +117,11 @@ public class Eval implements Command {
 					StringWriter out=new StringWriter()){
 				standardFileManager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singletonList(parentDir));
 				Iterable<? extends JavaFileObject> compilationUnits = standardFileManager.getJavaFileObjectsFromFiles(Collections.singletonList(sourceFile));
-				compiler.getTask(out, standardFileManager, null,null,null, compilationUnits).call();
+				compiler.getTask(out, standardFileManager, null,Arrays.asList("-classpath",System.getProperty("java.class.path")),null, compilationUnits).call();
 				errData=out.toString();
 			}
 		}
-		try(URLClassLoader loader = URLClassLoader.newInstance(new URL[] {parentDir.toURI().toURL()}, Eval.class.getClassLoader())){
+		try(URLClassLoader loader = URLClassLoader.newInstance(new URL[] {parentDir.toURI().toURL()}, Thread.currentThread().getContextClassLoader())){
 			Class<?> clazz = loader.loadClass(className);
 			Method method = clazz.getDeclaredMethod("eval",params.values().stream().map(Object::getClass).toArray(Class<?>[]::new));
 			return method.invoke(null,params.values().toArray());
