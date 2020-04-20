@@ -121,7 +121,7 @@ public class Eval implements Command {
 				errData=out.toString();
 			}
 		}
-		try(URLClassLoader loader = URLClassLoader.newInstance(new URL[] {parentDir.toURI().toURL()}, Thread.currentThread().getContextClassLoader())){
+		try(URLClassLoader loader = URLClassLoader.newInstance(new URL[] {parentDir.toURI().toURL()}, Eval.class.getClassLoader())){
 			Class<?> clazz = loader.loadClass(className);
 			Method method = clazz.getDeclaredMethod("eval",params.values().stream().map(Object::getClass).toArray(Class<?>[]::new));
 			return method.invoke(null,params.values().toArray());
