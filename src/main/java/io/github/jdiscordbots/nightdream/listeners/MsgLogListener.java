@@ -16,40 +16,23 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.time.Duration;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections4.map.ReferenceMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @BotListener
-public class MsgLogListener extends ListenerAdapter implements Runnable {
+public class MsgLogListener extends ListenerAdapter {
 
-	private static final TemporalAmount CACHE_EXPIRE_TIME = Duration.ofDays(1);
-	
-	private Map<String, Message> messages=new HashMap<>();
-	private BlockingQueue<String> cachedMessageIDs=new LinkedBlockingQueue<>();
+	private Map<String, Message> messages=new ReferenceMap<>();
 	private static final Logger LOG=LoggerFactory.getLogger(MsgLogListener.class);
 	private static final Pattern SIZE_SPLIT=Pattern.compile("\\	?size");
 	
 	public void clearCache() {
 		messages.clear();
-		cachedMessageIDs.clear();
-	}
-	
-	public MsgLogListener() {
-		Thread cacheClearer=new Thread(this);
-		cacheClearer.setDaemon(true);
-		cacheClearer.start();
 	}
 	
 	@Override
@@ -60,9 +43,6 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 				LOG.info("A message that has not been cached was deleted.");
 			}else {
 				messages.remove(event.getMessageId());
-				if(!cachedMessageIDs.remove(event.getMessageId())) {
-					LOG.warn("A message that has been cached but was not marked to be cached was deleted.");
-				}
 				EmbedBuilder builder=new EmbedBuilder();
 				builder.setColor(0x212121)
 				.setTitle("Deleted Message")
@@ -103,30 +83,9 @@ public class MsgLogListener extends ListenerAdapter implements Runnable {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		if(!(BotData.getMsgLogChannel(event.getGuild())==null||BotData.getMsgLogChannel(event.getGuild()).isEmpty())) {
 			messages.put(event.getMessageId(), event.getMessage());
-			cachedMessageIDs.add(event.getMessageId());
 		}
 	}
 
-	@Override
-	public void run() {
-		while(!Thread.currentThread().isInterrupted()) {
-			try {
-				String msgId = cachedMessageIDs.take();
-				ZonedDateTime now = Instant.now().atZone(ZoneId.systemDefault());
-				ZonedDateTime sent = messages.get(msgId).getTimeCreated().atZoneSameInstant(ZoneId.systemDefault());
-				ZonedDateTime delTime = sent.plus(CACHE_EXPIRE_TIME);
-				if(delTime.isAfter(now)) {
-					//wait
-					long between = ChronoUnit.MILLIS.between(now,delTime);
-					Thread.sleep(between);
-				}
-				messages.remove(msgId);
-			}catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-		}
-	}
-	
 	public Map<String, Message> getMessages() {
 		return messages;
 	}
