@@ -40,6 +40,8 @@ import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -57,6 +59,8 @@ public class Eval implements Command {
 	
 	private static ClassPool pool;
 	private static CtClass superClass;
+	
+	private ExecutorService evalThreadPool=Executors.newCachedThreadPool();
 	
 	private Throwable lastErr=new Exception();
 	
@@ -231,7 +235,7 @@ public class Eval implements Command {
         if (script.contains("getToken")) {
         	JDAUtils.tokenLeakAlert(event.getAuthor());
 		}else {
-			new Thread(()->exec(event,script)).start();
+			evalThreadPool.execute(()->exec(event,script));
 		}
 	}
 	
