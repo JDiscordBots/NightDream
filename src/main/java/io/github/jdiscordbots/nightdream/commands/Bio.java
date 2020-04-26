@@ -7,8 +7,6 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.GeneralUtils;
 import io.github.jdiscordbots.nightdream.util.IconChooser;
@@ -16,11 +14,15 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
 
 @BotCommand("bio")
 public class Bio implements Command {
+	
+	private static final Logger LOG=LoggerFactory.getLogger(Bio.class);
 
 	private static final String BASE_URL = "https://api.discord.bio/v1/";
 	private static final String DISCORD_CDN_AVATARS_BASE_URL = "https://cdn.discordapp.com/avatars/";
@@ -70,7 +72,7 @@ public class Bio implements Command {
 				channel.sendMessage(eb.build()).queue();
 			}
 		} catch (Exception e) {
-			NDLogger.getLogger("Command Handler").log(LogType.ERROR, "Failed to url encode query", e);
+			LOG.error("Failed to url encode query", e);
 			channel.sendMessage(error).queue();
 		}
 	}

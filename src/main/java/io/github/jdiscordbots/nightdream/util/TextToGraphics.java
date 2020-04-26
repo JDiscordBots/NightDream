@@ -11,8 +11,8 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 
 import javax.imageio.ImageIO;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -44,7 +44,7 @@ public class TextToGraphics implements Runnable {
 	private static final Color FG_COLOR=new Color(0x212121);
 	private static final float FONT_SIZE_BODY=13F;
 	private static final float FONT_SIZE_NOSPACE=14F;
-	private static final NDLogger LOG=NDLogger.getLogger("Image Processing");
+	private static final Logger LOG=LoggerFactory.getLogger(TextToGraphics.class);
 	private static TextToGraphics executor=new TextToGraphics();
 	private static final Thread graphicsThread;
 	
@@ -62,7 +62,7 @@ public class TextToGraphics implements Runnable {
 			body = Font.createFont(Font.TRUETYPE_FONT, bodyStream);
 			heading = Font.createFont(Font.TRUETYPE_FONT, headingStream);
 		} catch (IOException|FontFormatException e) {
-			LOG.log(LogType.WARN,"Error while loading fonts - Using Arial",e);
+			LOG.warn("Error while loading fonts - Using Arial",e);
 		}
 		FONT_BODY= body.deriveFont(FONT_SIZE_BODY);
 		FONT_NOSPACE=heading.deriveFont(FONT_SIZE_NOSPACE).deriveFont(Font.BOLD);
@@ -89,7 +89,7 @@ public class TextToGraphics implements Runnable {
 					baos.flush();
 					chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName+".jpg").queue();
 				} catch (IOException e) {
-					LOG.log(LogType.WARN,"Error while generating image from text: \n"+imgText,e);
+					LOG.warn("Error while generating image from text: \n"+imgText,e);
 				}
 			});
 			LOCK.notifyAll();

@@ -7,7 +7,6 @@
 
 package io.github.jdiscordbots.nightdream.storage;
 
-import io.github.jdiscordbots.nightdream.logging.*;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -28,13 +27,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Implementation of {@link Storage} but with sql databases
  */
 public class SQLStorage implements Storage {
 
 	private Connection connection;
-	private static final NDLogger LOG = NDLogger.getLogger("Storage");
+	private static final Logger LOG=LoggerFactory.getLogger(SQLStorage.class);
 	
 	private Map<String, PreparedStatement> stmtBuffer=new HashMap<>();
 	
@@ -56,7 +58,7 @@ public class SQLStorage implements Storage {
 			try{
 				toClose.close();
 			}catch(Exception e){
-				LOG.log(LogType.ERROR,"Cannot close Statement",e);
+				LOG.error("Cannot close Statement",e);
 			}
 		}
 	}
@@ -76,7 +78,7 @@ public class SQLStorage implements Storage {
 	}
 	public SQLStorage() throws SQLException {
 		URL[] urls=Stream.of(BotData.DATA_DIR.list()).map(SQLStorage::getURL).toArray(URL[]::new);
-		URLClassLoader loader=AccessController.doPrivileged((PrivilegedAction<URLClassLoader>)(() -> new URLClassLoader(urls)));
+		URLClassLoader loader=AccessController.doPrivileged((PrivilegedAction<URLClassLoader>)(() -> new URLClassLoader(urls)));//NOSONAR this cast is necessary
 		ServiceLoader<Driver> drivers = ServiceLoader.load(java.sql.Driver.class, loader);
 		Properties info=new Properties();
 		if(BotData.getDatabaseUser()!=null&&!"".equals(BotData.getDatabaseUser())) {
@@ -89,13 +91,13 @@ public class SQLStorage implements Storage {
 			try {
 				connection=driver.connect(BotData.getDatabaseUrl(), info);
 			}catch(SQLException e) {
-				LOG.log(LogType.WARN,"cannot connect to DB with driver "+driver.getClass().getName()+" and URL "+BotData.getDatabaseUrl(),e);
+				LOG.warn("cannot connect to DB with driver "+driver.getClass().getName()+" and URL "+BotData.getDatabaseUrl(),e);
 			}
 		}
 		if(connection==null) {
 			connection=DriverManager.getConnection(BotData.getDatabaseUrl(), info);
 		}
-		LOG.log(LogType.DONE, "Successfully connected to database");
+		LOG.info("Successfully connected to database");
 		stmt=connection.createStatement();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(this::closeAll));
@@ -146,7 +148,7 @@ public class SQLStorage implements Storage {
 			ret = read(selectStmt, insertStmt,
 					String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->""+s+" varchar(100) default ''").collect(Collectors.joining(", "))));
 		} catch (SQLException e) {
-			LOG.log(LogType.WARN, DB_READ_FAIL_MSG, e);
+			LOG.warn(DB_READ_FAIL_MSG, e);
 		}
 		if(ret==null||"".equals(ret)) {
 			ret=defaultValue;
@@ -171,7 +173,7 @@ public class SQLStorage implements Storage {
 			ret = read(selectStmt, insertStmt,
 					String.format(CREATE_FORMAT, unit));
 		} catch (SQLException e) {
-			LOG.log(LogType.WARN, DB_READ_FAIL_MSG, e);
+			LOG.warn(DB_READ_FAIL_MSG, e);
 		}
 		if(ret==null||"".equals(ret)) {
 			ret=defaultValue;
@@ -201,7 +203,7 @@ public class SQLStorage implements Storage {
 			updateStmt.setString(2, key);
 			write(selector,insertStmt,updateStmt,String.format(CREATE_SUB_FORMAT, unit,Stream.of(defaultRows).map(s->""+s+" varchar(100) default ''").collect(Collectors.joining(", "))));
 		}catch (SQLException e) {
-			LOG.log(LogType.WARN, DB_WRITE_FAIL_MSG, e);
+			LOG.warn(DB_WRITE_FAIL_MSG, e);
 		}
 	}
 	@Override
@@ -217,7 +219,7 @@ public class SQLStorage implements Storage {
 			updateStmt.setString(2, key);
 			write(selector,insertStmt,updateStmt,String.format(CREATE_FORMAT, unit));
 		}catch (SQLException e) {
-			LOG.log(LogType.WARN, DB_WRITE_FAIL_MSG, e);
+			LOG.warn(DB_WRITE_FAIL_MSG, e);
 		}
 	}
 
@@ -229,7 +231,7 @@ public class SQLStorage implements Storage {
 			deleteStmt.setString(1, key);
 			deleteStmt.execute();
 		} catch (SQLException e) {
-			LOG.log(LogType.WARN, "Failed to delete sql data", e);
+			LOG.warn("Failed to delete sql data", e);
 		}
 	}
 
@@ -241,7 +243,7 @@ public class SQLStorage implements Storage {
 			updateStmt.setString(2, key);
 			updateStmt.execute();
 		}catch (SQLException e) {
-			LOG.log(LogType.WARN, DB_WRITE_FAIL_MSG, e);
+			LOG.warn(DB_WRITE_FAIL_MSG, e);
 		}
 	}
 	@Override

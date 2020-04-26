@@ -14,16 +14,18 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 @BotCommand("license")
 public class License implements Command{
+	
+	private static final Logger LOG=LoggerFactory.getLogger(License.class);
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -59,8 +61,7 @@ public class License implements Command{
 			event.getChannel().sendMessage("No such license! Use the SPDX ID.").queue();
 		} catch (IOException e) {
 			event.getChannel().sendMessage("An Error occured - Please try again later").queue();
-			NDLogger.logWithModule(LogType.WARN, "Commands", String.format("Cannot load License %s: %s", args[0], e.getClass().getName()));
-			
+			LOG.warn("Cannot load License {}: {}", args[0], e.getClass().getName());
 		}
 	}
 	private static void fillStringBuilderWithJSONArray(StringBuilder sb,JSONArray arr) {

@@ -48,7 +48,7 @@ jobs:
         kSoftToken: ${{ secrets.ksoftToken }}
         pixabayAPIKey: ${{ secrets.pixabayAPIKey }}
     - name: "automated (feature) tests"
-      run: "mvn -B -Dio.github.jdiscordbots.nightdream.logging.Level.test=DEBUG test"
+      run: "mvn -B -Dio.github.jdiscordbots.nightdream.logging.Level.io.github.jdiscordbots.jdatesting.TestUtils=DEBUG test"
       env:
         ND_token: ${{secrets.botToken}}
         ND_admin: ${{secrets.botAdmin}}

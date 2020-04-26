@@ -7,8 +7,6 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -16,11 +14,14 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.Color;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @BotCommand("bugreport")
 public class BugReport implements Command {
 
 	private static final String DISABLED_INVALID_CHAN="Bug report command is disabled. To enable it, please insert a valid channel id into NightDream.properties.";
-	private static final NDLogger LOG=NDLogger.getLogger("Commands");
+	private static final Logger LOG=LoggerFactory.getLogger(BugReport.class);
 	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
@@ -46,20 +47,20 @@ public class BugReport implements Command {
 		if (BotData.getBugReportChannel() == null||"".equals(BotData.getBugReportChannel())) {
 			BotData.setBugReportChannel("");
 			if(args!=null) {
-				LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
+				LOG.warn(DISABLED_INVALID_CHAN);
 			}
 			return false;
 		}
 		try {
 			if(event.getJDA().getShardManager().getTextChannelById(BotData.getBugReportChannel())==null) {
 				if(args!=null) {
-					LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
+					LOG.warn(DISABLED_INVALID_CHAN);
 				}
 				return false;
 			}
 		} catch (NumberFormatException e) {
 			if(args!=null) {
-				LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
+				LOG.warn(DISABLED_INVALID_CHAN);
 			}
 			return false;
 		}

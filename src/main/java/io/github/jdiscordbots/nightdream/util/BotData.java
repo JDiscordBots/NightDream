@@ -23,12 +23,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * saving, loading, retrieving and setting data of the Bot
  */
 public class BotData {
 	
-	private static final NDLogger STORAGE_LOG = NDLogger.getLogger("Storage");
+	private static final Logger LOG=LoggerFactory.getLogger(BotData.class);
 	
 	private static final String PREFIX_PROP_NAME = "prefix";
 	
@@ -90,19 +93,19 @@ public class BotData {
 			}else if(dbUrl.startsWith("redis://")) {
 				dbUrl=dbUrl.substring("redis://".length());
 				tempStorage=new RedisStorage(dbUrl);
-				STORAGE_LOG.log(LogType.DONE, "Storage was set to redis database");
+				LOG.info("Storage was set to redis database");
 			}
 		}else {
 			try {
 				tempStorage = new SQLStorage();
-				STORAGE_LOG.log(LogType.DONE, "Storage was set to database");
+				LOG.info("Storage was set to database");
 			} catch (SQLException e) {
 				tempStorage = bkpStorage;
-				STORAGE_LOG.log(LogType.WARN, "DB loading failed",e);
+				LOG.warn("DB loading failed",e);
 			}
 		}
 		if(tempStorage==bkpStorage) {
-			STORAGE_LOG.log(LogType.DONE, "Storage was set to properties (files)");
+			LOG.info("Storage was set to properties (files)");
 		}
 		STORAGE = tempStorage;
 	}

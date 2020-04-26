@@ -1,7 +1,8 @@
 package io.github.jdiscordbots.nightdream.commands;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -9,7 +10,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
  * Interface for Commands<br>
  * @author Daniel Schmid
  */
-public interface Command {
+public interface Command {//NOSONAR logger constants are OK
+	
+	static final Logger LOG=LoggerFactory.getLogger(Command.class);
+	
 	/**
 	 * returns if the Command is blocked or something
 	 * @param args the Command-Arguments
@@ -31,8 +35,7 @@ public interface Command {
 	 * @param event The {@link GuildMessageReceivedEvent} of the incoming {@link Message}
 	 */
 	public default void executed(boolean success, GuildMessageReceivedEvent event) {
-		NDLogger.logWithModule(LogType.DEBUG, "Command System","Command "+event.getMessage().getContentDisplay()+" was executed "+(success?"successfully":" but an error occured"));
-		//Telemetry.addTelemetry(getClass());
+		LOG.debug("Command {} was executed {}",event.getMessage().getContentDisplay(),(success?"successfully":" but an error occured"));
 	}
 	/**
 	 * help for the Command<br>

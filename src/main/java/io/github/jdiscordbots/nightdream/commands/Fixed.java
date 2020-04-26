@@ -7,8 +7,6 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -18,11 +16,14 @@ import java.awt.Color;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @BotCommand("fixed")
 public class Fixed implements Command {
 
 	private static final String DISABLED_INVALID_CHAN = "Fixed command is disabled. To enable it, please insert a valid channel id into NightDream.properties.";
-	private static final NDLogger LOG=NDLogger.getLogger("Commands");
+	private static final Logger LOG=LoggerFactory.getLogger(Fixed.class);
 	
 	
 	@Override
@@ -68,13 +69,13 @@ public class Fixed implements Command {
 		try {
 			if(event.getJDA().getShardManager().getTextChannelById(BotData.getFixedBugsChannel())==null) {
 				if(args!=null) {
-					LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
+					LOG.warn(DISABLED_INVALID_CHAN);
 				}
 				return false;
 			}
 		} catch (IllegalArgumentException e) {
 			if(args!=null) {
-				LOG.log(LogType.WARN, DISABLED_INVALID_CHAN);
+				LOG.warn(DISABLED_INVALID_CHAN);
 			}
 			return false;
 		}

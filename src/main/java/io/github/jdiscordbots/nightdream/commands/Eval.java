@@ -7,8 +7,6 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import javassist.CannotCompileException;
@@ -49,8 +47,13 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @BotCommand("eval")
 public class Eval implements Command {
+	
+	private static final Logger LOG=LoggerFactory.getLogger(Eval.class);
 	
 	private static ClassPool pool;
 	private static CtClass superClass;
@@ -266,9 +269,9 @@ public class Eval implements Command {
 				len = 1000;
 			}
 			event.getChannel().sendMessage("`ERROR`\n```java\n" + exStr.substring(0, len) + "\n```").queue();
-			NDLogger.logWithModule(LogType.DEBUG, "eval", "error: ", e);
+			LOG.debug("eval", "error: ", e);
 		} catch (IOException ignored) {
-			NDLogger.logWithoutModule(LogType.ERROR, "Error within incorrect user input/eval execution error handling", e);
+			LOG.error("Error within incorrect user input/eval execution error handling", e);
 		}
 	}
 	@Override

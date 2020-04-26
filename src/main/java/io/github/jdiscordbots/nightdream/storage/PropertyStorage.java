@@ -22,8 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Guild;
 
@@ -32,7 +33,7 @@ import net.dv8tion.jda.api.entities.Guild;
  */
 public class PropertyStorage implements Storage {
 	
-	private static final NDLogger LOG=NDLogger.getLogger("storage");
+	private static final Logger LOG=LoggerFactory.getLogger(PropertyStorage.class);
 	private static final String FILE_SUFFIX=".properties";
 	
 	private Properties defaultProps;
@@ -221,13 +222,13 @@ public class PropertyStorage implements Storage {
 			try(Reader reader=new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), StandardCharsets.UTF_8)){
 				props.load(reader);
 			} catch (IOException e) {
-				LOG.log(LogType.WARN,"Cannot load Properties from file: "+file.getAbsolutePath(),e);
+				LOG.warn("Cannot load Properties from file: "+file.getAbsolutePath(),e);
 			}
 		}else {
 			try(Writer writer=new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(file)), StandardCharsets.UTF_8)){
 				props.store(writer,comment);
 			} catch (IOException e) {
-				LOG.log(LogType.WARN,"Cannot create file or save Properties: "+file.getAbsolutePath(),e);
+				LOG.warn("Cannot create file or save Properties: "+file.getAbsolutePath(),e);
 			}
 		}
 		return props;
@@ -245,7 +246,7 @@ public class PropertyStorage implements Storage {
 			try(Reader reader=new InputStreamReader(new BufferedInputStream(new FileInputStream(file)),StandardCharsets.UTF_8)){
 				props.load(reader);
 			} catch (IOException e) {
-				LOG.log(LogType.WARN,"Cannot load Properties from file: "+file.getAbsolutePath(),e);
+				LOG.warn("Cannot load Properties from file: "+file.getAbsolutePath(),e);
 			}
 		}
 		return props;

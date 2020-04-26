@@ -10,16 +10,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.awaitility.Durations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.github.jdiscordbots.jdatesting.TestUtils;
 import io.github.jdiscordbots.nightdream.core.NightDream;
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 
 public class JDALoader {
+	
+	private static final Logger LOG=LoggerFactory.getLogger(JDALoader.class);
+	private static final Logger TEST_LOG=LoggerFactory.getLogger(TestUtils.class);
+	
 	private static Member testUser;
 	private JDALoader() {
 		//prevent instantiation
@@ -41,10 +45,9 @@ public class JDALoader {
 			ids.add(jda.getSelfUser().getId());
 			BotData.setAdminIDs(ids.stream().toArray(String[]::new));
 		}
-		NDLogger log=NDLogger.getLogger("test");
-		log.log(LogType.DEBUG,"Admins: "+Arrays.toString(BotData.getAdminIDs()));
-		if(log.isLoggable(LogType.INFO)) {
-			TestUtils.setLogger(str->log.log(LogType.DEBUG, str));
+		LOG.info("Admins: "+Arrays.toString(BotData.getAdminIDs()));
+		if(TEST_LOG.isInfoEnabled()) {
+			TestUtils.setLogger(str->TEST_LOG.debug(str));
 		}
 		setTimeout(Durations.TEN_SECONDS);
 		setNumOfMessagesToCheck(2);

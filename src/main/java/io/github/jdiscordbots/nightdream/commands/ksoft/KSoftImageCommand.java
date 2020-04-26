@@ -7,9 +7,10 @@
 
 package io.github.jdiscordbots.nightdream.commands.ksoft;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.jdiscordbots.nightdream.commands.Command;
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import io.github.jdiscordbots.nightdream.util.IconChooser;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
@@ -20,6 +21,8 @@ import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.image.ImageTag;
 
 public abstract class KSoftImageCommand implements Command {
+	
+	private static final Logger LOG=LoggerFactory.getLogger(KSoftImageCommand.class);
 
 	protected abstract String getTitle();
 	protected abstract ImageTag getImageTag();
@@ -46,7 +49,7 @@ public abstract class KSoftImageCommand implements Command {
 				event.getChannel().sendMessage(builder.build()).queue();
 			},err->{
 				event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" could not load image").queue();
-				NDLogger.logWithModule(LogType.ERROR, "image", "could not load image",err);
+				LOG.error("could not load image",err);
 			})
 		);
 	}

@@ -18,6 +18,9 @@ import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import java.awt.Color;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.github.jdiscordbots.nightdream.logging.LogType;
 import io.github.jdiscordbots.nightdream.logging.NDLogger;
 
@@ -25,6 +28,7 @@ import io.github.jdiscordbots.nightdream.logging.NDLogger;
  * Utilities for interacting with Discord
  */
 public class JDAUtils {
+	private static final Logger LOG=LoggerFactory.getLogger(JDAUtils.class);
 	
 	private JDAUtils() {
 		//prevent instantiation
@@ -72,7 +76,7 @@ public class JDAUtils {
 		try {
 			return channel.sendMessage(message).complete();
 		} catch (InsufficientPermissionException e) {
-			NDLogger.logWithModule(LogType.DEBUG,"message Sender", "Cannot send Message \""+message.getDescription()+"\" in channel "+channel.getName()+"["+channel.getGuild().getName()+"]",e);
+			LOG.debug("Cannot send Message \""+message.getDescription()+"\" in channel "+channel.getName()+"["+channel.getGuild().getName()+"]",e);
 			return null;
 		}
 	}
@@ -120,7 +124,11 @@ public class JDAUtils {
 	 */
 	public static void tokenLeakAlert(User user) {
 		user.getJDA().shutdownNow();
-		NDLogger.logWithModule(LogType.FATAL, "Eval", user.getAsTag() + "(" + user.getId() + ") tried to get the bot token");
+		if(LOG instanceof NDLogger) {
+			((NDLogger)LOG).log(LogType.FATAL, user.getAsTag() + "(" + user.getId() + ") tried to get the bot token");
+		}else {
+			LOG.error("{} ({}) tried to get the bot token",user.getAsTag(),user.getId());
+		}
 		BotData.setAdminIDs(Stream.of(BotData.getAdminIDs()).filter(id->!user.getId().equals(id)).toArray(String[]::new));
 	}
 }

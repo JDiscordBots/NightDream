@@ -12,14 +12,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import javax.tools.ToolProvider;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.internal.entities.ReceivedMessage;
 
 public class EvalTest extends AbstractAdminCommandTest{
+	
+	private static final Logger LOG=LoggerFactory.getLogger(EvalTest.class);
+	
 	@Test 
 	public void testHelp() {
 		assertEquals("Evaluates Code", new Eval().help());
@@ -71,10 +74,10 @@ public class EvalTest extends AbstractAdminCommandTest{
 		sendCommand("eval return 0;");
 		Message resp;
 		if(ToolProvider.getSystemJavaCompiler()==null) {
-			NDLogger.getLogger("test").log(LogType.INFO,"testing eval without a java compiler");
+			LOG.info("testing eval without a java compiler");
 			resp = getMessage("`ERROR`\n```java\nInvalid return type - The method must either return an object or nothing.\n```");
 		}else {
-			NDLogger.getLogger("test").log(LogType.INFO,"testing eval with a java compiler");
+			LOG.info("testing eval with a java compiler");
 			resp=getMessage(msg->hasEmbed(msg,null, "```java\n0\n```"));
 		}
 		assertNotNull(resp);

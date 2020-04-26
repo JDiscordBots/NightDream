@@ -12,16 +12,16 @@ import java.awt.Color;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import io.github.jdiscordbots.nightdream.core.CommandHandler;
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.entities.Message;
 
 public abstract class AbstractKSoftImageTest {
-	private static final NDLogger LOG = NDLogger.getLogger("test");
+	private static final Logger LOG=LoggerFactory.getLogger(AbstractKSoftImageTest.class);
 	private static boolean init = false;
 	private static boolean tokenExists;
 
@@ -31,7 +31,7 @@ public abstract class AbstractKSoftImageTest {
 			getJDA();
 			if ("".equals(BotData.getKSoftToken()) || BotData.getKSoftToken() == null) {
 				tokenExists=false;
-				LOG.log(LogType.WARN,"There is no KSoft API token provided.");
+				LOG.warn("There is no KSoft API token provided.");
 			} else {
 				tokenExists=true;
 			}

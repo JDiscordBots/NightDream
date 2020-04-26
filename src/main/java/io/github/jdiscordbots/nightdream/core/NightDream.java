@@ -10,8 +10,6 @@ package io.github.jdiscordbots.nightdream.core;
 import io.github.jdiscordbots.nightdream.commands.BotCommand;
 import io.github.jdiscordbots.nightdream.commands.Command;
 import io.github.jdiscordbots.nightdream.listeners.BotListener;
-import io.github.jdiscordbots.nightdream.logging.LogType;
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
 import io.github.jdiscordbots.nightdream.util.BotData;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -22,6 +20,8 @@ import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.dv8tion.jda.internal.JDAImpl;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.lang.annotation.Annotation;
@@ -32,12 +32,9 @@ import java.util.stream.Collectors;
 
 public class NightDream {
 
-	private static final String ANNOTATED_WITH=" is annotated with @";
 	public static final String VERSION = "0.0.4";
 	
-	private static final NDLogger LOG=NDLogger.getLogger("System");
-	private static final NDLogger CMD_CTL_LOG=NDLogger.getLogger("Command Handler");
-	private static final NDLogger DISCORD_CTL_LOG=NDLogger.getLogger("Discord");
+	private static final Logger LOG=LoggerFactory.getLogger(NightDream.class);
 	
 	public static ShardManager initialize() {
 		final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createLight(BotData.getToken(), GatewayIntent.getIntents(GatewayIntent.DEFAULT))
@@ -64,28 +61,29 @@ public class NightDream {
 		try {
 			// initialize commands and listeners
 			Reflections ref = new Reflections("io.github.jdiscordbots.nightdream");
-			CMD_CTL_LOG.log(LogType.INFO, "Loading Commands and Listeners...");
+			LOG.info("Loading Commands and Listeners...");
 			addCommandsAndListeners(ref, builder);
-			CMD_CTL_LOG.log(LogType.INFO, "Loaded Commands and Listeners");
-			CMD_CTL_LOG.log(LogType.INFO, "available Commands: "
-					+ CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", ")));
+			LOG.info("Loaded Commands and Listeners");
+			if(LOG.isInfoEnabled()) {
+				LOG.info("available Commands: {}", CommandHandler.getCommands().keySet().stream().collect(Collectors.joining(", ")));
+			}
 			bot = builder.build();
-			DISCORD_CTL_LOG.log(LogType.INFO, "Logging in with "+bot.getShardsTotal()+" shard/-s.");
+			LOG.info("Logging in with {} shard/-s.",bot.getShardsTotal());
 			bot.getShards().forEach(jda->{
 				try {
 					jda.awaitReady();
 					((JDAImpl) jda).getGuildSetupController().clearCache();
 				} catch (InterruptedException e) {
-					DISCORD_CTL_LOG.log(LogType.WARN,"The main thread was interruped while waiting for a shard to connect initially",e);
+					LOG.warn("The main thread was interruped while waiting for a shard to connect initially",e);
 					Thread.currentThread().interrupt();
 				}
 			});
-			DISCORD_CTL_LOG.log(LogType.INFO, "Logged in. "+bot.getShardsRunning()+"/"+bot.getShardsTotal()+" shard/-s online.");
+			LOG.info("Logged in. {}/{} shard/-s online.",bot.getShardsRunning(),bot.getShardsTotal());
 			
 		} catch (final LoginException e) {
-			DISCORD_CTL_LOG.log(LogType.ERROR, "The entered token is not valid!");
+			LOG.error("The entered token is not valid!");
 		} catch (final IllegalArgumentException e) {
-			DISCORD_CTL_LOG.log(LogType.ERROR, "There is no token entered!",e);
+			LOG.error("There is no token entered!",e);
 		}
 		return bot;
 	}
@@ -135,6 +133,6 @@ public class NightDream {
         }
     }
 	private static void addActionWarn(Class<?> cl,Class<? extends Annotation> annotClass,String err) {
-		LOG.log(LogType.WARN,cl.getName() + ANNOTATED_WITH + annotClass.getName() + " but "+err);
+		LOG.warn("{} is annotated with @{} but {}",cl.getName(),annotClass.getName(),err);
 	}
 }

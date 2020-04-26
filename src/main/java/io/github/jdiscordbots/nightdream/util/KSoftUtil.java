@@ -9,7 +9,9 @@ package io.github.jdiscordbots.nightdream.util;
 
 import java.util.function.Consumer;
 
-import io.github.jdiscordbots.nightdream.logging.NDLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.explodingbush.ksoftapi.KSoftAPI;
 import net.explodingbush.ksoftapi.entities.TaggedImage;
 import net.explodingbush.ksoftapi.image.ImageTag;
@@ -19,12 +21,14 @@ import net.explodingbush.ksoftapi.image.ImageTag;
  */
 public class KSoftUtil {
 	
+	private static final Logger LOG=LoggerFactory.getLogger(KSoftUtil.class);
+	
 	private static KSoftAPI api;
 	
 	static {
 		String token=BotData.getKSoftToken();
 		if("".equals(token)) {
-			NDLogger.logWithModule("KSoft", "no ksoft token defined");
+			LOG.warn("no ksoft token defined");
 			api=null;
 		}else {
 			api=new KSoftAPI(token);
