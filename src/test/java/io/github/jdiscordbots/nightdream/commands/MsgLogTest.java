@@ -81,9 +81,9 @@ public class MsgLogTest {
 		resp.delete().queue();
 	}
 	private Guild getOtherGuild() {
-		return getJDA().getGuilds().stream().filter(g->g!=getTestingChannel().getGuild()&&!g.getTextChannels().isEmpty()).findAny().orElseGet(()->{
+		return getJDA().getGuilds().stream().filter(g->!g.equals(getTestingChannel().getGuild())&&!g.getTextChannels().isEmpty()).findAny().orElseGet(()->{
 			GuildAction createGuild = getJDA().createGuild("secondary guild for CI tests");
-			createGuild.newChannel(ChannelType.TEXT, "testing_channel");
+			createGuild.addChannel(createGuild.newChannel(ChannelType.TEXT, "testing_channel"));
 			createGuild.complete();
 			return getOtherGuild();
 		});
