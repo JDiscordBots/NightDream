@@ -76,7 +76,7 @@ public class JDAUtils {
 		try {
 			return channel.sendMessage(message).complete();
 		} catch (InsufficientPermissionException e) {
-			LOG.debug("Cannot send Message \"{}\" in channel [{}]",message.getDescription(),channel.getName(),channel.getGuild().getName(),e);
+			LOG.debug("Cannot send Message \"{}\" in channel {} [{}]",message.getDescription(),channel.getName(),channel.getGuild().getName(),e);
 			return null;
 		}
 	}
