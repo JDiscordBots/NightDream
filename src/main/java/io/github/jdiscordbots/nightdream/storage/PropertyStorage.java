@@ -222,13 +222,13 @@ public class PropertyStorage implements Storage {
 			try(Reader reader=new InputStreamReader(new BufferedInputStream(new FileInputStream(file)), StandardCharsets.UTF_8)){
 				props.load(reader);
 			} catch (IOException e) {
-				LOG.warn("Cannot load Properties from file: "+file.getAbsolutePath(),e);
+				LOG.warn("Cannot load Properties from file: {}", file.getAbsolutePath(),e);
 			}
 		}else {
 			try(Writer writer=new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(file)), StandardCharsets.UTF_8)){
 				props.store(writer,comment);
 			} catch (IOException e) {
-				LOG.warn("Cannot create file or save Properties: "+file.getAbsolutePath(),e);
+				LOG.warn("Cannot create file or save Properties: {}", file.getAbsolutePath(),e);
 			}
 		}
 		return props;
@@ -246,7 +246,7 @@ public class PropertyStorage implements Storage {
 			try(Reader reader=new InputStreamReader(new BufferedInputStream(new FileInputStream(file)),StandardCharsets.UTF_8)){
 				props.load(reader);
 			} catch (IOException e) {
-				LOG.warn("Cannot load Properties from file: "+file.getAbsolutePath(),e);
+				LOG.warn("Cannot load Properties from file: {}", file.getAbsolutePath(),e);
 			}
 		}
 		return props;

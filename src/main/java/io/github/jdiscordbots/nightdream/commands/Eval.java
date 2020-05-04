@@ -273,7 +273,7 @@ public class Eval implements Command {
 				len = 1000;
 			}
 			event.getChannel().sendMessage("`ERROR`\n```java\n" + exStr.substring(0, len) + "\n```").queue();
-			LOG.debug("eval", "error: ", e);
+			LOG.debug("An expression was evaluatd but it threw an error.", e);
 		} catch (IOException ignored) {
 			LOG.error("Error within incorrect user input/eval execution error handling", e);
 		}
