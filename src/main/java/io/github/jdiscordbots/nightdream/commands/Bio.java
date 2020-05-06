@@ -7,34 +7,23 @@
 
 package io.github.jdiscordbots.nightdream.commands;
 
-import io.github.jdiscordbots.nightdream.util.BotData;
-import io.github.jdiscordbots.nightdream.util.GeneralUtils;
 import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.net.URLEncoder;
+import bio.discord.dbio.Dbio;
+import bio.discord.dbio.entities.User;
+import bio.discord.dbio.entities.user.DiscordInformation;
+import bio.discord.dbio.entities.user.SettingsInformation;
 
 @BotCommand("bio")
 public class Bio implements Command {
 	
-	private static final Logger LOG=LoggerFactory.getLogger(Bio.class);
-
-	private static final String BASE_URL = "https://api.discord.bio/v1/";
-	private static final String DISCORD_CDN_AVATARS_BASE_URL = "https://cdn.discordapp.com/avatars/";
-	private static final String GENDER_KEY="gender";
-
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		final TextChannel channel = event.getChannel();
-		final String error = IconChooser.getErrorIcon(channel) + " Something went wrong.\n\n" +
-				"This command is in beta for now, this means among other things that bugs are not automatically reported.\n" +
-				"Please use `" + BotData.getPrefix(event.getGuild()) + "bugreport` to report the bug manually with with the exact input provided.";
 		final String error404 = IconChooser.getErrorIcon(channel) + " This user does not exist on https://discord.bio. Try again with another username.";
 
 
@@ -42,61 +31,39 @@ public class Bio implements Command {
 			args=new String[] {event.getAuthor().getId()};
 		}
 
-		try {
-			final String slug = URLEncoder.encode(String.join(" ", args), "UTF-8");
-			final JSONObject object = GeneralUtils.getJSONFromURL(BASE_URL + "user/details/" + slug);
-
-			if (object == null || !object.getBoolean("success")) {
+		final String slug = String.join(" ", args);
+		Dbio.getUserDetails(slug).thenAccept(details->{
+			if (!details.isPresent()) {
 				channel.sendMessage(error404).queue();
 			}
 			else {
-				final JSONObject settings = object.getJSONObject("payload").getJSONObject("settings");
-				final JSONObject discord = object.getJSONObject("payload").getJSONObject("discord");
-				final String avatarKey = discord.getString("avatar");
-				final String iconUrl = DISCORD_CDN_AVATARS_BASE_URL + settings.getString("user_id") + "/" + avatarKey + (avatarKey.startsWith("a_") ? ".gif" : ".png");
-
+				User user = details.get();
+				DiscordInformation discordInformation = user.getDiscordInformation();
+				SettingsInformation settingsInformation = user.getSettingsInformation();
+				settingsInformation.getLocation();
 				final EmbedBuilder eb = new EmbedBuilder().setColor(0xffffff)
-						.setAuthor(String.format("%s#%s", discord.getString("username"), discord.getString("discriminator")), "https://discord.bio/p/" + slug, iconUrl)
-						.setDescription(settings.getString("status"))
-						.addField("About", settings.getString("description"), true)
-						.addField("Upvotes", String.valueOf(settings.getInt("upvotes")), true)
-						.addField("Location", getPossibleNullElement(settings,"location"), true)
-						.addField("Birthday", getPossibleNullElement(settings,"birthday"), true)
-						.addField("E-Mail", getPossibleNullElement(settings,"email"), true)
-						.addField("Occupation", getPossibleNullElement(settings,"occupation"), true)
-						.addField("Verified", settings.getInt("verified") == 1 ? "Yes" : "No", true)
-						.addField("ID", discord.getString("id"), true)
-						.addField("Gender", getGender(settings), true)
-						.setThumbnail(iconUrl);
+						.setAuthor(discordInformation.getFullUserUsername(), "https://discord.bio/p/" + slug, discordInformation.getAvatarUrl("png"))
+						.setDescription(settingsInformation.getDescription())
+						.addField("Upvotes", String.valueOf(settingsInformation.getUpvotes()), true)
+						.addField("Location", removeNull(settingsInformation.getLocation()), true)
+						.addField("Birthday", settingsInformation.getBirthday()==null?"Not set":settingsInformation.getBirthday().toString(), true)
+						.addField("E-Mail", removeNull(settingsInformation.getEmail()), true)
+						.addField("Occupation", removeNull(settingsInformation.getEmail()), true)
+						.addField("Verified", settingsInformation.isVerified() ? "Yes" : "No", true)
+						.addField("ID", discordInformation.getId(), true)
+						.addField("Gender", settingsInformation.getGender().toString(), true)
+						.setThumbnail(discordInformation.getAvatarUrl("png"));
 
 				channel.sendMessage(eb.build()).queue();
 			}
-		} catch (Exception e) {
-			LOG.error("Failed to url encode query", e);
-			channel.sendMessage(error).queue();
-		}
+		});
 	}
-
-	private String getPossibleNullElement(JSONObject settings,String name) {
-		return !settings.has(name)||settings.isNull(name)||settings.getString(name).isEmpty() ? "Not set" : settings.getString(name);
+	private String removeNull(String in) {
+		return in==null?"Not set":in;
 	}
-	private String getGender(JSONObject settings) {
-		if (!settings.has(GENDER_KEY) || settings.isNull(GENDER_KEY)) {
-			return "Unspecified";
-		} 
-		switch(settings.getInt(GENDER_KEY)) {
-			case 1:
-				return "Male";
-			case 2:
-				return "Female";
-			default:
-				return "Other";
-		}
-	}
-
 	@Override
 	public String help() {
-		return "The first Discord-based discord.bio UI in Java";
+		return "A Discord-based discord.bio UI in Java";
 	}
 
 	@Override

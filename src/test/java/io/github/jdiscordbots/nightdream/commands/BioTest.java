@@ -38,10 +38,10 @@ public class BioTest {
 	public void testWithValidArgument() {
 		final JSONObject settings = GeneralUtils.getJSONFromURL("https://api.discord.bio/v1/user/details/358291050957111296").getJSONObject("payload").getJSONObject("settings");
 		assertNotNull(settings);
-		assertFalse(settings.isNull("status"));
+		assertFalse(settings.isNull("description"));
 		assertFalse(settings.isNull("user_id"));
 		sendCommand("bio dan1st");
-		Message response = getMessage(msg -> hasEmbed(msg, null, settings.getString("status")));
+		Message response = getMessage(msg -> hasEmbed(msg, null, settings.getString("description")));
 		assertTrue(hasEmbedField(response, "ID", settings.getString("user_id")));
 		assertTrue(hasEmbedField(response, "Verified", settings.getInt("verified") == 1 ? "Yes" : "No"));
 	}
@@ -53,6 +53,6 @@ public class BioTest {
 
 	@Test
 	public void testHelp() {
-		assertEquals("The first Discord-based discord.bio UI in Java", new Bio().help());
+		assertEquals("A Discord-based discord.bio UI in Java", new Bio().help());
 	}
 }
