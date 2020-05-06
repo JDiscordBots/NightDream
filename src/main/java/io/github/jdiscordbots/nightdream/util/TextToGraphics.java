@@ -89,7 +89,7 @@ public class TextToGraphics implements Runnable {
 					baos.flush();
 					chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName+".jpg").queue();
 				} catch (IOException e) {
-					LOG.warn("Error while generating image from text: \n"+imgText,e);
+					LOG.warn("Error while generating image from text: \n{}",imgText,e);
 				}
 			});
 			LOCK.notifyAll();
