@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.1.1_137</version>
+			<version>4.1.1_144</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -64,7 +64,7 @@
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
-			<version>3.2.0</version>
+			<version>3.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.reflections</groupId>
