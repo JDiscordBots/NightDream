@@ -19,7 +19,7 @@ public class InviteMeTest {
 	@Test
 	public void inviteMeTest() {
 		sendCommand("inviteme");
-		Message resp=getMessage(msg->hasEmbed(msg, "Invites","[Add the bot](https://discordapp.com/api/oauth2/authorize?client_id="+getJDA().getSelfUser().getId()+"&permissions=8&scope=bot)"+System.lineSeparator()+"[Server invite]("+BotData.getSupportServer()+")"));
+		Message resp=getMessage(msg->hasEmbed(msg, "Invites","[Add the bot](https://discord.com/api/oauth2/authorize?client_id="+getJDA().getSelfUser().getId()+"&permissions=8&scope=bot)"+System.lineSeparator()+"[Server invite]("+BotData.getSupportServer()+")"));
 		assertNotNull(resp);
 		resp.delete().queue();
 	}

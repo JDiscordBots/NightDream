@@ -20,7 +20,7 @@ public class InviteMe implements Command {
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.white).setTitle("Invites")
-                .setDescription(String.format("[Add the bot](https://discordapp.com/api/oauth2/authorize?client_id=%s&permissions=8&scope=bot)%n"
+                .setDescription(String.format("[Add the bot](https://discord.com/api/oauth2/authorize?client_id=%s&permissions=8&scope=bot)%n"
                 		+ "[Server invite](%s)", event.getJDA().getSelfUser().getId(),BotData.getSupportServer()));
         JDAUtils.msg(event.getChannel(), eb.build());
     }

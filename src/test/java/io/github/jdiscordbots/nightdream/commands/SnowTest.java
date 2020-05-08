@@ -52,7 +52,7 @@ public class SnowTest {
 	}
 	@Test
 	public void testSnowFlakeAnalysis() {
-		//use example id 175928847299117063 from https://discordapp.com/developers/docs/reference
+		//use example id 175928847299117063 from https://discord.com/developers/docs/reference
 		sendCommand("snow 175928847299117063");
 		Message resp=getMessage(msg->hasEmbed(msg, "175928847299117063", null));
 		assertTrue(hasEmbedField(resp, "Binary","0000001001110001000001100101101011000001000000100000000000000111"));

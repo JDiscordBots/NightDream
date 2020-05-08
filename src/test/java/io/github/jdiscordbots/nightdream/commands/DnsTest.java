@@ -32,8 +32,8 @@ public class DnsTest {
 	}
 	@Test
 	public void testCorrectQuery() {
-		sendCommand("dns discordapp.com");
-		Message msg=getMessage(message->hasEmbed(message, embed->"discordapp.com (type 12) resolves to:".equals(embed.getTitle())));
+		sendCommand("dns discord.com");
+		Message msg=getMessage(message->hasEmbed(message, embed->"discord.com (type 12) resolves to:".equals(embed.getTitle())));
 		assertNotNull(msg);
 		MessageEmbed embed=msg.getEmbeds().get(0);
 		assertTrue(hasEmbedField(embed, "Type","6"));

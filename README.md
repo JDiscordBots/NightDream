@@ -22,7 +22,7 @@ You can download NightDream [here](https://github.com/JDiscordBots/Nightdream/wi
 * the executable JAR file is in the directory `target`
 
 ## Invite Nightdream to your Server
-[Invite](https://discordapp.com/oauth2/authorize?client_id=596643235523330070&permissions=8&scope=bot)
+[Invite](https://discord.com/oauth2/authorize?client_id=596643235523330070&permissions=8&scope=bot)
 
 ## Nightdream on [DBL/top.gg](https://top.gg/)
 [Link](https://top.gg/bot/596643235523330070)
