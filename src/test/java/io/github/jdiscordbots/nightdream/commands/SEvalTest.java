@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 
+import io.github.jdiscordbots.jdatesting.TestUtils;
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import net.dv8tion.jda.api.entities.Message;
 
@@ -28,18 +29,24 @@ public class SEvalTest extends AbstractAdminCommandTest{
 	}
 	@Test 
 	public void testError() {
-		sendCommand("seval thisisinvalid");
-		sendCommand("seval thisisinvalidtoo");
-		Message resp=getMessage("No...");
-		assertNotNull(resp);
-		Message respDel=getMessage(msg->"No...".equals(msg.getContentRaw())&&!msg.getId().equals(resp.getId()));
-		assertNotNull(respDel);
-		assertNotEquals(resp.getId(),respDel.getId());
-		resp.clearReactions().queue();
-		Awaitility.await().atLeast(59, TimeUnit.SECONDS).atMost(65,TimeUnit.SECONDS).until(()->getAlreadySentMessage(getTestingChannel(),msg->msg.getId().equals(respDel.getId()))==null);
-		Message stillResp=getAlreadySentMessage(getTestingChannel(), msg->msg.getId().equals(resp.getId()));
-		assertNotNull(stillResp);
-		stillResp.delete().queue();
+		int msgsToChack=TestUtils.getNumOfMessagesToCheck();
+		try {
+			TestUtils.setNumOfMessagesToCheck(5);
+			sendCommand("seval thisisinvalid");
+			sendCommand("seval thisisinvalidtoo");
+			Message resp=getMessage("No...");
+			assertNotNull(resp);
+			Message respDel=getMessage(msg->"No...".equals(msg.getContentRaw())&&!msg.getId().equals(resp.getId()));
+			assertNotNull(respDel);
+			assertNotEquals(resp.getId(),respDel.getId());
+			resp.clearReactions().queue();
+			Awaitility.await().atLeast(59, TimeUnit.SECONDS).atMost(65,TimeUnit.SECONDS).until(()->getAlreadySentMessage(getTestingChannel(),msg->msg.getId().equals(respDel.getId()))==null);
+			Message stillResp=getAlreadySentMessage(getTestingChannel(), msg->msg.getId().equals(resp.getId()));
+			assertNotNull(stillResp);
+			stillResp.delete().queue();
+		}finally {
+			TestUtils.setNumOfMessagesToCheck(msgsToChack);
+		}
 	}
 	@Test 
 	public void testHelp() {

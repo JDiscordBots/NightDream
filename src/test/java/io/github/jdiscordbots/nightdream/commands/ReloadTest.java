@@ -20,6 +20,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import io.github.jdiscordbots.jdatesting.TestUtils;
 import io.github.jdiscordbots.nightdream.commands.Command.CommandType;
 import io.github.jdiscordbots.nightdream.listeners.MsgLogListener;
 import io.github.jdiscordbots.nightdream.storage.Storage;
@@ -79,19 +80,25 @@ public class ReloadTest extends AbstractAdminCommandTest{
 	}
 	@Test
 	public void testReconnect() {
-		sendCommand("reload login");
-		Awaitility.await().atMost(Durations.ONE_SECOND).until(()->!((JDAImpl)getJDA()).getClient().isConnected());
-		Message resp=getMessage(msg->hasEmbed(msg, null,"reconnecting..."));
-		assertNotNull(resp);
-		assertTrue(hasEmbed(resp, embed->Color.YELLOW.equals(embed.getColor())));
-		resp.delete().queue();
-		Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->getJDA().getStatus()==Status.CONNECTED);
-		resp=getMessage(msg->hasEmbed(msg, null,"reconnected!"));
-		assertNotNull(resp);
-		assertTrue(hasEmbed(resp, embed->Color.GREEN.equals(embed.getColor())));
-		resp.delete().queue();
-		assertEquals(0, storage.getFullReloadCount());
-		assertTrue(storage.getGuildReloads().isEmpty());
+		int msgsToChack=TestUtils.getNumOfMessagesToCheck();
+		try {
+			TestUtils.setNumOfMessagesToCheck(5);
+			sendCommand("reload login");
+			Awaitility.await().atMost(Durations.ONE_SECOND).until(()->!((JDAImpl)getJDA()).getClient().isConnected());
+			Message resp=getMessage(msg->hasEmbed(msg, null,"reconnecting..."));
+			assertNotNull(resp);
+			assertTrue(hasEmbed(resp, embed->Color.YELLOW.equals(embed.getColor())));
+			resp.delete().queue();
+			Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->getJDA().getStatus()==Status.CONNECTED);
+			resp=getMessage(msg->hasEmbed(msg, null,"reconnected!"));
+			assertNotNull(resp);
+			assertTrue(hasEmbed(resp, embed->Color.GREEN.equals(embed.getColor())));
+			resp.delete().queue();
+			assertEquals(0, storage.getFullReloadCount());
+			assertTrue(storage.getGuildReloads().isEmpty());
+		}finally {
+			TestUtils.setNumOfMessagesToCheck(msgsToChack);
+		}
 	}
 	@Test
 	public void testPropsReload() {
