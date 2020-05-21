@@ -15,11 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Set up JDK 13
+    - name: Set up JDK 14
       uses: actions/setup-java@v1
       with:
-        java-version: 13
-    - name: "compile with Java 13"
+        java-version: 14
+    - name: "compile with Java 14"
       run: mvn -B test-compile
   test:
     strategy:
@@ -65,10 +65,13 @@ jobs:
           java-version: 1.8
       - name: "setup user info"
         run: |
-          git config --global user.email "CI@github.com"
-          git config --global user.name "CI"
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions-bot"
       - name: "clone Wiki"
-        run: git clone https://github.com/JDiscordBots/NightDream.wiki.git wiki
+        run: |
+          git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/JDiscordBots/NightDream.wiki.git wiki
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "create JAR and copy it to the wiki"
         run: |
           mvn package -DskipTests=true
@@ -77,7 +80,5 @@ jobs:
         run: |
           cd wiki
           git add NightDream.jar
-          git commit -m "CI JAR deploy: `date`"
-          git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/JDiscordBots/NightDream.wiki.git
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git commit -m --amend "CI JAR deploy: `date`"
+          git push --force-with-lease

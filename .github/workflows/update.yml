@@ -107,10 +107,10 @@ jobs:
           java-version: 1.8
       - name: "setup user info"
         run: |
-          git config --global user.email "${GITHUB_ACTOR}@github.com"
-          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "actions@github.com"
+          git config --global user.name "github-actions-bot"
       - name: "clone Wiki"
-        run: git clone https://github.com/$GITHUB_REPOSITORY.wiki.git wiki
+        run: git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY.wiki.git wiki
       - name: "create JAR and copy it to the wiki"
         run: |
           mvn package -DskipTests=true
@@ -120,6 +120,6 @@ jobs:
           cd wiki
           git add NightDream.jar
           git commit -m "CI JAR deploy: `date`"
-          git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY.wiki.git
+          git push --force-with-lease
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
