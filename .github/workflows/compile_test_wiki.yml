@@ -11,7 +11,7 @@ jobs:
         java-version: 1.8
     - name: "compile with Java 8"
       run: mvn -B test-compile
-  compile-13:
+  compile-14:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -55,7 +55,7 @@ jobs:
         ND_testuser: ${{secrets.testUser}}
   upload:
     runs-on: ubuntu-latest
-    needs: [compile-8,compile-13,test]
+    needs: [compile-8,compile-14,test]
     if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v1
@@ -80,5 +80,5 @@ jobs:
         run: |
           cd wiki
           git add NightDream.jar
-          git commit -m --amend "CI JAR deploy: `date`"
+          git commit --amend -m "CI JAR deploy: `date`"
           git push --force-with-lease
