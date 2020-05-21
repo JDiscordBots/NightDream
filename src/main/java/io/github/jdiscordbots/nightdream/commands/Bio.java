@@ -17,9 +17,12 @@ import bio.discord.dbio.entities.User;
 import bio.discord.dbio.entities.user.DiscordInformation;
 import bio.discord.dbio.entities.user.SettingsInformation;
 
-@BotCommand("bio")
+/*
+ * @BotCommand("bio")
+ * This Command is temporarily disabled as discord.bio made an undocumented API change.
+ * See https://github.com/zastrixarundell/dbio-java#important-notice for details.
+ */
 public class Bio implements Command {
-	
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {

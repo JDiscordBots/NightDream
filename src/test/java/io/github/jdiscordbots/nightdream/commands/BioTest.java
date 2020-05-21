@@ -11,11 +11,13 @@ import io.github.jdiscordbots.nightdream.util.GeneralUtils;
 import io.github.jdiscordbots.nightdream.util.IconChooser;
 import net.dv8tion.jda.api.entities.Message;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static io.github.jdiscordbots.jdatesting.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled("This test is temporarily disabled because of an undocumented API change")
 public class BioTest {
 
 	@Test
@@ -42,8 +44,10 @@ public class BioTest {
 		assertFalse(settings.isNull("user_id"));
 		sendCommand("bio dan1st");
 		Message response = getMessage(msg -> hasEmbed(msg, null, settings.getString("description")));
+		assertNotNull(response);
 		assertTrue(hasEmbedField(response, "ID", settings.getString("user_id")));
 		assertTrue(hasEmbedField(response, "Verified", settings.getInt("verified") == 1 ? "Yes" : "No"));
+		response.delete().queue();
 	}
 
 	@Test
