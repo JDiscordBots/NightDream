@@ -85,11 +85,11 @@ public class ReloadTest extends AbstractAdminCommandTest{
 			TestUtils.setNumOfMessagesToCheck(5);
 			sendCommand("reload login");
 			Awaitility.await().atMost(Durations.ONE_SECOND).until(()->!((JDAImpl)getJDA()).getClient().isConnected());
+			Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->getJDA().getStatus()==Status.CONNECTED);
 			Message resp=getMessage(msg->hasEmbed(msg, null,"reconnecting..."));
 			assertNotNull(resp);
 			assertTrue(hasEmbed(resp, embed->Color.YELLOW.equals(embed.getColor())));
 			resp.delete().queue();
-			Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->getJDA().getStatus()==Status.CONNECTED);
 			resp=getMessage(msg->hasEmbed(msg, null,"reconnected!"));
 			assertNotNull(resp);
 			assertTrue(hasEmbed(resp, embed->Color.GREEN.equals(embed.getColor())));
