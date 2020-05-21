@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.1.1_144</version>
+			<version>4.1.1_154</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -105,7 +105,7 @@
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>
 			<artifactId>spotbugs</artifactId>
-			<version>4.0.2</version>
+			<version>4.0.3</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
