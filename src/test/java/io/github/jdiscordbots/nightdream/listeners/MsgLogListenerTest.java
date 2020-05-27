@@ -36,7 +36,7 @@ public class MsgLogListenerTest {
 		Message toDelete = getTestingChannel().sendMessage("test message 1").complete();
 		listener.clearCache();
 		toDelete.delete().complete();
-		assertNull(getAlreadySentMessage(getTestingChannel(), msg->hasEmbed(msg, "Deleted message 1",null)));
+		assertNull(getAlreadySentMessage(getTestingChannel(), msg->hasEmbed(msg, "Deleted Message",null)));
 	}
 	@Test
 	public void testDeletedMsg() {
