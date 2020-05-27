@@ -9,6 +9,7 @@ package io.github.jdiscordbots.nightdream.commands.ksoft;
 
 import io.github.jdiscordbots.nightdream.commands.BotCommand;
 import io.github.jdiscordbots.nightdream.commands.Command;
+import io.github.jdiscordbots.nightdream.util.IconChooser;
 import io.github.jdiscordbots.nightdream.util.JDAUtils;
 import io.github.jdiscordbots.nightdream.util.KSoftUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -21,8 +22,12 @@ import java.awt.Color;
 import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @BotCommand("lyrics")
 public class Lyrics implements Command {
+	private static final Logger LOG=LoggerFactory.getLogger(Lyrics.class);
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		KSoftAPI api = KSoftUtil.getApi();
@@ -38,21 +43,26 @@ public class Lyrics implements Command {
 		
 		event.getChannel().sendTyping().queue();
 		String query=String.join(" ", args);
-		Track track = api.getLyrics().search(query).execute().get(0);
-		if(track==null) {
-			JDAUtils.errmsg(event.getChannel(), "not found");
-			return;
-		}
-		OptionalInt released=track.getAlbums().stream().mapToInt(Album::getReleaseYear).min();
-		EmbedBuilder builder=new EmbedBuilder();
-		String lyrics=track.getLyrics();
-		builder.setColor(Color.white)
-		.setFooter("Results from KSoft.Si API")
-		.setTitle("Found something :mag:");
-		builder.addField("Artist: "+track.getArtist().getName(),"Album: "+track.getAlbums().stream().map(Album::getName).collect(Collectors.joining(" / ")),false);
-		builder.addField("Song: "+track.getName(), released.isPresent()?"released "+released.getAsInt():"", false);
-		builder.addField("Lyrics", lyrics.length()>=300?lyrics.substring(0,300)+"\n...":lyrics, false);
-		event.getChannel().sendMessage(builder.build()).queue();	
+		api.getLyrics().search(query).executeAsync(tracks->{
+			Track track=tracks.get(0);
+			if(track==null) {
+				event.getChannel().sendMessage("No track found").queue();
+			}else {
+				OptionalInt released=track.getAlbums().stream().mapToInt(Album::getReleaseYear).min();
+				EmbedBuilder builder=new EmbedBuilder();
+				String lyrics=track.getLyrics();
+				builder.setColor(Color.white)
+				.setFooter("Results from KSoft.Si API")
+				.setTitle("Found something :mag:");
+				builder.addField("Artist: "+track.getArtist().getName(),"Album: "+track.getAlbums().stream().map(Album::getName).collect(Collectors.joining(" / ")),false);
+				builder.addField("Song: "+track.getName(), released.isPresent()?"released "+released.getAsInt():"", false);
+				builder.addField("Lyrics", lyrics.length()>=300?lyrics.substring(0,300)+"\n...":lyrics, false);
+				event.getChannel().sendMessage(builder.build()).queue();
+			}
+		},err->{
+			event.getChannel().sendMessage(IconChooser.getErrorIcon(event.getChannel())+" An error occured trying to get the lyrics");
+			LOG.error("An error occured while executing the lyrics command",err);
+		});
 	}
 
 	@Override

@@ -10,6 +10,7 @@ Nightdream is a clone of the Bot [Daydream](https://gitlab.com/botstudio/daydrea
 * [Jedis](https://github.com/xetorthio/jedis) (Redis Storage)
 * [jda-testing-system](https://github.com/JDiscordBots/jda-testing-system) (for automated tests)
 * [Javassist](https://github.com/jboss-javassist/javassist) (for the eval command)
+* [dbio-java](https://github.com/zastrixarundell/dbio-java) (for the bio command)
 
 ## testing libraries
 * [JUnit](https://junit.org/junit5/) (for feature tests(not unit tests))

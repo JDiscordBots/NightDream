@@ -1,7 +1,6 @@
 # default: everyone owns everything:
 *   @byNoobiYT @danthe1st
 /.github @danthe1st
-/saveJAR.sh @danthe1st
 /src/main/java/io/github/jdiscordbots/nightdream/core/ @danthe1st
 /src/main/java/io/github/jdiscordbots/nightdream/core/NightDream.java @byNoobiYT @danthe1st
 /src/main/java/io/github/jdiscordbots/nightdream/listeners/BotListener.java @danthe1st
