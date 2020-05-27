@@ -27,8 +27,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 /**
  * utility class for sending images from a givn text as a Discord message
  */
-public class TextToGraphics implements Runnable {
+public class TextToGraphics {
 	
 	private static final Font FONT_BODY;
 	private static final Font FONT_NOSPACE;
@@ -45,12 +45,7 @@ public class TextToGraphics implements Runnable {
 	private static final float FONT_SIZE_BODY=13F;
 	private static final float FONT_SIZE_NOSPACE=14F;
 	private static final Logger LOG=LoggerFactory.getLogger(TextToGraphics.class);
-	private static TextToGraphics executor=new TextToGraphics();
-	private static final Thread graphicsThread;
-	
-	private static final Object LOCK=new Object();
-	
-	private Queue<Runnable> waiting=new LinkedBlockingQueue<>();
+	private static final ExecutorService graphicsThreadPool;
 	
 	private static final Pattern NEWLINE_REGEX=Pattern.compile("\n");
 	
@@ -66,9 +61,11 @@ public class TextToGraphics implements Runnable {
 		}
 		FONT_BODY= body.deriveFont(FONT_SIZE_BODY);
 		FONT_NOSPACE=heading.deriveFont(FONT_SIZE_NOSPACE).deriveFont(Font.BOLD);
-		graphicsThread=new Thread(executor);
-		graphicsThread.setDaemon(true);
-		graphicsThread.start();
+		graphicsThreadPool=Executors.newFixedThreadPool(1,r->{
+			Thread t=new Thread(r);
+			t.setDaemon(true);
+			return t;
+		});
 	}
 	
 	private TextToGraphics() {
@@ -82,18 +79,15 @@ public class TextToGraphics implements Runnable {
 	 * @param metaText the text that should be sent with the image
 	 */
 	public static void sendTextAsImage(MessageChannel chan, String imgName, String imgText, String metaText) {
-		synchronized (LOCK) {
-			executor.waiting.add(()->{
-				try(ByteArrayOutputStream baos=new ByteArrayOutputStream()){
-					createImage(imgText,baos);
-					baos.flush();
-					chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName+".jpg").queue();
-				} catch (IOException e) {
-					LOG.warn("Error while generating image from text: \n{}",imgText,e);
-				}
-			});
-			LOCK.notifyAll();
-		}
+		graphicsThreadPool.execute(()->{
+			try(ByteArrayOutputStream baos=new ByteArrayOutputStream()){
+				createImage(imgText,baos);
+				baos.flush();
+				chan.sendMessage(metaText).addFile(baos.toByteArray(), imgName+".jpg").queue();
+			} catch (IOException e) {
+				LOG.warn("Error while generating image from text: \n{}",imgText,e);
+			}
+		});
 	}
     private static void createImage(String text,OutputStream out) throws IOException {
     	text=text.replace("\t", "    ");
@@ -111,14 +105,14 @@ public class TextToGraphics implements Runnable {
         
         g2d.setBackground(BG_COLOR);
         g2d.clearRect(0, 0, width, height);
-        g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
-        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
+        g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
+        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+        g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
         g2d.setColor(FG_COLOR);
         
         drawString(g2d,text,0,0);
@@ -137,21 +131,4 @@ public class TextToGraphics implements Runnable {
             g.drawString(line, x+g.getFontMetrics().charWidth(' '), y);
         }
     }
-	@Override
-	public void run() {
-		while(!Thread.currentThread().isInterrupted()) {
-			try {
-				synchronized (LOCK) {
-					if(waiting.isEmpty()) {
-						LOCK.wait();
-					}
-				}
-				while(!waiting.isEmpty()) {
-					waiting.poll().run();
-				}
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-		}
-	}
 }
