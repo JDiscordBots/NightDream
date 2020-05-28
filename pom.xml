@@ -8,11 +8,11 @@
 	<name>NightDream</name>
 	<description>a Clone of the Discord Bot Daydream (https://gitlab.com/botstudio/daydream) in Java</description>
 	<licenses>
-		<license>
-			<name>Boost Software License 1.0</name>
-			<url>https://www.boost.org/LICENSE_1_0.txt</url>
-		</license>
-	</licenses>
+	  	<license>
+	      <name>GNU GPL Version 3.0</name>
+	      <url>http://www.gnu.org/licenses/gpl.html</url>
+	    </license>
+  	</licenses>
 	<repositories>
 		<repository>
 			<id>jcenter</id>
@@ -166,26 +166,17 @@
 				</configuration>
 			</plugin>
 			<plugin>
-   <groupId>org.jasig.maven</groupId>
-   <artifactId>maven-notice-plugin</artifactId>
-   <version>1.0.6</version>
-   <configuration>
-      <noticeTemplate>misc/NOTICE.template</noticeTemplate>
-      <licenseMapping>
-         <param>misc/license-mappings.xml</param>
-      </licenseMapping>
-      <generateChildNotices>false</generateChildNotices>
-   </configuration>
-   <executions>
-      <execution>
-         <id>check-license</id>
-         <phase>initialize</phase>
-         <goals>
-            <goal>check</goal>
-         </goals>
-      </execution>
-   </executions>
-</plugin>
+			   <groupId>org.jasig.maven</groupId>
+			   <artifactId>maven-notice-plugin</artifactId>
+			   <version>1.0.6</version>
+			   <configuration>
+			      <noticeTemplate>misc/NOTICE.template</noticeTemplate>
+			      <licenseMapping>
+			         <param>misc/license-mappings.xml</param>
+			      </licenseMapping>
+			      <generateChildNotices>true</generateChildNotices>
+			   </configuration>
+			</plugin>
 		</plugins>
 		<testResources>
 			<testResource>
