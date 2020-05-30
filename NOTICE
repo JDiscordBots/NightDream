@@ -20,9 +20,11 @@ Nightdream is a clone of the Bot [Daydream](https://gitlab.com/botstudio/daydrea
   Awaitility under Apache 2.0
   com.diogonunes:JCDP under MIT License
   com.neovisionaries:nv-websocket-client under The Apache Software License, Version 2.0
+  Commons IO under The Apache Software License, Version 2.0
   dbio under WTFPL
   dom4j under BSD 3-clause New License
   FindBugs-jsr305 under The Apache Software License, Version 2.0
+  GitHub API for Java under The MIT license
   GNU Trove under GNU Lesser General Public License 2.1
   Gson under Apache 2.0
   Hamcrest under BSD Licence 3

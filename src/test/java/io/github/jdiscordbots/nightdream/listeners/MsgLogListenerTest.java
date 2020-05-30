@@ -50,6 +50,7 @@ public class MsgLogListenerTest {
 		String avatarURL=getJDA().getSelfUser().getAvatarUrl();
 		assertTrue(hasEmbed(resp, embed->avatarURL==null?embed.getThumbnail()==null:avatarURL.equals(embed.getThumbnail().getUrl())));
 		assertTrue(hasEmbedField(resp, "Attachments","[empty.txt]("+toDelete.getAttachments().get(0).getUrl()+") (10)"));
+		resp.delete().complete();
 	}
 	@AfterAll
 	public static void finish() {

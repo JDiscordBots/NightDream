@@ -6,7 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -62,16 +65,33 @@ public class GeneralUtils {
 		return rand;
 	}
 	public static JSONObject getJSONFromURL(String url) {
-		try(BufferedReader reader=new BufferedReader(new InputStreamReader(openStreamWithRandomUserAgent(url),StandardCharsets.UTF_8))){
+		return getJSONFromURL(url,StandardCharsets.UTF_8);
+    }
+	public static JSONObject getJSONFromURL(String url,Charset charset) {
+		try(BufferedReader reader=new BufferedReader(new InputStreamReader(openStreamWithRandomUserAgent(url),charset))){
 			return new JSONObject(reader.lines().collect(Collectors.joining()));
 		} catch (IOException e) {
 			return null;
 		}
-		
     }
+	public static JSONObject getJSONFromURLWithHeaders(String url,Map<String, String> headers) {
+		return getJSONFromURLWithHeaders(url,headers,StandardCharsets.UTF_8);
+    }
+	public static JSONObject getJSONFromURLWithHeaders(String url,Map<String, String> headers,Charset charset) {
+		try(BufferedReader reader=new BufferedReader(new InputStreamReader(openStreamWithHeaders(url,headers),charset))){
+			return new JSONObject(reader.lines().collect(Collectors.joining()));
+		} catch (IOException e) {
+			return null;
+		}
+	}
     public static InputStream openStreamWithRandomUserAgent(String url)throws IOException{
+    	Map<String, String> headers=new HashMap<>();
+    	headers.put("User-Agent", UUID.randomUUID().toString());
+    	return openStreamWithHeaders(url,headers);
+    }
+    public static InputStream openStreamWithHeaders(String url,Map<String, String> headers)throws IOException{
         URLConnection con=new URL(url).openConnection();
-        con.setRequestProperty("User-Agent", UUID.randomUUID().toString());
+        headers.forEach(con::setRequestProperty);
         return con.getInputStream();
     }
 }

@@ -47,6 +47,7 @@ public class BotData {
 	private static final String DATABASE_PASSWORD_PROP_NAME = "DBPw";
 	private static final String SUPPORT_SERVER_PROP_NAME = "supportInvite";
 	private static final String JDA_TOKEN_PROP_NAME="token";
+	private static final String GITHUB_TOKEN_PROP_NAME="gh-token";
 	
 	public static final Map<String,String> GLOBAL_DEFAULTS;
 	public static final Map<String,String> GUILD_DEFAULTS;
@@ -337,6 +338,20 @@ public class BotData {
 	 */
 	public static void setDatabasePassword(String databasePwd) {
 		bkpStorage.setGlobalProperty(DATABASE_PASSWORD_PROP_NAME, databasePwd);
+	}
+	/**
+	 * gets the github token
+	 * @return the GitHub token
+	 */
+	public static String getGitHubToken() {
+		return bkpStorage.getGlobalProperty(GITHUB_TOKEN_PROP_NAME);
+	}
+	/**
+	 * Sets the GitHub token
+	 * @param databasePwd the GitHub token
+	 */
+	public static void setGitHubToken(String ghToken) {
+		bkpStorage.setGlobalProperty(GITHUB_TOKEN_PROP_NAME, ghToken);
 	}
 	/**
 	 * reloads all Properties
