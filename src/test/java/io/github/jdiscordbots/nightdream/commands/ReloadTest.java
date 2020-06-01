@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.JDA.Status;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.internal.JDAImpl;
 import sun.misc.Unsafe;
-
+@SuppressWarnings("restriction")
 public class ReloadTest extends AbstractAdminCommandTest{
 	private static ReloadStorage storage;
 	private static Object staticFieldBase;
