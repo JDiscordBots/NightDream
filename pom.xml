@@ -180,6 +180,7 @@
 			         <param>https://jdiscordbots.github.io/util/data/notice/license-mappings.xml</param>
 			      </licenseMapping>
 			      <generateChildNotices>true</generateChildNotices>
+			      <fileName>NOTICE.md</fileName>
 			   </configuration>
 			</plugin>
 		</plugins>
