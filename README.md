@@ -1,4 +1,4 @@
-# NightDream ![](https://github.com/JDiscordBots/NightDream/workflows/test%20and%20upload/badge.svg) ![](https://github.com/JDiscordBots/NightDream/workflows/static%20code%20analysis/badge.svg) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=NightDream&metric=alert_status)](https://sonarcloud.io/dashboard?id=NightDream)
+# NightDream ![](https://github.com/JDiscordBots/NightDream/workflows/test%20and%20upload/badge.svg) ![](https://github.com/JDiscordBots/NightDream/workflows/static%20code%20analysis/badge.svg) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=NightDream&metric=alert_status)](https://sonarcloud.io/dashboard?id=NightDream) ![Public Instance Status](https://top.gg/api/widget/status/596643235523330070.png)
 a Clone of the Discord Bot [Daydream](https://gitlab.com/botstudio/daydream) in Java
 
 This is not an exact clone, there are a few differences to the original.
