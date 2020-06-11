@@ -175,9 +175,9 @@
 			   <artifactId>maven-notice-plugin</artifactId>
 			   <version>1.0.6</version>
 			   <configuration>
-			      <noticeTemplate>misc/NOTICE.template</noticeTemplate>
+			      <noticeTemplate>https://jdiscordbots.github.io/util/data/notice/NightDream.template</noticeTemplate>
 			      <licenseMapping>
-			         <param>misc/license-mappings.xml</param>
+			         <param>https://jdiscordbots.github.io/util/data/notice/license-mappings.xml</param>
 			      </licenseMapping>
 			      <generateChildNotices>true</generateChildNotices>
 			   </configuration>
