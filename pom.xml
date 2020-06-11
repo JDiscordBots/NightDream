@@ -44,7 +44,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.1.1_156</version>
+			<version>4.1.1_162</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>org.kohsuke</groupId>
 			<artifactId>github-api</artifactId>
-			<version>1.112</version>
+			<version>1.114</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -116,7 +116,7 @@
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>
 			<artifactId>spotbugs</artifactId>
-			<version>4.0.3</version>
+			<version>4.0.4</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
