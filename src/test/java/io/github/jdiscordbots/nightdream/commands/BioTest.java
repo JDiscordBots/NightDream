@@ -1,8 +1,8 @@
 /*
- * Copyright (c) JDiscordBots 2020
+ * Copyright (c) JDiscordBots 2019 - 2020
  * File: BioTest.java
  * Project: NightDream
- * Licensed under Boost Software License 1.0
+ * Licensed under GNU General Public License 3.0
  */
 
 package io.github.jdiscordbots.nightdream.commands;

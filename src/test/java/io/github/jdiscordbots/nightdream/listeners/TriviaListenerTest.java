@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) JDiscordBots 2019 - 2020
+ * File: TriviaListenerTest.java
+ * Project: NightDream
+ * Licensed under GNU General Public License 3.0
+ */
+
 package io.github.jdiscordbots.nightdream.listeners;
 
 import static io.github.jdiscordbots.jdatesting.TestUtils.getAlreadySentMessage;
