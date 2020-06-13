@@ -21,6 +21,7 @@ Nightdream is a clone of the Bot [Daydream](https://gitlab.com/botstudio/daydrea
   com.diogonunes:JCDP under MIT License
   com.neovisionaries:nv-websocket-client under The Apache Software License, Version 2.0
   Commons IO under The Apache Software License, Version 2.0
+  Core of Test Harness for SpotBugs Plugin under GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1
   dbio under WTFPL
   dom4j under BSD 3-clause New License
   FindBugs-jsr305 under The Apache Software License, Version 2.0
@@ -57,6 +58,8 @@ Nightdream is a clone of the Bot [Daydream](https://gitlab.com/botstudio/daydrea
   Jetty :: XML utilities under Apache Software License - Version 2.0 or Eclipse Public License - Version 1.0
   Joda-Time under Apache License, Version 2.0
   JSON in Java under The JSON License
+  JUnit 4 Test Harness for SpotBugs Plugin under GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1
+  JUnit 5 Test Harness for SpotBugs Plugin under GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1
   JUnit Jupiter (Aggregator) under Eclipse Public License v2.0
   JUnit Jupiter API under Eclipse Public License v2.0
   JUnit Jupiter Engine under Eclipse Public License v2.0
@@ -78,6 +81,7 @@ Nightdream is a clone of the Bot [Daydream](https://gitlab.com/botstudio/daydrea
   Saxon-HE under Mozilla Public License Version 2.0
   SLF4J API Module under MIT License
   Spark under The Apache Software License, Version 2.0
-  SpotBugs under GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1
+  spotbugs under GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1
   SpotBugs Annotations under GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1
+  SpotBugs Ant Task under GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1
 
