@@ -2,3 +2,6 @@ buttons:
   - title: Update dependencies
     action: "update"
     description: Updates all dependencies
+  - title: Update Notice
+    action: "update-notice"
+    description: Updates the NOTICE.md file
