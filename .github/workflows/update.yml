@@ -1,4 +1,5 @@
 on: repository_dispatch
+  types: [update]
 name: Update dependencies
 jobs:
   update:

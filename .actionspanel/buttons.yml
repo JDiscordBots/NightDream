@@ -3,5 +3,5 @@ buttons:
     action: "update"
     description: Updates all dependencies
   - title: Update Notice
-    action: "update-notice"
+    action: "update_notice"
     description: Updates the NOTICE.md file
