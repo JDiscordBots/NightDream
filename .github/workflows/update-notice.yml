@@ -1,7 +1,7 @@
 on: repository_dispatch
 name: Update NOTICE.md
 jobs:
-  update:
+  updateNotice:
     runs-on: ubuntu-latest
     needs: [test,check-notice]
     steps:
