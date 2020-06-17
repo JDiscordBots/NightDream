@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +41,7 @@ public class SnowTest {
 		long idLong=Long.parseLong(id);
 		long timeSinceDCEpoch=idLong>>22;
 		long timeSinceUnixEpoch=timeSinceDCEpoch+1_420_070_400_000L;
-		String timestampCalculated=Instant.ofEpochMilli(timeSinceUnixEpoch).atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss (zzz)"));
+		String timestampCalculated=Instant.ofEpochMilli(timeSinceUnixEpoch).atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss (zzz)").withLocale(Locale.ROOT));
 		assertEquals(timestampCalculated, sentTimestamp);
 		long worker=(idLong>>17)&0x1F;
 		assertEquals(1, worker);
@@ -63,7 +64,7 @@ public class SnowTest {
 		sendCommand("snow 175928847299117063");
 		Message resp=getMessage(msg->hasEmbed(msg, "175928847299117063", null));
 		assertTrue(hasEmbedField(resp, "Binary","0000001001110001000001100101101011000001000000100000000000000111"));
-		assertTrue(hasEmbedField(resp, "Date/Time","Sa Apr 30 2016 11:18:25 (UTC)"));
+		assertTrue(hasEmbedField(resp, "Date/Time","Sat Apr 30 2016 11:18:25 (UTC)"));
 		assertTrue(hasEmbedField(resp, "Increment","7"));
 		assertTrue(hasEmbedField(resp, "Worker, Process ID","175928847299117063 has worker ID 1 with process ID 0"));
 		resp.delete().queue();
