@@ -24,13 +24,18 @@ public class Snow implements Command {
 	private static int increment=0;
 	private static final long EPOCH=1_420_070_400_000L;//Discord epoch/1.1.2015 0:00
 	
+	private static final DateTimeFormatter FORMATTER=DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss (zzz)");
+	
+	private String getTimeString(Instant time) {
+		return time.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))
+				.format(FORMATTER);
+	}
+	
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {
 		if(args.length==0) {
 			Instant time=Instant.now();
-			event.getChannel().sendMessage("`"+generate(time.toEpochMilli())+"` made `"+time.atZone(ZoneId.systemDefault())
-					.format(DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss 'GMT'Z (zzz)"))
-					+"`").queue();
+			event.getChannel().sendMessage("`"+generate(time.toEpochMilli())+"` made `"+getTimeString(time)+"`").queue();
 		}else {
 			try {
 				EmbedBuilder eb=new EmbedBuilder();
@@ -38,7 +43,7 @@ public class Snow implements Command {
 				eb.setColor(Color.white);
 				String binStr=fillWithZerosBefore(64,Long.toBinaryString(Long.parseLong(args[0])));
 				eb.addField("Binary",binStr , false);
-				eb.addField("Date", Instant.ofEpochMilli(Long.valueOf(binStr.substring(0,42),2)+EPOCH).atZone(ZoneId.systemDefault()).toLocalDate().toString(), false);
+				eb.addField("Date/Time", getTimeString(Instant.ofEpochMilli(Long.valueOf(binStr.substring(0,42),2)+EPOCH)),false);
 				eb.addField("Increment", Integer.valueOf(binStr.substring(52,64),2).toString(), false);
 				eb.addField("Worker, Process ID", args[0]+" has worker ID "+Integer.valueOf(binStr.substring(42,47),2)+" with process ID "+Integer.valueOf(binStr.substring(47,52),2), false);
 				event.getChannel().sendMessage(eb.build()).queue();
