@@ -23,17 +23,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.EnumSet;
+import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class NightDream {
 
-	public static final String VERSION = "0.0.4";
+	private static final Logger LOG;
 	
-	private static final Logger LOG=LoggerFactory.getLogger(NightDream.class);
+	public static final String VERSION;
+	
+	static {
+		LOG=LoggerFactory.getLogger(NightDream.class);
+		Properties props=new Properties();
+		URL rsc = NightDream.class.getClassLoader().getResource("info.properties");
+		if(rsc==null) {
+			LOG.error("Resource info.properties not present");
+		}else {
+			try(BufferedReader br=new BufferedReader(new InputStreamReader(rsc.openStream(), StandardCharsets.UTF_8.name()))){
+				props.load(br);
+			} catch (IOException e) {
+				LOG.error("Cannot load version",e);
+			}
+		}
+		VERSION=props.getProperty("version", "<unknown>");
+	}
 	
 	public static ShardManager initialize() {
 		final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createLight(BotData.getToken(), GatewayIntent.getIntents(GatewayIntent.DEFAULT))
@@ -86,6 +109,7 @@ public class NightDream {
 		}
 		return bot;
 	}
+	
 	public static void main(String[] args) {
 		initialize();
 	}

@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>NightDream</artifactId>
-	<version>0.0.4</version>
+	<version>${version}</version>
 	<name>NightDream</name>
 	<description>a Clone of the Discord Bot Daydream (https://gitlab.com/botstudio/daydream) in Java</description>
 	<parent>
@@ -12,11 +12,11 @@
 		<version>1.0.1</version>
 	</parent>
 	<licenses>
-	  	<license>
-	      <name>GNU GPL Version 3.0</name>
-	      <url>http://www.gnu.org/licenses/gpl.html</url>
-	    </license>
-  	</licenses>
+		<license>
+			<name>GNU GPL Version 3.0</name>
+			<url>http://www.gnu.org/licenses/gpl.html</url>
+		</license>
+	</licenses>
 
 	<dependencies>
 		<dependency>
@@ -68,9 +68,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.zastrixarundell</groupId>
-		    <artifactId>dbio</artifactId>
-		    <version>0.0.1</version>
+			<groupId>com.github.zastrixarundell</groupId>
+			<artifactId>dbio</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.kohsuke</groupId>
@@ -110,11 +110,11 @@
 				</configuration>
 			</plugin>
 			<plugin>
-			   <groupId>org.jasig.maven</groupId>
-			   <artifactId>maven-notice-plugin</artifactId>
-			   <configuration>
-			      <noticeTemplate>https://jdiscordbots.github.io/util/data/notice/NightDream.template</noticeTemplate>
-			   </configuration>
+				<groupId>org.jasig.maven</groupId>
+				<artifactId>maven-notice-plugin</artifactId>
+				<configuration>
+					<noticeTemplate>https://jdiscordbots.github.io/util/data/notice/NightDream.template</noticeTemplate>
+				</configuration>
 			</plugin>
 		</plugins>
 		<testResources>
@@ -122,10 +122,27 @@
 				<directory>src/test/resources</directory>
 			</testResource>
 		</testResources>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>info.properties</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>info.properties</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 	<properties>
 		<sonar.projectKey>NightDream</sonar.projectKey>
 		<sonar.organization>nightdream</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<version>0.0.4</version>
 	</properties>
 </project>
