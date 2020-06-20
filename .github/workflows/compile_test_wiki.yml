@@ -89,5 +89,5 @@ jobs:
         run: |
           cd wiki
           git add NightDream.jar
-          git commit --amend -m "CI JAR deploy: "$(date)"
+          git commit --amend -m "CI JAR deploy: $(date)"
           git push --force-with-lease

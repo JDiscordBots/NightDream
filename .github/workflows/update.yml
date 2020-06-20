@@ -127,13 +127,13 @@ jobs:
         run: git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY.wiki.git wiki
       - name: "create JAR and copy it to the wiki"
         run: |
-          mvn package -DskipTests=true
+          mvn package -DskipTests=true -Dversion="$(git describe --tags --always --dirty=-modified)"
           cp target/NightDream.jar wiki/NightDream.jar
       - name: "Upload to wiki"
         run: |
           cd wiki
           git add NightDream.jar
-          git commit --amend -m "CI JAR deploy: `date`"
+          git commit --amend -m "CI JAR deploy: $(date)"
           git push --force-with-lease
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
