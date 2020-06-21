@@ -16,12 +16,34 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.Year;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @BotCommand("info")
 public class Info implements Command {
+	private Logger LOG=LoggerFactory.getLogger(Info.class);
+	public Info() {
+		try {
+			TextToGraphics.createImage("\n\t", new OutputStream() {
+				@Override
+				public void write(byte[] b, int off, int len) throws IOException {
+					//ignore
+				}
+				@Override
+				public void write(int b) throws IOException {
+					//ignore
+				}
+			});
+		} catch (IOException e) {//should never happen - 
+			LOG.warn("A weird error occured while initializing text to graphics.");
+		}
+	}
 
 	@Override
 	public void action(String[] args, GuildMessageReceivedEvent event) {

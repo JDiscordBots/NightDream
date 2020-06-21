@@ -89,7 +89,7 @@ public class TextToGraphics {
 			}
 		});
 	}
-    private static void createImage(String text,OutputStream out) throws IOException {
+    public static void createImage(String text,OutputStream out) throws IOException {
     	text=text.replace("\t", "    ");
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();

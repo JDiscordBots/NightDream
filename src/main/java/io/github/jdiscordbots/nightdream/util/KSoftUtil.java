@@ -58,7 +58,8 @@ public class KSoftUtil {
 	/**
 	 * gets an image with a specified tag
 	 * @param tag the tag of the image
-	 * @return the image as {@link TaggedImage}
+	 * @param success a {@link Consumer} that is called if the request succeeds
+	 * @param failure a {@link Consumer} that is called if the request fails
 	 */
 	public static void getImage(ImageTag tag,Consumer<? super TaggedImage> success,Consumer<? super Throwable> failure) {
 		if(api==null) {

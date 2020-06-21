@@ -229,7 +229,6 @@ public class BotData {
 	}
 	/**
 	 * sets the Discord Bot token
-	 * @return the token
 	 */
 	public static void setToken(String token) {
 		bkpStorage.setGlobalProperty(JDA_TOKEN_PROP_NAME,token);
@@ -348,7 +347,7 @@ public class BotData {
 	}
 	/**
 	 * Sets the GitHub token
-	 * @param databasePwd the GitHub token
+	 * @param ghToken the GitHub token
 	 */
 	public static void setGitHubToken(String ghToken) {
 		bkpStorage.setGlobalProperty(GITHUB_TOKEN_PROP_NAME, ghToken);
