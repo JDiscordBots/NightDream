@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * utility class for sending images from a givn text as a Discord message
+ * utility class for sending images from a given text as a Discord message
  */
 public class TextToGraphics {
 	
@@ -46,6 +46,8 @@ public class TextToGraphics {
 	private static final float FONT_SIZE_NOSPACE=14F;
 	private static final Logger LOG=LoggerFactory.getLogger(TextToGraphics.class);
 	private static final ExecutorService graphicsThreadPool;
+	
+	private static final Graphics2D calcG2d;
 	
 	private static final Pattern NEWLINE_REGEX=Pattern.compile("\n");
 	
@@ -66,8 +68,29 @@ public class TextToGraphics {
 			t.setDaemon(true);
 			return t;
 		});
+		calcG2d = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
+		LOG.info("init");
+		graphicsThreadPool.execute(()->{
+			try {
+				TextToGraphics.createImage("\n\t", new OutputStream() {
+					@Override
+					public void write(byte[] b, int off, int len) throws IOException {
+						//ignore
+					}
+					@Override
+					public void write(int b) throws IOException {
+						//ignore
+					}
+				});
+			} catch (IOException e) {//should never happen - an empty implementation of OutputStream cannot throw IOExceptions
+				LOG.warn("A weird error occured while initializing text to graphics.");
+			}
+		});
+		Runtime.getRuntime().addShutdownHook(new Thread(calcG2d::dispose));
 	}
-	
+	public static void ensureInit() {
+		//init done by static initializer
+	}
 	private TextToGraphics() {
 		//prevent instantiation
 	}
@@ -89,35 +112,47 @@ public class TextToGraphics {
 			}
 		});
 	}
-    public static void createImage(String text,OutputStream out) throws IOException {
+	private static FontMetrics getMetricsForLine(String line,FontMetrics fmNoSpace,FontMetrics fmBody) {
+		return line.startsWith("\t")?fmBody:fmNoSpace;
+	}
+    private static void createImage(String text,OutputStream out) throws IOException {
     	text=text.replace("\t", "    ");
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
-        g2d.setFont(FONT_NOSPACE);
-        final FontMetrics fm = g2d.getFontMetrics();
-        int width = Stream.of(NEWLINE_REGEX.split(text)).collect(Collectors.summarizingInt(fm::stringWidth)).getMax();
-        int height = fm.getHeight()*NEWLINE_REGEX.split(text).length+1;
-        
-        g2d.dispose();
-
+        int width;
+        int height;
+        try {
+            final FontMetrics fmNoSpace = g2d.getFontMetrics(FONT_BODY);
+            
+            final FontMetrics fmBody = g2d.getFontMetrics(FONT_NOSPACE);
+            String[] split = NEWLINE_REGEX.split(text);
+            int securityMargin=fmNoSpace.getHeight()/2;
+			width = Stream.of(split).collect(Collectors.summarizingInt(line->getMetricsForLine(line,fmNoSpace,fmBody).stringWidth(line))).getMax()+securityMargin;
+			height = Stream.of(split).collect(Collectors.summingInt(line->getMetricsForLine(line,fmNoSpace,fmBody).getHeight())).intValue()+securityMargin;
+        }finally {
+        	g2d.dispose();
+        }
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        g2d = img.createGraphics();
         
-        g2d.setBackground(BG_COLOR);
-        g2d.clearRect(0, 0, width, height);
-        g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-        g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
-        g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
-        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
-        g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
-        g2d.setColor(FG_COLOR);
-        
-        drawString(g2d,text,0,0);
-        g2d.dispose();
-        
+        try {
+        	g2d = img.createGraphics();
+            
+            g2d.setBackground(BG_COLOR);
+            g2d.clearRect(0, 0, width, height);
+            g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+            g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+            g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
+            g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_DISABLE);
+            g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+            g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+            g2d.setColor(FG_COLOR);
+            drawString(g2d,text,0,0);
+        }finally {
+        	g2d.dispose();
+        }
         ImageIO.write(img, "JPG", out);
     }
     private static void drawString(Graphics g, String text, int x, int y) {
