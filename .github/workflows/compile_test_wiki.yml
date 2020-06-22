@@ -83,7 +83,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: "create JAR and copy it to the wiki"
         run: |
-          mvn package -DskipTests=true -Dversion="$(git describe --tags --always --dirty=-modified)"
+          mvn package -DskipTests=true -Dexternal.version="$(git describe --tags --always --dirty=-modified)"
           cp target/NightDream.jar wiki/NightDream.jar
       - name: "Upload to wiki"
         run: |

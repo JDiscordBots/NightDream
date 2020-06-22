@@ -127,7 +127,7 @@ jobs:
         run: git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY.wiki.git wiki
       - name: "create JAR and copy it to the wiki"
         run: |
-          mvn package -DskipTests=true -Dversion="$(git describe --tags --always --dirty=-modified)"
+          mvn package -DskipTests=true -Dexternalversion="$(git describe --tags --always --dirty=-modified)"
           cp target/NightDream.jar wiki/NightDream.jar
       - name: "Upload to wiki"
         run: |

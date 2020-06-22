@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>NightDream</artifactId>
-	<version>${version}</version>
+	<version>0.0.4</version>
 	<name>NightDream</name>
 	<description>a Clone of the Discord Bot Daydream (https://gitlab.com/botstudio/daydream) in Java</description>
 	<parent>
@@ -17,7 +17,12 @@
 			<url>http://www.gnu.org/licenses/gpl.html</url>
 		</license>
 	</licenses>
-
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jboss</id>
+			<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>io.github.jdiscordbots</groupId>
@@ -116,6 +121,34 @@
 					<noticeTemplate>https://jdiscordbots.github.io/util/data/notice/NightDream.template</noticeTemplate>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.dellroad</groupId>
+				<artifactId>dellroad-stuff-maven-plugin</artifactId>
+				<version>2.4.2</version>
+				<executions>
+					<execution>
+						<id>set-version</id>
+						<goals>
+							<goal>git-describe</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<always>true</always>
+					<tags>true</tags>
+					<dirty>-modified</dirty>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-external-version-plugin</artifactId>
+				<version>0.1.0-jboss-5</version>
+				<extensions>true</extensions>
+				<configuration>
+					<strategy hint="sysprop"/>
+					<deleteTemporaryFile>true</deleteTemporaryFile>
+				</configuration>
+			</plugin>
 		</plugins>
 		<testResources>
 			<testResource>
@@ -143,7 +176,6 @@
 		<sonar.projectKey>NightDream</sonar.projectKey>
 		<sonar.organization>nightdream</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-		<version>0.0.4</version>
 		<main>io.github.jdiscordbots.nightdream.core.NightDream</main>
 	</properties>
 </project>
