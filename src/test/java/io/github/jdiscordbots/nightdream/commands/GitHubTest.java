@@ -50,7 +50,7 @@ public class GitHubTest {
 		sendCommand("github octocat");
 		Message resp=getMessage(msg->hasEmbed(msg, "User `octocat`",null));
 		assertNotNull(resp);
-		assertTrue(hasEmbedField(resp, "Company","GitHub"));
+		assertTrue(hasEmbedField(resp, "Company","@github"));
 		assertTrue(hasEmbed(resp, embed->embed.getAuthor()!=null));
 		assertTrue(hasEmbed(resp, embed->embed.getAuthor().getIconUrl()!=null));
 		testFooter(resp);
