@@ -84,12 +84,12 @@ public class ReloadTest extends AbstractAdminCommandTest{
 		testFullPropertiesReload();
 	}
 	@Test
-	public void testReconnect() {
+	public void testGReconnect() {
 		int msgsToChack=TestUtils.getNumOfMessagesToCheck();
 		try {
 			TestUtils.setNumOfMessagesToCheck(5);
 			sendCommand("reload login");
-			Awaitility.await().atMost(Durations.ONE_SECOND).until(()->!((JDAImpl)getJDA()).getClient().isConnected());
+			Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->!((JDAImpl)getJDA()).getClient().isConnected());
 			Awaitility.await().atMost(Durations.TEN_SECONDS).until(()->getJDA().getStatus()==Status.CONNECTED);
 			Message resp=getMessage(msg->hasEmbed(msg, null,"reconnecting..."));
 			assertNotNull(resp);

@@ -41,7 +41,6 @@ public class Reload implements Command {
 		case "reconnect":
 			JDAUtils.msg(event.getChannel(), "reconnecting...",Color.YELLOW);
 			JDAImpl jda=((JDAImpl)event.getJDA());
-			jda.getClient().close();
 			final TextChannel tc=event.getChannel();
 			jda.addEventListener(new ListenerAdapter() {
 				@Override
@@ -50,6 +49,7 @@ public class Reload implements Command {
 					jda.removeEventListener(this);
 				}
 			});
+			jda.getClient().close();
 			break;
 		case "props":
 			JDAUtils.msg(event.getChannel(), "reloading all Properties...",Color.YELLOW);
