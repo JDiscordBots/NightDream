@@ -96,6 +96,11 @@
 			<artifactId>jedis</artifactId>
 			<version>3.3.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.27.0-GA</version>
+		</dependency>
 	</dependencies>
 	<pluginRepositories>
 		<pluginRepository>

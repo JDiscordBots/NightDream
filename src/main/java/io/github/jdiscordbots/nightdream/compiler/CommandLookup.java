@@ -20,8 +20,7 @@ import javax.tools.Diagnostic.Kind;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 
-//@SupportedAnnotationTypes({"io.github.jdiscordbots.nightdream.commands.BotCommand","io.github.jdiscordbots.nightdream.listeners.BotListener"})
-@SupportedAnnotationTypes("*")
+@SupportedAnnotationTypes({"io.github.jdiscordbots.nightdream.commands.BotCommand","io.github.jdiscordbots.nightdream.listeners.BotListener"})
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class CommandLookup extends AbstractProcessor{
 

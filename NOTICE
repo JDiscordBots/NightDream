@@ -27,6 +27,7 @@ Nightdream is a clone of the Bot [Daydream](https://gitlab.com/botstudio/daydrea
   GitHub API for Java under The MIT license
   GNU Trove under GNU Lesser General Public License 2.1
   Gson under Apache 2.0
+  Guava: Google Core Libraries for Java under The Apache Software License, Version 2.0
   Hamcrest under BSD Licence 3
   ICU4J under Unicode/ICU License
   Jackson-annotations under The Apache Software License, Version 2.0
