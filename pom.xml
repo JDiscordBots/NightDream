@@ -27,6 +27,17 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>com.github.zastrixarundell</groupId>
+			<artifactId>dbio</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.jdiscordbots</groupId>
+			<artifactId>jda-testing-system</artifactId>
+			<version>0.0.13-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>io.github.jdiscordbots</groupId>
 			<artifactId>nightdream-logging</artifactId>
 			<version>1.1.9</version>
@@ -35,16 +46,6 @@
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
 			<version>4.2.0_182</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-text</artifactId>
-			<version>1.9</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>2.0.0-alpha1</version>
 		</dependency>
 		<dependency>
 			<groupId>net.explodingbush.KSoft4J</groupId>
@@ -58,31 +59,9 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<version>3.3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<version>0.9.12</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.github.jdiscordbots</groupId>
-			<artifactId>jda-testing-system</artifactId>
-			<version>0.0.13-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.zastrixarundell</groupId>
-			<artifactId>dbio</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.kohsuke</groupId>
-			<artifactId>github-api</artifactId>
-			<version>1.115</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -102,6 +81,21 @@
 			<version>1.7.0-M1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.kohsuke</groupId>
+			<artifactId>github-api</artifactId>
+			<version>1.115</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.0-alpha1</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>3.3.0</version>
+		</dependency>
 	</dependencies>
 	<pluginRepositories>
 		<pluginRepository>
@@ -110,6 +104,8 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<resources>
 			<resource>
 				<filtering>false</filtering>
@@ -132,6 +128,32 @@
 			</testResource>
 		</testResources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<proc>none</proc>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<version>4.2-jdk8</version>
+				<configuration>
+					<processors>
+						<processor>io.github.jdiscordbots.nightdream.compiler.CommandLookup</processor>
+					</processors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>process</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<phase>compile</phase>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.0</version>

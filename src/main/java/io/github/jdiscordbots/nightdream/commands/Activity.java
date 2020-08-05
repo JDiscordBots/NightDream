@@ -15,7 +15,6 @@ import static net.dv8tion.jda.api.entities.Activity.playing;
 
 @BotCommand("activity")
 public class Activity implements Command {
-
     @Override
     public void action(String[] args, GuildMessageReceivedEvent event) {
 
