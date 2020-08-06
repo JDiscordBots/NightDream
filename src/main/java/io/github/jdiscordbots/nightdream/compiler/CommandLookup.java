@@ -40,27 +40,32 @@ public class CommandLookup extends AbstractProcessor{
 			throw new UncheckedIOException(e);
 		}
 	}
-	private void loadClassesToFile(String annotationName,BufferedWriter writer,RoundEnvironment roundEnv) {
+	private void loadClassToFile(TypeElement elem,BufferedWriter writer,String requiredInterface) throws IOException {
+		boolean noArgsConstructorFound=false;
+		for (Element enclosedElement : elem.getEnclosedElements()) {
+			if(enclosedElement.getKind()==ElementKind.CONSTRUCTOR) {
+				ExecutableElement constructorElem=(ExecutableElement) enclosedElement;
+				if(constructorElem.getParameters().isEmpty()) {
+					noArgsConstructorFound=true;
+				}
+			}
+		}
+		if(!processingEnv.getTypeUtils().isAssignable(elem.asType(), processingEnv.getElementUtils().getTypeElement(requiredInterface).asType())) {
+			processingEnv.getMessager().printMessage(Kind.ERROR, "Missing interface: "+requiredInterface, elem);
+		}else if(!noArgsConstructorFound) {
+			processingEnv.getMessager().printMessage(Kind.ERROR, "No constructor without parameters found", elem);
+		}else{
+			writer.write(elem.getQualifiedName().toString());
+			writer.write('\n');
+		}
+	}
+	private void loadClassesToFile(String annotationName,BufferedWriter writer,RoundEnvironment roundEnv,String requiredInterface) {
 		try{
 			TypeElement botCommandAnnotElem = processingEnv.getElementUtils().getTypeElement(annotationName);
 			for (Element elem : roundEnv.getElementsAnnotatedWith(botCommandAnnotElem)) {
 				if(elem.getKind()==ElementKind.CLASS) {
 					TypeElement tElem=(TypeElement) elem;
-					boolean noArgsConstructorFound=false;
-					for (Element typeElement : elem.getEnclosedElements()) {
-						if(typeElement.getKind()==ElementKind.CONSTRUCTOR) {
-							ExecutableElement constructorElem=(ExecutableElement) typeElement;
-							if(constructorElem.getParameters().isEmpty()) {
-								noArgsConstructorFound=true;
-							}
-						}
-					}
-					if(noArgsConstructorFound) {
-						writer.write(tElem.getQualifiedName().toString());
-						writer.write('\n');
-					}else {
-						processingEnv.getMessager().printMessage(Kind.ERROR, "No constructor without parameters found", elem);
-					}
+					loadClassToFile(tElem, writer, requiredInterface);
 				}else {
 					processingEnv.getMessager().printMessage(Kind.ERROR, "Non-class annotated with @"+annotationName, elem);
 				}
@@ -72,19 +77,19 @@ public class CommandLookup extends AbstractProcessor{
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		try{
-			loadClassesToFile("io.github.jdiscordbots.nightdream.commands.BotCommand", commandListWriter, roundEnv);
-			loadClassesToFile("io.github.jdiscordbots.nightdream.listeners.BotListener", listenerListWriter, roundEnv);
+			loadClassesToFile("io.github.jdiscordbots.nightdream.commands.BotCommand", commandListWriter, roundEnv,"io.github.jdiscordbots.nightdream.commands.Command");
+			loadClassesToFile("io.github.jdiscordbots.nightdream.listeners.BotListener", listenerListWriter, roundEnv,"net.dv8tion.jda.api.hooks.ListenerAdapter");
 		}finally {
 			if(roundEnv.processingOver()) {
 				try {
 					commandListWriter.close();
 				} catch (IOException e) {
-					throw new UncheckedIOException(e);
+					processingEnv.getMessager().printMessage(Kind.ERROR, "Cannot close writer for the command list file: "+e.getMessage());
 				}
 				try {
 					listenerListWriter.close();
 				} catch (IOException e) {
-					throw new UncheckedIOException(e);
+					processingEnv.getMessager().printMessage(Kind.ERROR, "Cannot close writer for the listener list file: "+e.getMessage());
 				}
 			}
 		}

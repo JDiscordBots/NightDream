@@ -161,30 +161,37 @@ public class NightDream {
 			try (BufferedReader reader = new BufferedReader(
 					new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
 				while ((line = reader.readLine()) != null) {
-					Class<?> cl = null;
-					try {
-						cl = Thread.currentThread().getContextClassLoader().loadClass(line);
-						Object annotatedAsObject = cl.getDeclaredConstructor().newInstance();
-						Annotation cmdAsAnnotation = cl.getAnnotation(annotClass);
-						function.accept(cmdAsAnnotation, annotatedAsObject);
-					} catch (InstantiationException e) {
-						addActionWarn(cl, annotClass, "cannot be instantiated");
-					} catch (IllegalAccessException e) {
-						addActionWarn(cl, annotClass, "the no-args constructor is not visible");
-					} catch (NoSuchMethodException e) {
-						addActionWarn(cl, annotClass, "there is no no-args constructor");
-					} catch (InvocationTargetException e) {
-						addActionWarn(cl, annotClass,
-								"there was an unknown Error: " + e.getClass().getName() + ": " + e.getCause());
-					} catch (ClassNotFoundException e) {
-						LOG.warn("Cannot load class {} that is marked with @{}", line, annotClass);
-					}
+					addAction(line,annotClass,function);
 				}
 			}
 		}
-
 	}
-
+	/**
+	 * invokes a method object of a class that is annotated by a specified {@link Annotation}
+	 * @param line the fully qualified name of the class
+	 * @param annotClass the annotation represented as {@link Class}
+	 * @param function the function to execute
+	 */
+	private static void addAction(String line,Class<? extends Annotation> annotClass,BiConsumer<Annotation, Object> function) {
+		Class<?> cl = null;
+		try {
+			cl = Thread.currentThread().getContextClassLoader().loadClass(line);
+			Object annotatedAsObject = cl.getDeclaredConstructor().newInstance();
+			Annotation cmdAsAnnotation = cl.getAnnotation(annotClass);
+			function.accept(cmdAsAnnotation, annotatedAsObject);
+		} catch (InstantiationException e) {
+			addActionWarn(cl, annotClass, "cannot be instantiated");
+		} catch (IllegalAccessException e) {
+			addActionWarn(cl, annotClass, "the no-args constructor is not visible");
+		} catch (NoSuchMethodException e) {
+			addActionWarn(cl, annotClass, "there is no no-args constructor");
+		} catch (InvocationTargetException e) {
+			addActionWarn(cl, annotClass,
+					"there was an unknown Error: " + e.getClass().getName() + ": " + e.getCause());
+		} catch (ClassNotFoundException e) {
+			LOG.warn("Cannot load class {} that is marked with @{}", line, annotClass);
+		}
+	}
 	private static void addActionWarn(Class<?> cl, Class<? extends Annotation> annotClass, String err) {
 		LOG.warn("{} is annotated with @{} but {}", cl.getName(), annotClass.getName(), err);
 	}

@@ -126,6 +126,12 @@
 					<include>info.properties</include>
 				</includes>
 			</resource>
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>privacy-policy.md</include>
+				</includes>
+			</resource>
 		</resources>
 		<testResources>
 			<testResource>
