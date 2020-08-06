@@ -30,7 +30,7 @@ public abstract class KSoftImageCommand implements Command {
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
 		KSoftAPI api = KSoftUtil.getApi();
-		if(api==null&&args==null) {
+		if(api==null&&args!=null) {
 			JDAUtils.errmsg(event.getChannel(), "This command is disabled due there is no KSoft API token");
 		}
 		//else
