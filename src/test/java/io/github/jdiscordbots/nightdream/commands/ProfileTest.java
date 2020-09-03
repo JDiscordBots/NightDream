@@ -63,7 +63,7 @@ public class ProfileTest {
 			resp=getMessage(msg->hasEmbed(msg, "Link added!",null));
 			assertNotNull(resp);
 			assertTrue(hasEmbedField(resp,"`GitHub`","https://github.com/JDiscordBots/NightDream"));
-			resp.delete().queue();
+			resp.delete().complete();
 			
 			sendCommand("profile link Daydream https://gitlab.com/botstudio/daydream");
 			resp=getMessage(msg->hasEmbed(msg, "Link added!",null));

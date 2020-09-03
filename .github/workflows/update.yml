@@ -1,6 +1,4 @@
-on:
-  repository_dispatch:
-    types: [update]
+on: [workflow_dispatch]
 name: Update dependencies
 jobs:
   update:

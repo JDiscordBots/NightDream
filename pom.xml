@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.2.0_182</version>
+			<version>4.2.0_187</version>
 		</dependency>
 		<dependency>
 			<groupId>net.explodingbush.KSoft4J</groupId>

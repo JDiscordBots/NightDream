@@ -1,6 +1,4 @@
-on:
-  repository_dispatch:
-    types: [update_notice]
+on: [workflow_dispatch]
 name: Update NOTICE.md
 jobs:
   updateNotice:
