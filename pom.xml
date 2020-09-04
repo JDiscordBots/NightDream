@@ -40,12 +40,12 @@
 		<dependency>
 			<groupId>io.github.jdiscordbots</groupId>
 			<artifactId>nightdream-logging</artifactId>
-			<version>1.1.9</version>
+			<version>1.1.10</version>
 		</dependency>
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.2.0_187</version>
+			<version>4.2.0_203</version>
 		</dependency>
 		<dependency>
 			<groupId>net.explodingbush.KSoft4J</groupId>
@@ -66,19 +66,19 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.7.0-M1</version>
+			<version>5.7.0-RC1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-commons</artifactId>
-			<version>1.7.0-M1</version>
+			<version>1.7.0-RC1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-launcher</artifactId>
-			<version>1.7.0-M1</version>
+			<version>1.7.0-RC1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -200,15 +200,29 @@
 					<dirty>-modified</dirty>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-external-version-plugin</artifactId>
-				<version>0.1.0-jboss-5</version>
-				<extensions>true</extensions>
-				<configuration>
-					<strategy hint="sysprop"/>
-					<deleteTemporaryFile>true</deleteTemporaryFile>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>use-different-version</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-external-version-plugin</artifactId>
+						<version>0.1.0-jboss-5</version>
+						<extensions>true</extensions>
+						<configuration>
+							<strategy hint="sysprop" />
+							<deleteTemporaryFile>true</deleteTemporaryFile>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<activation>
+				<property>
+					<name>external.version</name>
+				</property>
+			</activation>
+		</profile>
+	</profiles>
 </project>
