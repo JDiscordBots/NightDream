@@ -61,21 +61,14 @@ public class NightDream {
 
 	public static ShardManager initialize() {
 		final DefaultShardManagerBuilder builder = DefaultShardManagerBuilder
-				.createLight(BotData.getToken(), GatewayIntent.getIntents(GatewayIntent.DEFAULT)).setAutoReconnect(true) // should
-																															// the
-																															// Bot
-																															// reconnect?
+				.createLight(BotData.getToken(), GatewayIntent.getIntents(GatewayIntent.DEFAULT)).setAutoReconnect(true) // should the Bot reconnect?
 				.enableCache(EnumSet.of(CacheFlag.VOICE_STATE)).setStatus(OnlineStatus.ONLINE) // the online Status
 				/*
 				 * possible statuses: OnlineStatus.DO_NOT_DISTURB OnlineStatus.IDLE
 				 * OnlineStatus.INVISIBLE OnlineStatus.ONLINE OnlineStatus.OFFLINE
 				 * OnlineStatus.UNKNOWN
 				 */
-				.setActivity(Activity.playing(BotData.getDefaultPrefix() + "help | " + BotData.getGame())) // the name
-																											// of the
-																											// game the
-																											// Bot is
-																											// "playing"
+				.setActivity(Activity.playing(BotData.getDefaultPrefix() + "help | " + BotData.getGame())) // the name of the game the Bot is "playing"
 				/*
 				 * Activity.playing(String)//playing... Activity.listening(String)//listening...
 				 * Activity.streaming(String, String)//streaming...(with url)
@@ -161,18 +154,22 @@ public class NightDream {
 			try (BufferedReader reader = new BufferedReader(
 					new InputStreamReader(url.openStream(), StandardCharsets.UTF_8))) {
 				while ((line = reader.readLine()) != null) {
-					addAction(line,annotClass,function);
+					addAction(line, annotClass, function);
 				}
 			}
 		}
 	}
+
 	/**
-	 * invokes a method object of a class that is annotated by a specified {@link Annotation}
-	 * @param line the fully qualified name of the class
+	 * invokes a method object of a class that is annotated by a specified
+	 * {@link Annotation}
+	 * 
+	 * @param line       the fully qualified name of the class
 	 * @param annotClass the annotation represented as {@link Class}
-	 * @param function the function to execute
+	 * @param function   the function to execute
 	 */
-	private static void addAction(String line,Class<? extends Annotation> annotClass,BiConsumer<Annotation, Object> function) {
+	private static void addAction(String line, Class<? extends Annotation> annotClass,
+			BiConsumer<Annotation, Object> function) {
 		Class<?> cl = null;
 		try {
 			cl = Thread.currentThread().getContextClassLoader().loadClass(line);
@@ -192,6 +189,7 @@ public class NightDream {
 			LOG.warn("Cannot load class {} that is marked with @{}", line, annotClass);
 		}
 	}
+
 	private static void addActionWarn(Class<?> cl, Class<? extends Annotation> annotClass, String err) {
 		LOG.warn("{} is annotated with @{} but {}", cl.getName(), annotClass.getName(), err);
 	}

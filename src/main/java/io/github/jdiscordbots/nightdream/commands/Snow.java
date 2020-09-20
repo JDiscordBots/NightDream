@@ -25,7 +25,7 @@ public class Snow implements Command {
 	private static int increment=0;
 	private static final long EPOCH=1_420_070_400_000L;//Discord epoch/1.1.2015 0:00
 	
-	private static final DateTimeFormatter FORMATTER=DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss (zzz)").withLocale(Locale.ROOT);
+	private static final DateTimeFormatter FORMATTER=DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss:SSS (zzz)").withLocale(Locale.ROOT);
 	
 	private String getTimeString(Instant time) {
 		return time.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("UTC"))

@@ -263,6 +263,8 @@ public class Eval implements Command {
 				pw.println(((CannotCompileException) e).getReason());
 			}else if(e instanceof VerifyError){
 				pw.print("Invalid return type - The method must either return an object or nothing.");
+			}else if(e instanceof InvocationTargetException) {
+				e.getCause().printStackTrace(pw);
 			}else {
 				e.printStackTrace(pw);
 			}
@@ -273,7 +275,7 @@ public class Eval implements Command {
 				len = 1000;
 			}
 			event.getChannel().sendMessage("`ERROR`\n```java\n" + exStr.substring(0, len) + "\n```").queue();
-			LOG.debug("An expression was evaluatd but it threw an error.", e);
+			LOG.debug("An expression was evaluated but it threw an error.", e);
 		} catch (IOException ignored) {
 			LOG.error("Error within incorrect user input/eval execution error handling", e);
 		}
