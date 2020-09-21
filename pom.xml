@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.2.0_203</version>
+			<version>4.2.0_204</version>
 		</dependency>
 		<dependency>
 			<groupId>net.explodingbush.KSoft4J</groupId>
@@ -66,19 +66,19 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.7.0-RC1</version>
+			<version>5.7.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-commons</artifactId>
-			<version>1.7.0-RC1</version>
+			<version>1.7.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-launcher</artifactId>
-			<version>1.7.0-RC1</version>
+			<version>1.7.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

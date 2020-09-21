@@ -116,7 +116,7 @@ public class Eval implements Command {
 						throw new UncheckedIOException(e);
 					}
 				});
-				writer.write("){if(true){\n"+code+"\n/**/}return null;}}");
+				writer.write(")throws Exception{if(true){\n"+filterCode(code)+"\n/**/}return null;}}");
 			}catch(UncheckedIOException e) {
 				throw e.getCause();
 			}
@@ -194,7 +194,7 @@ public class Eval implements Command {
 		init();
 		CtClass cl=pool.makeClass(UUID.randomUUID().toString(), superClass);
 		CtMethod method = CtNewMethod.delegator(superClass.getDeclaredMethod("execute"), cl);
-		method.setBody("{if(true){\n"+code+"\n/**/}return null;}");
+		method.setBody("{if(true){\n"+filterCode(code)+"\n/**/}return null;}");
 		cl.addMethod(method);
 		Class<?> clazz = cl.toClass(Eval.class.getClassLoader(),Eval.class.getProtectionDomain());
 		Sandbox instance= (Sandbox) clazz.getConstructor(event.getClass()).newInstance(event);
@@ -202,6 +202,19 @@ public class Eval implements Command {
 		return instance.execute();
 	}
 	//endregion
+	
+	private String filterCode(String code) {
+		code=code.trim();
+		char lastChar=code.charAt(code.length()-1);
+		if(lastChar!=';'&&lastChar!='}') {
+			if(code.contains(";")||code.contains("{")||code.contains("}")) {
+				code=code+";";
+			}else {
+				code="return "+code+";";
+			}
+		}
+		return code;
+	}
 	
 	@Override
 	public boolean allowExecute(String[] args, GuildMessageReceivedEvent event) {
