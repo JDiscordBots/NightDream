@@ -205,12 +205,14 @@ public class Eval implements Command {
 	
 	private String filterCode(String code) {
 		code=code.trim();
-		char lastChar=code.charAt(code.length()-1);
-		if(lastChar!=';'&&lastChar!='}') {
-			if(code.contains(";")||code.contains("{")||code.contains("}")) {
-				code=code+";";
-			}else {
-				code="return "+code+";";
+		if(code.length()>0) {
+			char lastChar=code.charAt(code.length()-1);
+			if(lastChar!=';'&&lastChar!='}') {
+				if(code.contains(";")||code.contains("{")||code.contains("}")||code.startsWith("/")) {
+					code=code+";";
+				}else {
+					code="return "+code+";";
+				}
 			}
 		}
 		return code;
