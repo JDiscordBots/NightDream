@@ -24,7 +24,7 @@ public class Nuget implements Command {
 			event.getChannel().sendMessage(IconChooser.getQuestionIcon(event.getChannel())+" I need a package name").queue();
 			return;
 		}
-		String url="https://azuresearch-usnc.nuget.org/query?q="+args[0]+"&take=1"+args[0];
+		String url="https://azuresearch-usnc.nuget.org/query?q="+args[0]+"&take=1";
 		JSONObject jsonObj=GeneralUtils.getJSONFromURL(url);
 		if(jsonObj==null) {
 			event.getChannel().sendMessage("This didn't work...").queue();
