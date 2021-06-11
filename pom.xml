@@ -19,6 +19,13 @@
 			<url>http://www.gnu.org/licenses/gpl.html</url>
 		</license>
 	</licenses>
+	<repositories>
+		<repository>
+			<id>dv8tion</id>
+			<name>m2-dv8tion</name>
+			<url>https://m2.dv8tion.net/releases</url>
+		</repository>
+	</repositories>
 	<properties>
 		<sonar.projectKey>NightDream</sonar.projectKey>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -45,7 +52,7 @@
 		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
-			<version>4.2.0_229</version>
+			<version>4.2.1_276</version>
 		</dependency>
 		<dependency>
 			<groupId>net.explodingbush.KSoft4J</groupId>
@@ -66,7 +73,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.7.0</version>
+			<version>5.8.0-M1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -84,7 +91,7 @@
 		<dependency>
 			<groupId>org.kohsuke</groupId>
 			<artifactId>github-api</artifactId>
-			<version>1.129</version>
+			<version>1.130</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
