@@ -6,6 +6,7 @@ Nightdream is a clone of the Bot [Daydream](https://gitlab.com/botstudio/daydrea
   Apache Commons BCEL under Apache License, Version 2.0
   Apache Commons Codec under Apache License, Version 2.0
   Apache Commons Collections under Apache License, Version 2.0
+  Apache Commons IO under Apache License, Version 2.0
   Apache Commons Lang under Apache License, Version 2.0
   Apache Commons Logging under The Apache Software License, Version 2.0
   Apache Commons Pool under Apache License, Version 2.0
@@ -20,7 +21,6 @@ Nightdream is a clone of the Bot [Daydream](https://gitlab.com/botstudio/daydrea
   Awaitility under Apache 2.0
   com.diogonunes:JCDP under MIT License
   com.neovisionaries:nv-websocket-client under The Apache Software License, Version 2.0
-  Commons IO under The Apache Software License, Version 2.0
   dbio under WTFPL
   dom4j under BSD 3-clause New License
   FindBugs-jsr305 under The Apache Software License, Version 2.0
@@ -65,6 +65,10 @@ Nightdream is a clone of the Bot [Daydream](https://gitlab.com/botstudio/daydrea
   JUnit Platform Commons under Eclipse Public License v2.0
   JUnit Platform Engine API under Eclipse Public License v2.0
   JUnit Platform Launcher under Eclipse Public License v2.0
+  Kotlin Stdlib under The Apache License, Version 2.0
+  Kotlin Stdlib Common under The Apache License, Version 2.0
+  Kotlin Stdlib Jdk7 under The Apache License, Version 2.0
+  Kotlin Stdlib Jdk8 under The Apache License, Version 2.0
   KSoft4J under GNU General Public License v3.0
   NightDream under GNU GPL Version 3.0
   NightDream Logging under Boost Software License 1.0
